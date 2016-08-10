@@ -125,7 +125,7 @@ public class Junit4Fragment extends AbstractGeneratorFragment {
 	 */
 	@Override
 	public String[] getExportedPackagesTests(Grammar grammar) {
-		return new String[]{ getNaming().basePackageRuntime(grammar) };
+		return new String[]{ getNaming().basePackageRuntime(grammar)+";x-internal=true" };
 	}
 
 	/**
