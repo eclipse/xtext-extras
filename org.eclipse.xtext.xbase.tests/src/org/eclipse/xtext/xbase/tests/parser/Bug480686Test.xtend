@@ -18,7 +18,7 @@ import org.eclipse.xtext.testing.InjectWith
 import org.eclipse.xtext.testing.XtextRunner
 import org.eclipse.xtext.testing.util.ParseHelper
 import org.eclipse.xtext.util.EmfFormatter
-import org.eclipse.xtext.xbase.testlanguages.ContentAssistFragmentTestLangInjectorProvider
+import org.eclipse.xtext.xbase.testlanguages.tests.ContentAssistFragmentTestLangInjectorProvider
 import org.eclipse.xtext.xbase.testlanguages.contentAssistFragmentTestLang.ContentAssistFragmentTestLanguageRoot
 import org.junit.Assert
 import org.junit.ComparisonFailure
