@@ -3,21 +3,26 @@
  */
 package org.eclipse.xtext.xbase.testlanguages.services;
 
-import com.google.inject.Singleton;
 import com.google.inject.Inject;
-
+import com.google.inject.Singleton;
 import java.util.List;
-
-import org.eclipse.xtext.*;
+import org.eclipse.xtext.Action;
+import org.eclipse.xtext.Alternatives;
+import org.eclipse.xtext.Assignment;
+import org.eclipse.xtext.Grammar;
+import org.eclipse.xtext.GrammarUtil;
+import org.eclipse.xtext.Group;
+import org.eclipse.xtext.Keyword;
+import org.eclipse.xtext.ParserRule;
+import org.eclipse.xtext.RuleCall;
+import org.eclipse.xtext.TerminalRule;
+import org.eclipse.xtext.service.AbstractElementFinder.AbstractGrammarElementFinder;
 import org.eclipse.xtext.service.GrammarProvider;
-import org.eclipse.xtext.service.AbstractElementFinder.*;
-
 import org.eclipse.xtext.xbase.services.XbaseGrammarAccess;
 import org.eclipse.xtext.xbase.services.XtypeGrammarAccess;
 
 @Singleton
 public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarElementFinder {
-	
 	
 	public class ContentAssistFragmentTestLanguageRootElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.xtext.xbase.testlanguages.ContentAssistFragmentTestLang.ContentAssistFragmentTestLanguageRoot");
@@ -27,14 +32,13 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 		//ContentAssistFragmentTestLanguageRoot:
 		//	expression=XExpression;
 		@Override public ParserRule getRule() { return rule; }
-
+		
 		//expression=XExpression
 		public Assignment getExpressionAssignment() { return cExpressionAssignment; }
-
+		
 		//XExpression
 		public RuleCall getExpressionXExpressionParserRuleCall_0() { return cExpressionXExpressionParserRuleCall_0; }
 	}
-
 	public class XVariableDeclarationElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.xtext.xbase.testlanguages.ContentAssistFragmentTestLang.XVariableDeclaration");
 		private final Group cGroup = (Group)rule.eContents().get(1);
@@ -64,62 +68,62 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 		//	{XVariableDeclaration} (writeable?='var' | 'val') (=> (type=JvmTypeReference name=ValidID) | name=ValidID) ('='
 		//	right=XExpression)?;
 		@Override public ParserRule getRule() { return rule; }
-
+		
 		//{XVariableDeclaration} (writeable?='var' | 'val') (=> (type=JvmTypeReference name=ValidID) | name=ValidID) ('='
 		//right=XExpression)?
 		public Group getGroup() { return cGroup; }
-
+		
 		//{XVariableDeclaration}
 		public Action getXVariableDeclarationAction_0() { return cXVariableDeclarationAction_0; }
-
+		
 		//(writeable?='var' | 'val')
 		public Alternatives getAlternatives_1() { return cAlternatives_1; }
-
+		
 		//writeable?='var'
 		public Assignment getWriteableAssignment_1_0() { return cWriteableAssignment_1_0; }
-
+		
 		//'var'
 		public Keyword getWriteableVarKeyword_1_0_0() { return cWriteableVarKeyword_1_0_0; }
-
+		
 		//'val'
 		public Keyword getValKeyword_1_1() { return cValKeyword_1_1; }
-
+		
 		//(=> (type=JvmTypeReference name=ValidID) | name=ValidID)
 		public Alternatives getAlternatives_2() { return cAlternatives_2; }
-
+		
 		//=> (type=JvmTypeReference name=ValidID)
 		public Group getGroup_2_0() { return cGroup_2_0; }
-
+		
 		//(type=JvmTypeReference name=ValidID)
 		public Group getGroup_2_0_0() { return cGroup_2_0_0; }
-
+		
 		//type=JvmTypeReference
 		public Assignment getTypeAssignment_2_0_0_0() { return cTypeAssignment_2_0_0_0; }
-
+		
 		//JvmTypeReference
 		public RuleCall getTypeJvmTypeReferenceParserRuleCall_2_0_0_0_0() { return cTypeJvmTypeReferenceParserRuleCall_2_0_0_0_0; }
-
+		
 		//name=ValidID
 		public Assignment getNameAssignment_2_0_0_1() { return cNameAssignment_2_0_0_1; }
-
+		
 		//ValidID
 		public RuleCall getNameValidIDParserRuleCall_2_0_0_1_0() { return cNameValidIDParserRuleCall_2_0_0_1_0; }
-
+		
 		//name=ValidID
 		public Assignment getNameAssignment_2_1() { return cNameAssignment_2_1; }
-
+		
 		//ValidID
 		public RuleCall getNameValidIDParserRuleCall_2_1_0() { return cNameValidIDParserRuleCall_2_1_0; }
-
+		
 		//('=' right=XExpression)?
 		public Group getGroup_3() { return cGroup_3; }
-
+		
 		//'='
 		public Keyword getEqualsSignKeyword_3_0() { return cEqualsSignKeyword_3_0; }
-
+		
 		//right=XExpression
 		public Assignment getRightAssignment_3_1() { return cRightAssignment_3_1; }
-
+		
 		//XExpression
 		public RuleCall getRightXExpressionParserRuleCall_3_1_0() { return cRightXExpressionParserRuleCall_3_1_0; }
 	}
@@ -129,15 +133,15 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	private final XVariableDeclarationElements pXVariableDeclaration;
 	
 	private final Grammar grammar;
-
+	
 	private final XbaseGrammarAccess gaXbase;
-
+	
 	private final XtypeGrammarAccess gaXtype;
 
 	@Inject
 	public ContentAssistFragmentTestLangGrammarAccess(GrammarProvider grammarProvider,
-		XbaseGrammarAccess gaXbase,
-		XtypeGrammarAccess gaXtype) {
+			XbaseGrammarAccess gaXbase,
+			XtypeGrammarAccess gaXtype) {
 		this.grammar = internalFindGrammar(grammarProvider);
 		this.gaXbase = gaXbase;
 		this.gaXtype = gaXtype;
@@ -166,11 +170,11 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 		return grammar;
 	}
 	
-
+	
 	public XbaseGrammarAccess getXbaseGrammarAccess() {
 		return gaXbase;
 	}
-
+	
 	public XtypeGrammarAccess getXtypeGrammarAccess() {
 		return gaXtype;
 	}
@@ -185,7 +189,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getContentAssistFragmentTestLanguageRootRule() {
 		return getContentAssistFragmentTestLanguageRootAccess().getRule();
 	}
-
+	
 	//// To test bug https://bugs.eclipse.org/bugs/show_bug.cgi?id=471434
 	//// we need to override one of the Xbase's rules
 	//// even if we don't change its syntax
@@ -199,7 +203,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXVariableDeclarationRule() {
 		return getXVariableDeclarationAccess().getRule();
 	}
-
+	
 	//XExpression:
 	//	XAssignment;
 	public XbaseGrammarAccess.XExpressionElements getXExpressionAccess() {
@@ -209,7 +213,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXExpressionRule() {
 		return getXExpressionAccess().getRule();
 	}
-
+	
 	//XAssignment XExpression:
 	//	{XAssignment} feature=[types::JvmIdentifiableElement|FeatureCallID] OpSingleAssign value=XAssignment | XOrExpression
 	//	(=> ({XBinaryOperation.leftOperand=current} feature=[types::JvmIdentifiableElement|OpMultiAssign])
@@ -221,7 +225,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXAssignmentRule() {
 		return getXAssignmentAccess().getRule();
 	}
-
+	
 	//OpSingleAssign:
 	//	'=';
 	public XbaseGrammarAccess.OpSingleAssignElements getOpSingleAssignAccess() {
@@ -231,7 +235,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getOpSingleAssignRule() {
 		return getOpSingleAssignAccess().getRule();
 	}
-
+	
 	//OpMultiAssign:
 	//	'+=' | '-=' | '*=' | '/=' | '%=' |
 	//	'<' '<' '=' |
@@ -243,7 +247,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getOpMultiAssignRule() {
 		return getOpMultiAssignAccess().getRule();
 	}
-
+	
 	//XOrExpression XExpression:
 	//	XAndExpression (=> ({XBinaryOperation.leftOperand=current} feature=[types::JvmIdentifiableElement|OpOr])
 	//	rightOperand=XAndExpression)*
@@ -254,7 +258,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXOrExpressionRule() {
 		return getXOrExpressionAccess().getRule();
 	}
-
+	
 	//OpOr:
 	//	'||';
 	public XbaseGrammarAccess.OpOrElements getOpOrAccess() {
@@ -264,7 +268,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getOpOrRule() {
 		return getOpOrAccess().getRule();
 	}
-
+	
 	//XAndExpression XExpression:
 	//	XEqualityExpression (=> ({XBinaryOperation.leftOperand=current} feature=[types::JvmIdentifiableElement|OpAnd])
 	//	rightOperand=XEqualityExpression)*
@@ -275,7 +279,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXAndExpressionRule() {
 		return getXAndExpressionAccess().getRule();
 	}
-
+	
 	//OpAnd:
 	//	'&&';
 	public XbaseGrammarAccess.OpAndElements getOpAndAccess() {
@@ -285,7 +289,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getOpAndRule() {
 		return getOpAndAccess().getRule();
 	}
-
+	
 	//XEqualityExpression XExpression:
 	//	XRelationalExpression (=> ({XBinaryOperation.leftOperand=current} feature=[types::JvmIdentifiableElement|OpEquality])
 	//	rightOperand=XRelationalExpression)*
@@ -296,7 +300,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXEqualityExpressionRule() {
 		return getXEqualityExpressionAccess().getRule();
 	}
-
+	
 	//OpEquality:
 	//	'==' | '!=' | '===' | '!==';
 	public XbaseGrammarAccess.OpEqualityElements getOpEqualityAccess() {
@@ -306,7 +310,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getOpEqualityRule() {
 		return getOpEqualityAccess().getRule();
 	}
-
+	
 	//XRelationalExpression XExpression:
 	//	XOtherOperatorExpression (=> ({XInstanceOfExpression.expression=current} 'instanceof') type=JvmTypeReference |
 	//	=> ({XBinaryOperation.leftOperand=current} feature=[types::JvmIdentifiableElement|OpCompare])
@@ -318,7 +322,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXRelationalExpressionRule() {
 		return getXRelationalExpressionAccess().getRule();
 	}
-
+	
 	//OpCompare:
 	//	'>=' | '<' '=' | '>' | '<';
 	public XbaseGrammarAccess.OpCompareElements getOpCompareAccess() {
@@ -328,7 +332,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getOpCompareRule() {
 		return getOpCompareAccess().getRule();
 	}
-
+	
 	//XOtherOperatorExpression XExpression:
 	//	XAdditiveExpression (=> ({XBinaryOperation.leftOperand=current} feature=[types::JvmIdentifiableElement|OpOther])
 	//	rightOperand=XAdditiveExpression)*
@@ -339,7 +343,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXOtherOperatorExpressionRule() {
 		return getXOtherOperatorExpressionAccess().getRule();
 	}
-
+	
 	//OpOther:
 	//	'->'
 	//	| '..<'
@@ -355,7 +359,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getOpOtherRule() {
 		return getOpOtherAccess().getRule();
 	}
-
+	
 	//XAdditiveExpression XExpression:
 	//	XMultiplicativeExpression (=> ({XBinaryOperation.leftOperand=current} feature=[types::JvmIdentifiableElement|OpAdd])
 	//	rightOperand=XMultiplicativeExpression)*
@@ -366,7 +370,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXAdditiveExpressionRule() {
 		return getXAdditiveExpressionAccess().getRule();
 	}
-
+	
 	//OpAdd:
 	//	'+' | '-';
 	public XbaseGrammarAccess.OpAddElements getOpAddAccess() {
@@ -376,7 +380,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getOpAddRule() {
 		return getOpAddAccess().getRule();
 	}
-
+	
 	//XMultiplicativeExpression XExpression:
 	//	XUnaryOperation (=> ({XBinaryOperation.leftOperand=current} feature=[types::JvmIdentifiableElement|OpMulti])
 	//	rightOperand=XUnaryOperation)*
@@ -387,7 +391,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXMultiplicativeExpressionRule() {
 		return getXMultiplicativeExpressionAccess().getRule();
 	}
-
+	
 	//OpMulti:
 	//	'*' | '**' | '/' | '%';
 	public XbaseGrammarAccess.OpMultiElements getOpMultiAccess() {
@@ -397,7 +401,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getOpMultiRule() {
 		return getOpMultiAccess().getRule();
 	}
-
+	
 	//XUnaryOperation XExpression:
 	//	{XUnaryOperation} feature=[types::JvmIdentifiableElement|OpUnary] operand=XUnaryOperation
 	//	| XCastedExpression
@@ -408,7 +412,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXUnaryOperationRule() {
 		return getXUnaryOperationAccess().getRule();
 	}
-
+	
 	//OpUnary:
 	//	"!" | "-" | "+";
 	public XbaseGrammarAccess.OpUnaryElements getOpUnaryAccess() {
@@ -418,7 +422,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getOpUnaryRule() {
 		return getOpUnaryAccess().getRule();
 	}
-
+	
 	//XCastedExpression XExpression:
 	//	XPostfixOperation (=> ({XCastedExpression.target=current} 'as') type=JvmTypeReference)*
 	public XbaseGrammarAccess.XCastedExpressionElements getXCastedExpressionAccess() {
@@ -428,7 +432,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXCastedExpressionRule() {
 		return getXCastedExpressionAccess().getRule();
 	}
-
+	
 	//XPostfixOperation XExpression:
 	//	XMemberFeatureCall => ({XPostfixOperation.operand=current} feature=[types::JvmIdentifiableElement|OpPostfix])?
 	public XbaseGrammarAccess.XPostfixOperationElements getXPostfixOperationAccess() {
@@ -438,7 +442,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXPostfixOperationRule() {
 		return getXPostfixOperationAccess().getRule();
 	}
-
+	
 	//OpPostfix:
 	//	"++" | "--";
 	public XbaseGrammarAccess.OpPostfixElements getOpPostfixAccess() {
@@ -448,7 +452,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getOpPostfixRule() {
 		return getOpPostfixAccess().getRule();
 	}
-
+	
 	//XMemberFeatureCall XExpression:
 	//	XPrimaryExpression (=> ({XAssignment.assignable=current} ('.' | explicitStatic?="::")
 	//	feature=[types::JvmIdentifiableElement|FeatureCallID] OpSingleAssign) value=XAssignment
@@ -465,7 +469,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXMemberFeatureCallRule() {
 		return getXMemberFeatureCallAccess().getRule();
 	}
-
+	
 	//XPrimaryExpression XExpression:
 	//	XConstructorCall | XBlockExpression | XSwitchExpression | XSynchronizedExpression | XFeatureCall | XLiteral |
 	//	XIfExpression | XForLoopExpression | XBasicForLoopExpression | XWhileExpression | XDoWhileExpression |
@@ -477,7 +481,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXPrimaryExpressionRule() {
 		return getXPrimaryExpressionAccess().getRule();
 	}
-
+	
 	//XLiteral XExpression:
 	//	XCollectionLiteral | XClosure | XBooleanLiteral | XNumberLiteral | XNullLiteral | XStringLiteral | XTypeLiteral
 	public XbaseGrammarAccess.XLiteralElements getXLiteralAccess() {
@@ -487,7 +491,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXLiteralRule() {
 		return getXLiteralAccess().getRule();
 	}
-
+	
 	//XCollectionLiteral:
 	//	XSetLiteral | XListLiteral;
 	public XbaseGrammarAccess.XCollectionLiteralElements getXCollectionLiteralAccess() {
@@ -497,7 +501,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXCollectionLiteralRule() {
 		return getXCollectionLiteralAccess().getRule();
 	}
-
+	
 	//XSetLiteral:
 	//	{XSetLiteral} '#' '{' (elements+=XExpression (',' elements+=XExpression)*)? '}';
 	public XbaseGrammarAccess.XSetLiteralElements getXSetLiteralAccess() {
@@ -507,7 +511,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXSetLiteralRule() {
 		return getXSetLiteralAccess().getRule();
 	}
-
+	
 	//XListLiteral:
 	//	{XListLiteral} '#' '[' (elements+=XExpression (',' elements+=XExpression)*)? ']';
 	public XbaseGrammarAccess.XListLiteralElements getXListLiteralAccess() {
@@ -517,7 +521,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXListLiteralRule() {
 		return getXListLiteralAccess().getRule();
 	}
-
+	
 	//XClosure XExpression:
 	//	=> ({XClosure}
 	//	'[')
@@ -532,7 +536,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXClosureRule() {
 		return getXClosureAccess().getRule();
 	}
-
+	
 	//XExpressionInClosure XExpression:
 	//	{XBlockExpression} (expressions+=XExpressionOrVarDeclaration ';'?)*
 	public XbaseGrammarAccess.XExpressionInClosureElements getXExpressionInClosureAccess() {
@@ -542,7 +546,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXExpressionInClosureRule() {
 		return getXExpressionInClosureAccess().getRule();
 	}
-
+	
 	//XShortClosure XExpression:
 	//	=> ({XClosure} (declaredFormalParameters+=JvmFormalParameter (',' declaredFormalParameters+=JvmFormalParameter)*)?
 	//	explicitSyntax?='|') expression=XExpression
@@ -553,7 +557,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXShortClosureRule() {
 		return getXShortClosureAccess().getRule();
 	}
-
+	
 	//XParenthesizedExpression XExpression:
 	//	'(' XExpression ')'
 	public XbaseGrammarAccess.XParenthesizedExpressionElements getXParenthesizedExpressionAccess() {
@@ -563,7 +567,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXParenthesizedExpressionRule() {
 		return getXParenthesizedExpressionAccess().getRule();
 	}
-
+	
 	//XIfExpression XExpression:
 	//	{XIfExpression}
 	//	'if' '(' if=XExpression ')'
@@ -575,7 +579,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXIfExpressionRule() {
 		return getXIfExpressionAccess().getRule();
 	}
-
+	
 	//XSwitchExpression XExpression:
 	//	{XSwitchExpression}
 	//	'switch' (=> ('(' declaredParam=JvmFormalParameter ':') switch=XExpression ')'
@@ -589,7 +593,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXSwitchExpressionRule() {
 		return getXSwitchExpressionAccess().getRule();
 	}
-
+	
 	//XCasePart:
 	//	{XCasePart} typeGuard=JvmTypeReference? ('case' case=XExpression)? (':' then=XExpression | fallThrough?=',');
 	public XbaseGrammarAccess.XCasePartElements getXCasePartAccess() {
@@ -599,7 +603,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXCasePartRule() {
 		return getXCasePartAccess().getRule();
 	}
-
+	
 	//XForLoopExpression XExpression:
 	//	=> ({XForLoopExpression}
 	//	'for' '(' declaredParam=JvmFormalParameter ':') forExpression=XExpression ')'
@@ -611,7 +615,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXForLoopExpressionRule() {
 		return getXForLoopExpressionAccess().getRule();
 	}
-
+	
 	//XBasicForLoopExpression XExpression:
 	//	{XBasicForLoopExpression}
 	//	'for' '(' (initExpressions+=XExpressionOrVarDeclaration (',' initExpressions+=XExpressionOrVarDeclaration)*)? ';'
@@ -624,7 +628,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXBasicForLoopExpressionRule() {
 		return getXBasicForLoopExpressionAccess().getRule();
 	}
-
+	
 	//XWhileExpression XExpression:
 	//	{XWhileExpression}
 	//	'while' '(' predicate=XExpression ')'
@@ -636,7 +640,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXWhileExpressionRule() {
 		return getXWhileExpressionAccess().getRule();
 	}
-
+	
 	//XDoWhileExpression XExpression:
 	//	{XDoWhileExpression}
 	//	'do'
@@ -649,7 +653,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXDoWhileExpressionRule() {
 		return getXDoWhileExpressionAccess().getRule();
 	}
-
+	
 	//XBlockExpression XExpression:
 	//	{XBlockExpression}
 	//	'{' (expressions+=XExpressionOrVarDeclaration ';'?)*
@@ -661,7 +665,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXBlockExpressionRule() {
 		return getXBlockExpressionAccess().getRule();
 	}
-
+	
 	//XExpressionOrVarDeclaration XExpression:
 	//	super::XVariableDeclaration | XExpression
 	public XbaseGrammarAccess.XExpressionOrVarDeclarationElements getXExpressionOrVarDeclarationAccess() {
@@ -671,7 +675,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXExpressionOrVarDeclarationRule() {
 		return getXExpressionOrVarDeclarationAccess().getRule();
 	}
-
+	
 	//JvmFormalParameter types::JvmFormalParameter:
 	//	parameterType=JvmTypeReference? name=ValidID
 	public XbaseGrammarAccess.JvmFormalParameterElements getJvmFormalParameterAccess() {
@@ -681,7 +685,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getJvmFormalParameterRule() {
 		return getJvmFormalParameterAccess().getRule();
 	}
-
+	
 	//FullJvmFormalParameter types::JvmFormalParameter:
 	//	parameterType=JvmTypeReference name=ValidID
 	public XbaseGrammarAccess.FullJvmFormalParameterElements getFullJvmFormalParameterAccess() {
@@ -691,7 +695,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getFullJvmFormalParameterRule() {
 		return getFullJvmFormalParameterAccess().getRule();
 	}
-
+	
 	//XFeatureCall XExpression:
 	//	{XFeatureCall} ('<' typeArguments+=JvmArgumentTypeReference (',' typeArguments+=JvmArgumentTypeReference)* '>')?
 	//	feature=[types::JvmIdentifiableElement|IdOrSuper] (=> explicitOperationCall?='(' (featureCallArguments+=XShortClosure
@@ -705,7 +709,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXFeatureCallRule() {
 		return getXFeatureCallAccess().getRule();
 	}
-
+	
 	//FeatureCallID:
 	//	ValidID | 'extends' | 'static' | 'import' | 'extension';
 	public XbaseGrammarAccess.FeatureCallIDElements getFeatureCallIDAccess() {
@@ -715,7 +719,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getFeatureCallIDRule() {
 		return getFeatureCallIDAccess().getRule();
 	}
-
+	
 	//IdOrSuper:
 	//	FeatureCallID | 'super';
 	public XbaseGrammarAccess.IdOrSuperElements getIdOrSuperAccess() {
@@ -725,7 +729,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getIdOrSuperRule() {
 		return getIdOrSuperAccess().getRule();
 	}
-
+	
 	//XConstructorCall XExpression:
 	//	{XConstructorCall}
 	//	'new' constructor=[types::JvmConstructor|QualifiedName] (=> '<' typeArguments+=JvmArgumentTypeReference (','
@@ -740,7 +744,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXConstructorCallRule() {
 		return getXConstructorCallAccess().getRule();
 	}
-
+	
 	//XBooleanLiteral XExpression:
 	//	{XBooleanLiteral} ('false' | isTrue?='true')
 	public XbaseGrammarAccess.XBooleanLiteralElements getXBooleanLiteralAccess() {
@@ -750,7 +754,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXBooleanLiteralRule() {
 		return getXBooleanLiteralAccess().getRule();
 	}
-
+	
 	//XNullLiteral XExpression:
 	//	{XNullLiteral} 'null'
 	public XbaseGrammarAccess.XNullLiteralElements getXNullLiteralAccess() {
@@ -760,7 +764,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXNullLiteralRule() {
 		return getXNullLiteralAccess().getRule();
 	}
-
+	
 	//XNumberLiteral XExpression:
 	//	{XNumberLiteral} value=Number
 	public XbaseGrammarAccess.XNumberLiteralElements getXNumberLiteralAccess() {
@@ -770,7 +774,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXNumberLiteralRule() {
 		return getXNumberLiteralAccess().getRule();
 	}
-
+	
 	//XStringLiteral XExpression:
 	//	{XStringLiteral} value=STRING
 	public XbaseGrammarAccess.XStringLiteralElements getXStringLiteralAccess() {
@@ -780,7 +784,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXStringLiteralRule() {
 		return getXStringLiteralAccess().getRule();
 	}
-
+	
 	//XTypeLiteral XExpression:
 	//	{XTypeLiteral} 'typeof' '(' type=[types::JvmType|QualifiedName] arrayDimensions+=ArrayBrackets* ')'
 	public XbaseGrammarAccess.XTypeLiteralElements getXTypeLiteralAccess() {
@@ -790,7 +794,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXTypeLiteralRule() {
 		return getXTypeLiteralAccess().getRule();
 	}
-
+	
 	//XThrowExpression XExpression:
 	//	{XThrowExpression} 'throw' expression=XExpression
 	public XbaseGrammarAccess.XThrowExpressionElements getXThrowExpressionAccess() {
@@ -800,7 +804,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXThrowExpressionRule() {
 		return getXThrowExpressionAccess().getRule();
 	}
-
+	
 	//XReturnExpression XExpression:
 	//	{XReturnExpression} 'return' -> expression=XExpression?
 	public XbaseGrammarAccess.XReturnExpressionElements getXReturnExpressionAccess() {
@@ -810,7 +814,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXReturnExpressionRule() {
 		return getXReturnExpressionAccess().getRule();
 	}
-
+	
 	//XTryCatchFinallyExpression XExpression:
 	//	{XTryCatchFinallyExpression}
 	//	'try'
@@ -823,7 +827,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXTryCatchFinallyExpressionRule() {
 		return getXTryCatchFinallyExpressionAccess().getRule();
 	}
-
+	
 	//XSynchronizedExpression XExpression:
 	//	=> ({XSynchronizedExpression}
 	//	'synchronized' '(') param=XExpression ')' expression=XExpression
@@ -834,7 +838,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXSynchronizedExpressionRule() {
 		return getXSynchronizedExpressionAccess().getRule();
 	}
-
+	
 	//XCatchClause:
 	//	=> 'catch' '(' declaredParam=FullJvmFormalParameter ')' expression=XExpression;
 	public XbaseGrammarAccess.XCatchClauseElements getXCatchClauseAccess() {
@@ -844,7 +848,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXCatchClauseRule() {
 		return getXCatchClauseAccess().getRule();
 	}
-
+	
 	//QualifiedName:
 	//	ValidID (=> '.' ValidID)*;
 	public XbaseGrammarAccess.QualifiedNameElements getQualifiedNameAccess() {
@@ -854,7 +858,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getQualifiedNameRule() {
 		return getQualifiedNameAccess().getRule();
 	}
-
+	
 	//Number hidden():
 	//	HEX | (INT | DECIMAL) ('.' (INT | DECIMAL))?;
 	public XbaseGrammarAccess.NumberElements getNumberAccess() {
@@ -864,11 +868,11 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getNumberRule() {
 		return getNumberAccess().getRule();
 	}
-
-	/// **
+	
+	///**
 	// * Dummy rule, for "better" downwards compatibility, since GrammarAccess generates non-static inner classes, 
 	// * which makes downstream grammars break on classloading, when a rule is removed.
-	// * / StaticQualifier:
+	// */ StaticQualifier:
 	//	(ValidID '::')+;
 	public XbaseGrammarAccess.StaticQualifierElements getStaticQualifierAccess() {
 		return gaXbase.getStaticQualifierAccess();
@@ -877,25 +881,25 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getStaticQualifierRule() {
 		return getStaticQualifierAccess().getRule();
 	}
-
+	
 	//terminal HEX:
 	//	('0x' | '0X') ('0'..'9' | 'a'..'f' | 'A'..'F' | '_')+ ('#' (('b' | 'B') ('i' | 'I') | ('l' | 'L')))?;
 	public TerminalRule getHEXRule() {
 		return gaXbase.getHEXRule();
-	} 
-
+	}
+	
 	//terminal INT returns ecore::EInt:
 	//	'0'..'9' ('0'..'9' | '_')*;
 	public TerminalRule getINTRule() {
 		return gaXbase.getINTRule();
-	} 
-
+	}
+	
 	//terminal DECIMAL:
 	//	INT (('e' | 'E') ('+' | '-')? INT)? (('b' | 'B') ('i' | 'I' | 'd' | 'D') | ('l' | 'L' | 'd' | 'D' | 'f' | 'F'))?;
 	public TerminalRule getDECIMALRule() {
 		return gaXbase.getDECIMALRule();
-	} 
-
+	}
+	
 	//JvmTypeReference:
 	//	JvmParameterizedTypeReference => ({JvmGenericArrayTypeReference.componentType=current} ArrayBrackets)*
 	//	| XFunctionTypeRef;
@@ -906,7 +910,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getJvmTypeReferenceRule() {
 		return getJvmTypeReferenceAccess().getRule();
 	}
-
+	
 	//ArrayBrackets:
 	//	'[' ']';
 	public XtypeGrammarAccess.ArrayBracketsElements getArrayBracketsAccess() {
@@ -916,7 +920,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getArrayBracketsRule() {
 		return getArrayBracketsAccess().getRule();
 	}
-
+	
 	//XFunctionTypeRef:
 	//	('(' (paramTypes+=JvmTypeReference (',' paramTypes+=JvmTypeReference)*)? ')')? '=>' returnType=JvmTypeReference;
 	public XtypeGrammarAccess.XFunctionTypeRefElements getXFunctionTypeRefAccess() {
@@ -926,7 +930,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXFunctionTypeRefRule() {
 		return getXFunctionTypeRefAccess().getRule();
 	}
-
+	
 	//JvmParameterizedTypeReference:
 	//	type=[JvmType|super::QualifiedName] (=> '<' arguments+=JvmArgumentTypeReference (','
 	//	arguments+=JvmArgumentTypeReference)* '>' (=> ({JvmInnerTypeReference.outer=current} '.') type=[JvmType|ValidID] (=>
@@ -938,7 +942,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getJvmParameterizedTypeReferenceRule() {
 		return getJvmParameterizedTypeReferenceAccess().getRule();
 	}
-
+	
 	//JvmArgumentTypeReference JvmTypeReference:
 	//	JvmTypeReference | JvmWildcardTypeReference
 	public XtypeGrammarAccess.JvmArgumentTypeReferenceElements getJvmArgumentTypeReferenceAccess() {
@@ -948,7 +952,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getJvmArgumentTypeReferenceRule() {
 		return getJvmArgumentTypeReferenceAccess().getRule();
 	}
-
+	
 	//JvmWildcardTypeReference:
 	//	{JvmWildcardTypeReference} '?' (constraints+=JvmUpperBound constraints+=JvmUpperBoundAnded*
 	//	| constraints+=JvmLowerBound constraints+=JvmLowerBoundAnded*)?;
@@ -959,7 +963,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getJvmWildcardTypeReferenceRule() {
 		return getJvmWildcardTypeReferenceAccess().getRule();
 	}
-
+	
 	//JvmUpperBound:
 	//	'extends' typeReference=JvmTypeReference;
 	public XtypeGrammarAccess.JvmUpperBoundElements getJvmUpperBoundAccess() {
@@ -969,7 +973,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getJvmUpperBoundRule() {
 		return getJvmUpperBoundAccess().getRule();
 	}
-
+	
 	//JvmUpperBoundAnded JvmUpperBound:
 	//	'&' typeReference=JvmTypeReference
 	public XtypeGrammarAccess.JvmUpperBoundAndedElements getJvmUpperBoundAndedAccess() {
@@ -979,7 +983,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getJvmUpperBoundAndedRule() {
 		return getJvmUpperBoundAndedAccess().getRule();
 	}
-
+	
 	//JvmLowerBound:
 	//	'super' typeReference=JvmTypeReference;
 	public XtypeGrammarAccess.JvmLowerBoundElements getJvmLowerBoundAccess() {
@@ -989,7 +993,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getJvmLowerBoundRule() {
 		return getJvmLowerBoundAccess().getRule();
 	}
-
+	
 	//JvmLowerBoundAnded JvmLowerBound:
 	//	'&' typeReference=JvmTypeReference
 	public XtypeGrammarAccess.JvmLowerBoundAndedElements getJvmLowerBoundAndedAccess() {
@@ -999,7 +1003,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getJvmLowerBoundAndedRule() {
 		return getJvmLowerBoundAndedAccess().getRule();
 	}
-
+	
 	//JvmTypeParameter:
 	//	name=ValidID (constraints+=JvmUpperBound constraints+=JvmUpperBoundAnded*)?;
 	public XtypeGrammarAccess.JvmTypeParameterElements getJvmTypeParameterAccess() {
@@ -1009,7 +1013,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getJvmTypeParameterRule() {
 		return getJvmTypeParameterAccess().getRule();
 	}
-
+	
 	//QualifiedNameWithWildcard:
 	//	super::QualifiedName '.' '*';
 	public XtypeGrammarAccess.QualifiedNameWithWildcardElements getQualifiedNameWithWildcardAccess() {
@@ -1019,7 +1023,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getQualifiedNameWithWildcardRule() {
 		return getQualifiedNameWithWildcardAccess().getRule();
 	}
-
+	
 	//ValidID:
 	//	ID;
 	public XtypeGrammarAccess.ValidIDElements getValidIDAccess() {
@@ -1029,7 +1033,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getValidIDRule() {
 		return getValidIDAccess().getRule();
 	}
-
+	
 	//XImportSection:
 	//	importDeclarations+=XImportDeclaration+;
 	public XtypeGrammarAccess.XImportSectionElements getXImportSectionAccess() {
@@ -1039,7 +1043,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXImportSectionRule() {
 		return getXImportSectionAccess().getRule();
 	}
-
+	
 	//XImportDeclaration:
 	//	'import' (static?='static' extension?='extension'? importedType=[JvmDeclaredType|QualifiedNameInStaticImport]
 	//	(wildcard?='*' | memberName=ValidID) | importedType=[JvmDeclaredType|super::QualifiedName] |
@@ -1051,7 +1055,7 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getXImportDeclarationRule() {
 		return getXImportDeclarationAccess().getRule();
 	}
-
+	
 	//QualifiedNameInStaticImport:
 	//	(ValidID '.')+;
 	public XtypeGrammarAccess.QualifiedNameInStaticImportElements getQualifiedNameInStaticImportAccess() {
@@ -1061,41 +1065,41 @@ public class ContentAssistFragmentTestLangGrammarAccess extends AbstractGrammarE
 	public ParserRule getQualifiedNameInStaticImportRule() {
 		return getQualifiedNameInStaticImportAccess().getRule();
 	}
-
+	
 	//terminal ID:
 	//	'^'? ('a'..'z' | 'A'..'Z' | '$' | '_') ('a'..'z' | 'A'..'Z' | '$' | '_' | '0'..'9')*;
 	public TerminalRule getIDRule() {
 		return gaXtype.getIDRule();
-	} 
-
+	}
+	
 	//terminal STRING:
 	//	'"' ('\\' . | !('\\' | '"'))* '"'? |
 	//	"'" ('\\' . | !('\\' | "'"))* "'"?;
 	public TerminalRule getSTRINGRule() {
 		return gaXtype.getSTRINGRule();
-	} 
-
+	}
+	
 	//terminal ML_COMMENT:
-	//	'/ *'->'* /';
+	//	'/*'->'*/';
 	public TerminalRule getML_COMMENTRule() {
 		return gaXtype.getML_COMMENTRule();
-	} 
-
+	}
+	
 	//terminal SL_COMMENT:
 	//	'//' !('\n' | '\r')* ('\r'? '\n')?;
 	public TerminalRule getSL_COMMENTRule() {
 		return gaXtype.getSL_COMMENTRule();
-	} 
-
+	}
+	
 	//terminal WS:
 	//	' ' | '\t' | '\r' | '\n'+;
 	public TerminalRule getWSRule() {
 		return gaXtype.getWSRule();
-	} 
-
+	}
+	
 	//terminal ANY_OTHER:
 	//	.;
 	public TerminalRule getANY_OTHERRule() {
 		return gaXtype.getANY_OTHERRule();
-	} 
+	}
 }
