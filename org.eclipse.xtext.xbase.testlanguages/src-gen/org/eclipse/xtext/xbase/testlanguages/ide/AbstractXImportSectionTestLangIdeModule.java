@@ -5,10 +5,14 @@ package org.eclipse.xtext.xbase.testlanguages.ide;
 
 import com.google.inject.Binder;
 import com.google.inject.name.Names;
-import org.eclipse.xtext.ide.DefaultIdeModule;
 import org.eclipse.xtext.ide.LexerIdeBindings;
+import org.eclipse.xtext.ide.editor.contentassist.FQNPrefixMatcher;
+import org.eclipse.xtext.ide.editor.contentassist.IPrefixMatcher;
+import org.eclipse.xtext.ide.editor.contentassist.IProposalConflictHelper;
+import org.eclipse.xtext.ide.editor.contentassist.antlr.AntlrProposalConflictHelper;
 import org.eclipse.xtext.ide.editor.contentassist.antlr.IContentAssistParser;
 import org.eclipse.xtext.ide.editor.contentassist.antlr.internal.Lexer;
+import org.eclipse.xtext.xbase.ide.DefaultXbaseIdeModule;
 import org.eclipse.xtext.xbase.testlanguages.ide.contentassist.antlr.XImportSectionTestLangParser;
 import org.eclipse.xtext.xbase.testlanguages.ide.contentassist.antlr.internal.InternalXImportSectionTestLangLexer;
 
@@ -16,7 +20,7 @@ import org.eclipse.xtext.xbase.testlanguages.ide.contentassist.antlr.internal.In
  * Manual modifications go to {@link XImportSectionTestLangIdeModule}.
  */
 @SuppressWarnings("all")
-public abstract class AbstractXImportSectionTestLangIdeModule extends DefaultIdeModule {
+public abstract class AbstractXImportSectionTestLangIdeModule extends DefaultXbaseIdeModule {
 
 	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
 	public void configureContentAssistLexer(Binder binder) {
@@ -28,6 +32,16 @@ public abstract class AbstractXImportSectionTestLangIdeModule extends DefaultIde
 	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
 	public Class<? extends IContentAssistParser> bindIContentAssistParser() {
 		return XImportSectionTestLangParser.class;
+	}
+	
+	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
+	public Class<? extends IProposalConflictHelper> bindIProposalConflictHelper() {
+		return AntlrProposalConflictHelper.class;
+	}
+	
+	// contributed by org.eclipse.xtext.xtext.generator.exporting.QualifiedNamesFragment2
+	public Class<? extends IPrefixMatcher> bindIPrefixMatcher() {
+		return FQNPrefixMatcher.class;
 	}
 	
 }
