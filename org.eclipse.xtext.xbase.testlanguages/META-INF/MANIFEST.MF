@@ -7,6 +7,8 @@ Bundle-SymbolicName: org.eclipse.xtext.xbase.testlanguages; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.xtext;visibility:=reexport,
  org.eclipse.xtext.xbase;resolution:=optional;visibility:=reexport,
+ org.eclipse.xtext.xbase.ide,
+ org.eclipse.xtext.xbase.lib,
  org.eclipse.xtext.generator;resolution:=optional,
  org.apache.commons.logging;bundle-version="1.0.4";resolution:=optional,
  org.eclipse.emf.codegen.ecore;bundle-version="2.10.2";resolution:=optional,
@@ -17,7 +19,6 @@ Require-Bundle: org.eclipse.xtext;visibility:=reexport,
  org.eclipse.emf.common;bundle-version="2.10.1",
  org.antlr.runtime,
  org.eclipse.xtext.common.types,
- org.eclipse.xtext.xbase.lib,
  org.objectweb.asm;bundle-version="[5.0.1,6.0.0)";resolution:=optional,
  org.eclipse.xtext.testing,
  org.eclipse.xtend.lib
