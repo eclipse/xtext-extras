@@ -35,6 +35,7 @@ import org.eclipse.xtext.xbase.tests.typesystem.XbaseWithLogicalContainerInjecto
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.eclipse.xtext.xbase.jvmmodel.JvmAnnotationReferenceBuilder
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(XbaseWithLogicalContainerInjectorProvider))
@@ -43,6 +44,7 @@ class JvmModelGeneratorTest extends AbstractXbaseTestCase {
 	@Rule
 	@Inject public TemporaryFolder temporaryFolder
 	@Inject extension JvmTypesBuilder builder
+	@Inject JvmAnnotationReferenceBuilder.Factory annotationRefBuilderFactory
 	@Inject TypeReferences references
 	@Inject ValidationTestHelper helper
 	@Inject JvmModelGenerator generator
@@ -69,7 +71,7 @@ class JvmModelGeneratorTest extends AbstractXbaseTestCase {
 		expression.eResource.eSetDeliver(true)
 		val fsa = new InMemoryFileSystemAccess()
 		generator.doGenerate(expression.eResource, fsa)
-		val code = fsa.files.get(IFileSystemAccess::DEFAULT_OUTPUT + clazz.identifier.replace('.','/')+".java").toString
+		val code = fsa.textFiles.get(IFileSystemAccess::DEFAULT_OUTPUT + clazz.identifier.replace('.','/')+".java").toString
 		assertFalse(code.contains("import"))
 		assertTrue(code, code.contains("java.lang.String foo"))
 		val compiledClass = javaCompiler.compileToClass(clazz.identifier, code)
@@ -232,15 +234,16 @@ class JvmModelGeneratorTest extends AbstractXbaseTestCase {
 	@Test
 	def void testBug380754(){
 		val expression = expression("null")
+		val extension JvmAnnotationReferenceBuilder arefBuilder = annotationRefBuilderFactory.create(expression.eResource.resourceSet)
 		val clazz = expression.toClass("my.test.Foo") [
 			members += expression.toMethod("doStuff",references.getTypeForName("java.lang.Object", expression)) [
 				setBody(expression)
-				val annotation = expression.toAnnotation(typeof(TestAnnotations))
+				val annotation = TestAnnotations.annotationRef
 				val annotationAnnotationValue = typesFactory.createJvmAnnotationAnnotationValue
 
-				annotationAnnotationValue.values += expression.toAnnotation(typeof(TestAnnotation))
-				annotationAnnotationValue.values += expression.toAnnotation(typeof(TestAnnotation))
-				annotationAnnotationValue.values += expression.toAnnotation(typeof(TestAnnotation))
+				annotationAnnotationValue.values += TestAnnotation.annotationRef
+				annotationAnnotationValue.values += TestAnnotation.annotationRef
+				annotationAnnotationValue.values += TestAnnotation.annotationRef
 				annotation.explicitValues += annotationAnnotationValue
 				annotations += annotation
 			]
@@ -252,13 +255,14 @@ class JvmModelGeneratorTest extends AbstractXbaseTestCase {
 	@Test
 	def void testBug380754_2() {
 		val expression = expression("null")
+		val extension JvmAnnotationReferenceBuilder arefBuilder = annotationRefBuilderFactory.create(expression.eResource.resourceSet)
 		val clazz = expression.toClass("my.test.Foo") [
 			members += expression.toMethod("doStuff",references.getTypeForName("java.lang.Object", expression)) [
 				setBody(expression)
 				val parameter = expression.toParameter("s", references.getTypeForName(typeof(String), expression))
 				parameters += parameter
-				parameter.annotations += expression.toAnnotation(typeof(TestAnnotation))
-				parameter.annotations += expression.toAnnotation(typeof(TestAnnotation2))
+				parameter.annotations += TestAnnotation.annotationRef
+				parameter.annotations += TestAnnotation2.annotationRef
 			]
 		]
 		compile(expression.eResource, clazz)
@@ -267,14 +271,15 @@ class JvmModelGeneratorTest extends AbstractXbaseTestCase {
 	@Test
 	def void testBug419430() {
 		val expression = expression("null")
+		val extension JvmAnnotationReferenceBuilder arefBuilder = annotationRefBuilderFactory.create(expression.eResource.resourceSet)
 		val clazz = expression.toClass("my.test.Foo") [
 			members += expression.toMethod("doStuff", references.getTypeForName("java.lang.Object", expression)) [
 				setBody(expression)
-				val annotation = expression.toAnnotation(typeof(TestAnnotations))
+				val annotation = TestAnnotations.annotationRef
 				val annotationAnnotationValue = typesFactory.createJvmAnnotationAnnotationValue
-				annotationAnnotationValue.values += expression.toAnnotation(typeof(TestAnnotation))
-				annotationAnnotationValue.values += expression.toAnnotation(typeof(TestAnnotation))
-				annotationAnnotationValue.values += expression.toAnnotation(typeof(TestAnnotation))
+				annotationAnnotationValue.values += TestAnnotation.annotationRef
+				annotationAnnotationValue.values += TestAnnotation.annotationRef
+				annotationAnnotationValue.values += TestAnnotation.annotationRef
 				annotation.explicitValues += annotationAnnotationValue
 				annotations += annotation
 			]
