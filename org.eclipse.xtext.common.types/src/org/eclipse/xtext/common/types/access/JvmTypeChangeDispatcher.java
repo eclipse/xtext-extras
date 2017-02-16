@@ -9,15 +9,22 @@ package org.eclipse.xtext.common.types.access;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 /**
  * @author Sebastian Zarnekow - Initial contribution and API
@@ -60,21 +67,21 @@ public class JvmTypeChangeDispatcher extends AdapterImpl {
 			super.notifyChanged(notification);
 			if (notification.isTouch() && !isRemoveThis(notification)) 
 				return;
-			List<Runnable> localListeners = null;
+			Map<Notifier, List<Runnable>> localListeners = null;
 			synchronized (listenerLock) {
 				localListeners = listeners;
 				if (localListeners.isEmpty()) {
 					return;
 				}
-				listeners = Lists.newLinkedList();
+				listeners = Maps.newLinkedHashMap();
 			}
-			Iterator<Runnable> iterator = localListeners.iterator();
-			while(iterator.hasNext()) {
+			Iterator<Runnable> iterator = IterableExtensions.flatten(localListeners.values()).iterator();
+			while (iterator.hasNext()) {
 				Runnable runnable = iterator.next();
 				if (runnable != null) {
 					try {
 						runnable.run();
-					} catch(Exception e) {
+					} catch (Exception e) {
 						LOG.error(e.getMessage(), e);
 					}
 				}
@@ -106,12 +113,12 @@ public class JvmTypeChangeDispatcher extends AdapterImpl {
 		
 	}
 	
-	private List<Runnable> listeners;
+	private Map<Notifier, List<Runnable>> listeners;
 	
 	private final Object listenerLock = new Object();
 	
 	public JvmTypeChangeDispatcher() {
-		listeners = Lists.newLinkedList();
+		listeners = Maps.newLinkedHashMap();
 	}
 	
 	public void requestNotificationOnChange(Notifier notifier, Runnable runnable) {
@@ -122,7 +129,10 @@ public class JvmTypeChangeDispatcher extends AdapterImpl {
 			notifier.eAdapters().add(result);
 		}
 		synchronized (listeners) {
-			listeners.add(runnable);
+			if(!listeners.containsKey(notifier)) {
+				listeners.put(notifier, Lists.<Runnable>newLinkedList());
+			}
+			listeners.get(notifier).add(runnable);
 		}
 	}
 	
@@ -131,4 +141,28 @@ public class JvmTypeChangeDispatcher extends AdapterImpl {
 		return JvmTypeChangeDispatcher.class.equals(type);
 	}
 	
+	public void removeListenersFromResource(Resource resource) {
+		URI toBeRemovedURI = resource.getURI();
+		if (toBeRemovedURI != null) {
+			synchronized (listeners) {
+				Iterator<Entry<Notifier, List<Runnable>>> iter = listeners.entrySet().iterator();
+				while (iter.hasNext()) {
+					Entry<Notifier, List<Runnable>> entry = iter.next();
+					if (toBeRemovedURI.equals(getNotifierURI(entry.getKey()))) {
+						iter.remove();
+					}
+				}
+
+			}
+		}
+	}
+
+	private URI getNotifierURI(Notifier notifier) {
+		if (notifier instanceof EObject) {
+			return ((EObject) notifier).eResource().getURI();
+		} else if (notifier instanceof Resource) {
+			return ((Resource) notifier).getURI();
+		}
+		return null;
+	}
 }
