@@ -19,6 +19,7 @@ import org.eclipse.xtext.common.types.JvmDeclaredType;
 import org.eclipse.xtext.common.types.JvmExecutable;
 import org.eclipse.xtext.common.types.JvmField;
 import org.eclipse.xtext.common.types.JvmFormalParameter;
+import org.eclipse.xtext.common.types.JvmGenericType;
 import org.eclipse.xtext.common.types.JvmIdentifiableElement;
 import org.eclipse.xtext.common.types.JvmMember;
 import org.eclipse.xtext.common.types.JvmType;
@@ -323,6 +324,9 @@ public class SerializerScopeProvider implements IScopeProvider, IFeatureNames {
 			JvmDeclaredType thisType = ((JvmMember) logicalContainer).getDeclaringType();
 			if (thisType != thisOrSuper) {
 				name = SUPER;
+				if (logicalContainer instanceof JvmConstructor && thisType instanceof JvmGenericType && ((JvmGenericType) thisType).isAnonymous()) {
+					name = THIS;
+				}
 			}
 		}
 		return new SingletonScope(EObjectDescription.create(name, thisOrSuper), IScope.NULLSCOPE);
