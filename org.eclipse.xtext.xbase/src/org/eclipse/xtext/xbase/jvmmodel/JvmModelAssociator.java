@@ -26,6 +26,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.xtext.Constants;
 import org.eclipse.xtext.common.types.JvmDeclaredType;
 import org.eclipse.xtext.common.types.JvmIdentifiableElement;
+import org.eclipse.xtext.common.types.access.JvmTypeChangeDispatcher;
 import org.eclipse.xtext.common.types.xtext.JvmMemberInitializableResource;
 import org.eclipse.xtext.resource.DerivedStateAwareResource;
 import org.eclipse.xtext.resource.IDerivedStateComputer;
@@ -432,9 +433,24 @@ public class JvmModelAssociator implements IJvmModelAssociations, IJvmModelAssoc
 
 	@Override
 	public void discardDerivedState(DerivedStateAwareResource resource) {
+		cleanJvmTypeChangeDispatcher(resource);
 		cleanAssociationState(resource);
 	}
 
+	/**
+	 * @since 2.11
+	 */
+	public void cleanJvmTypeChangeDispatcher(DerivedStateAwareResource resource) {
+		final Notifier notifier;
+		if (resource.getResourceSet() != null) {
+			notifier = resource.getResourceSet();
+		} else {
+			notifier = resource;
+		}
+		JvmTypeChangeDispatcher resourceChangeDispatcher = JvmTypeChangeDispatcher.findResourceChangeDispatcher(notifier);
+		resourceChangeDispatcher.removeListenersFromResource(resource);
+	}
+	
 	public void cleanAssociationState(Resource resource) {
 		checkLanguageResource(resource);
 		List<EObject> derived = Lists.newArrayList();
