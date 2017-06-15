@@ -75,6 +75,7 @@ public class Formatter2Fragment extends Xtend2GeneratorFragment {
     return bf.getBindings();
   }
   
+  @Deprecated
   @Override
   public void generate(final Xtend2ExecutionContext ctx) {
     ctx.writeFile(Generator.SRC, this.stubGenerator.getStubFileName(), this.stubGenerator.generateStubFileContents());

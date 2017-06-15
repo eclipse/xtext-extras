@@ -10,7 +10,6 @@ package testdata;
 /**
  * @author Jan Koehnlein - Initial contribution and API
  */
-@SuppressWarnings("unused")
 public class Methods {
 
 	public void method(int i) {}

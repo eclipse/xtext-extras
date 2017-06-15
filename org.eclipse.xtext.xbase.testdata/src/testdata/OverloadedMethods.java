@@ -13,7 +13,6 @@ import java.util.List;
 /**
  * @author Sebastian Zarnekow - Initial contribution and API
  */
-@SuppressWarnings("unused")
 public class OverloadedMethods<V> {
 
 	public int usedConstructor = 0; 

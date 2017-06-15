@@ -18,7 +18,6 @@ import org.eclipse.xpand2.XpandExecutionContext;
 import org.eclipse.xtext.Grammar;
 import org.eclipse.xtext.GrammarUtil;
 import org.eclipse.xtext.formatting.ILineSeparatorInformation;
-import org.eclipse.xtext.generator.Generator;
 import org.eclipse.xtext.generator.GeneratorWarning;
 import org.eclipse.xtext.generator.Naming;
 import org.eclipse.xtext.generator.NewlineNormalizer;
@@ -45,14 +44,15 @@ public class DebugAntlrGeneratorFragment extends AbstractAntlrGeneratorFragment 
 		issues.addInfo("Generate debugging grammar file");
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void generate(Grammar grammar, XpandExecutionContext ctx) {
 		DebugGrammarToken token = DebugGrammarToken.aquire();
 		try {
 			super.generate(grammar, ctx);
-			String srcGenPath = ctx.getOutput().getOutlet(Generator.SRC_GEN).getPath();
+			String srcGenPath = ctx.getOutput().getOutlet(org.eclipse.xtext.generator.Generator.SRC_GEN).getPath();
 			String absoluteGrammarFileName = srcGenPath+"/"+getGrammarFileName(grammar, getNaming()).replace('.', '/')+".g";
-			prettyPrint(absoluteGrammarFileName, Charset.forName(getEncoding(ctx, Generator.SRC_GEN)));
+			prettyPrint(absoluteGrammarFileName, Charset.forName(getEncoding(ctx, org.eclipse.xtext.generator.Generator.SRC_GEN)));
 		} finally {
 			token.done();
 		}

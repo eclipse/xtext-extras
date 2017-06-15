@@ -22,7 +22,6 @@ import org.eclipse.xtext.Grammar;
 import org.eclipse.xtext.generator.BindFactory;
 import org.eclipse.xtext.generator.Binding;
 import org.eclipse.xtext.generator.DefaultGeneratorFragment;
-import org.eclipse.xtext.generator.Generator;
 import org.eclipse.xtext.generator.Naming;
 import org.eclipse.xtext.generator.NamingAware;
 import org.eclipse.xtext.generator.NewlineNormalizer;
@@ -100,14 +99,15 @@ public class ExternalAntlrLexerFragment extends DefaultGeneratorFragment impleme
 		return antlrTool;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void generate(Grammar grammar, XpandExecutionContext ctx) {
 		super.generate(grammar, ctx);
-		String srcGen = Generator.SRC_GEN;
-		String src = Generator.SRC;
+		String srcGen = org.eclipse.xtext.generator.Generator.SRC_GEN;
+		String src = org.eclipse.xtext.generator.Generator.SRC;
 		if (contentAssist || highlighting) {
-			srcGen = Generator.SRC_GEN_IDE;
-			src = Generator.SRC_IDE;
+			srcGen = org.eclipse.xtext.generator.Generator.SRC_GEN_IDE;
+			src = org.eclipse.xtext.generator.Generator.SRC_IDE;
 		}
 		String srcGenPath = ctx.getOutput().getOutlet(srcGen).getPath();
 		String srcPath = ctx.getOutput().getOutlet(src).getPath();

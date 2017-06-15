@@ -67,6 +67,7 @@ public class CompositeGeneratorFragment implements IGeneratorFragment, IGenerato
 	/**
 	 * @since 2.6
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
 	public void addToPluginXmlRt(LanguageConfig config, XpandExecutionContext ctx) {
 		for (IGeneratorFragment fragment : fragments) {
@@ -88,6 +89,7 @@ public class CompositeGeneratorFragment implements IGeneratorFragment, IGenerato
 	/**
 	 * @since 2.6
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
 	public void addToPluginXmlUi(LanguageConfig config, XpandExecutionContext ctx) {
 		for (IGeneratorFragment fragment : fragments) {
@@ -123,6 +125,7 @@ public class CompositeGeneratorFragment implements IGeneratorFragment, IGenerato
 	/**
 	 * @since 2.6
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
 	public void addToStandaloneSetup(LanguageConfig config, XpandExecutionContext ctx) {
 		for (IGeneratorFragment fragment : fragments) {
@@ -154,6 +157,7 @@ public class CompositeGeneratorFragment implements IGeneratorFragment, IGenerato
 	/**
 	 * @since 2.6
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
 	public void generate(LanguageConfig config, XpandExecutionContext ctx) throws CompositeGeneratorException {
 		CompositeGeneratorException cgEx = new CompositeGeneratorException();

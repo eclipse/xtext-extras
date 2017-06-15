@@ -84,6 +84,7 @@ public class ValidatorFragment extends Xtend2GeneratorFragment implements IInher
     return _xblockexpression;
   }
   
+  @Deprecated
   @Override
   public void generate(final Xtend2ExecutionContext ctx) {
     String _asPath = this._naming.asPath(this._validatorNaming.getAbstractValidatorName());

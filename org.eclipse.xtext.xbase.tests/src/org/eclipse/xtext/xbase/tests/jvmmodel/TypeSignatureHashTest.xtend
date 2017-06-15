@@ -52,6 +52,7 @@ class TypeSignatureHashTest extends AbstractXbaseTestCase {
 		assertFalse('Bar'.equal(bar.hash))
 	}
 	
+	@Deprecated
 	@Test
 	def void testRecursiveInheritance() {
 		val eObject = EcoreFactory::eINSTANCE.createEObject

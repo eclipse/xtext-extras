@@ -66,6 +66,7 @@ import org.eclipse.xtext.xtext.generator.parser.antlr.GrammarNaming;
  * @noreference
  */
 @Log
+@Deprecated
 @SuppressWarnings("all")
 public class XtextAntlrGeneratorComparisonFragment extends FragmentAdapter {
   public static class ErrorHandler implements AntlrGrammarComparator.IErrorHandler {
@@ -219,6 +220,7 @@ public class XtextAntlrGeneratorComparisonFragment extends FragmentAdapter {
    * {@link Generator#SRC_GEN_UI Generator.SRC_GEN_UI} outlets
    * and injects the {@link #getTmpPath()}.
    */
+  @Deprecated
   @Override
   protected Outlet createOutlet(final boolean append, final String encoding, final String name, final boolean overwrite, final String path) {
     Outlet _xifexpression = null;
@@ -230,6 +232,7 @@ public class XtextAntlrGeneratorComparisonFragment extends FragmentAdapter {
     return _xifexpression;
   }
   
+  @Deprecated
   @Override
   public void generate() {
     Naming _naming = this.getNaming();
@@ -277,6 +280,7 @@ public class XtextAntlrGeneratorComparisonFragment extends FragmentAdapter {
     return new XtextAntlrGeneratorComparisonFragment.ErrorHandler();
   }
   
+  @Deprecated
   protected RuntimeException loadAndCompareGrammars(final IFileSystemAccess2 fsa, final String outlet, final AntlrGrammarComparator.IErrorHandler errorHandler) {
     try {
       final StopWatch stopWatch = new StopWatch();
@@ -406,6 +410,7 @@ public class XtextAntlrGeneratorComparisonFragment extends FragmentAdapter {
   protected void postProcessReferenceParserGrammar(final String absoluteReferenceParserGrammarFile, final String outlet) {
   }
   
+  @Deprecated
   protected void performXpandBasedGeneration(final String outlet) {
     final RuleFilter filter = new RuleFilter();
     filter.setDiscardUnreachableRules(this.options.isSkipUnusedRules());

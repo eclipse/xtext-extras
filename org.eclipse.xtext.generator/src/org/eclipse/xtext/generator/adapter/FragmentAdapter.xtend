@@ -20,14 +20,12 @@ import org.eclipse.xtend.expression.Variable
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.xtend.type.impl.java.JavaBeansMetaModel
 import org.eclipse.xtext.generator.Binding
-import org.eclipse.xtext.generator.Generator
 import org.eclipse.xtext.generator.IFileSystemAccess2
 import org.eclipse.xtext.generator.IGeneratorFragment
 import org.eclipse.xtext.generator.IGeneratorFragmentExtension
 import org.eclipse.xtext.generator.IGeneratorFragmentExtension2
 import org.eclipse.xtext.generator.IGeneratorFragmentExtension3
 import org.eclipse.xtext.generator.IGeneratorFragmentExtension4
-import org.eclipse.xtext.generator.LanguageConfig
 import org.eclipse.xtext.generator.Naming
 import org.eclipse.xtext.generator.NamingAware
 import org.eclipse.xtext.generator.NewlineNormalizer
@@ -46,6 +44,7 @@ import static extension org.eclipse.xtext.xtext.generator.model.TypeReference.gu
 /**
  * @since 2.9
  */
+@Deprecated
 class FragmentAdapter extends AbstractXtextGeneratorFragment {
 	
 	@Inject CodeConfig codeConfig
@@ -103,7 +102,7 @@ class FragmentAdapter extends AbstractXtextGeneratorFragment {
 		generateManifestTests(config1, ctx)
 	}
 	
-	private def void generateStandaloneSetup(LanguageConfig config1, XpandExecutionContext ctx) {
+	private def void generateStandaloneSetup(org.eclipse.xtext.generator.LanguageConfig config1, XpandExecutionContext ctx) {
 		ctx.output.openFile(null, StringConcatOutputImpl.STRING_OUTLET)
 		try {
 			val config2 = language
@@ -121,7 +120,7 @@ class FragmentAdapter extends AbstractXtextGeneratorFragment {
 		}
 	}
 	
-	private def generateGuiceModuleRt(LanguageConfig config1, XpandExecutionContext ctx) {
+	private def generateGuiceModuleRt(org.eclipse.xtext.generator.LanguageConfig config1, XpandExecutionContext ctx) {
 		val config2 = language
 		val bindings = fragment.getGuiceBindingsRt(config1.grammar)
 		if (bindings !== null)
@@ -133,7 +132,7 @@ class FragmentAdapter extends AbstractXtextGeneratorFragment {
 		}
 	}
 	
-	private def generateGuiceModuleUi(LanguageConfig config1, XpandExecutionContext ctx) {
+	private def generateGuiceModuleUi(org.eclipse.xtext.generator.LanguageConfig config1, XpandExecutionContext ctx) {
 		val config2 = language
 		val bindings = fragment.getGuiceBindingsUi(config1.grammar)
 		if (bindings !== null)
@@ -169,7 +168,7 @@ class FragmentAdapter extends AbstractXtextGeneratorFragment {
 		return qualifiedName
 	}
 	
-	private def void generatePluginXmlRt(LanguageConfig config1, XpandExecutionContext ctx) {
+	private def void generatePluginXmlRt(org.eclipse.xtext.generator.LanguageConfig config1, XpandExecutionContext ctx) {
 		if (projectConfig.runtime.pluginXml !== null) {
 			ctx.output.openFile(null, StringConcatOutputImpl.STRING_OUTLET)
 			try {
@@ -188,7 +187,7 @@ class FragmentAdapter extends AbstractXtextGeneratorFragment {
 		}
 	}
 	
-	private def void generatePluginXmlUi(LanguageConfig config1, XpandExecutionContext ctx) {
+	private def void generatePluginXmlUi(org.eclipse.xtext.generator.LanguageConfig config1, XpandExecutionContext ctx) {
 		if (projectConfig.eclipsePlugin.pluginXml !== null) {
 			ctx.output.openFile(null, StringConcatOutputImpl.STRING_OUTLET)
 			try {
@@ -207,7 +206,7 @@ class FragmentAdapter extends AbstractXtextGeneratorFragment {
 		}
 	}
 	
-	private def void generateManifestRt(LanguageConfig config1, XpandExecutionContext ctx) {
+	private def void generateManifestRt(org.eclipse.xtext.generator.LanguageConfig config1, XpandExecutionContext ctx) {
 		if (projectConfig.runtime.manifest !== null) {
 			val exported = fragment.getExportedPackagesRt(config1.grammar)
 			if (exported !== null)
@@ -221,7 +220,7 @@ class FragmentAdapter extends AbstractXtextGeneratorFragment {
 		}
 	}
 	
-	private def void generateManifestUi(LanguageConfig config1, XpandExecutionContext ctx) {
+	private def void generateManifestUi(org.eclipse.xtext.generator.LanguageConfig config1, XpandExecutionContext ctx) {
 		if (projectConfig.eclipsePlugin.manifest !== null) {
 			val exported = fragment.getExportedPackagesUi(config1.grammar)
 			if (exported !== null)
@@ -235,7 +234,7 @@ class FragmentAdapter extends AbstractXtextGeneratorFragment {
 		}
 	}
 	
-	private def void generateManifestIde(LanguageConfig config1, XpandExecutionContext ctx) {
+	private def void generateManifestIde(org.eclipse.xtext.generator.LanguageConfig config1, XpandExecutionContext ctx) {
 		if (fragment instanceof IGeneratorFragmentExtension3 && projectConfig.genericIde.manifest !== null) {
 			val fr = fragment as IGeneratorFragmentExtension3
 			val exported = fr.getExportedPackagesIde(config1.grammar)
@@ -250,7 +249,7 @@ class FragmentAdapter extends AbstractXtextGeneratorFragment {
 		}
 	}
 	
-	private def void generateManifestTests(LanguageConfig config1, XpandExecutionContext ctx) {
+	private def void generateManifestTests(org.eclipse.xtext.generator.LanguageConfig config1, XpandExecutionContext ctx) {
 		if (fragment instanceof IGeneratorFragmentExtension && projectConfig.runtimeTest.manifest !== null) {
 			val fr = fragment as IGeneratorFragmentExtension
 			val exported = fr.getExportedPackagesTests(config1.grammar)
@@ -288,9 +287,9 @@ class FragmentAdapter extends AbstractXtextGeneratorFragment {
 		return result
 	}
 	
-	protected def LanguageConfig createLanguageConfig() {
+	protected def org.eclipse.xtext.generator.LanguageConfig createLanguageConfig() {
 		val config2 = language as XtextGeneratorLanguage
-		val config = new LanguageConfig
+		val config = new org.eclipse.xtext.generator.LanguageConfig
 		config.forcedResourceSet = config2.resourceSet
 		config.fileExtensions = config2.fileExtensions.join(',')
 		config.uri = config2.grammarUri
@@ -303,55 +302,55 @@ class FragmentAdapter extends AbstractXtextGeneratorFragment {
 		val output = new StringConcatOutputImpl
 
 		if (projectConfig.runtime.root !== null)
-			output.addOutlet(createOutlet(false, encoding, Generator.PLUGIN_RT, false, projectConfig.runtime.root.path))
+			output.addOutlet(createOutlet(false, encoding, org.eclipse.xtext.generator.Generator.PLUGIN_RT, false, projectConfig.runtime.root.path))
 		if (projectConfig.runtime.src !== null)
-			output.addOutlet(createOutlet(false, encoding, Generator.SRC, false, projectConfig.runtime.src.path))
+			output.addOutlet(createOutlet(false, encoding, org.eclipse.xtext.generator.Generator.SRC, false, projectConfig.runtime.src.path))
 		if (projectConfig.runtime.srcGen !== null)
-			output.addOutlet(createOutlet(false, encoding, Generator.SRC_GEN, true, projectConfig.runtime.srcGen.path))
+			output.addOutlet(createOutlet(false, encoding, org.eclipse.xtext.generator.Generator.SRC_GEN, true, projectConfig.runtime.srcGen.path))
 		if (projectConfig.runtime.root !== null)
-			output.addOutlet(createOutlet(false, encoding, Generator.MODEL, false, projectConfig.runtime.root.path + "/model"))
+			output.addOutlet(createOutlet(false, encoding, org.eclipse.xtext.generator.Generator.MODEL, false, projectConfig.runtime.root.path + "/model"))
 		if (projectConfig.eclipsePlugin.root !== null)
-			output.addOutlet(createOutlet(false, encoding, Generator.PLUGIN_UI, false, projectConfig.eclipsePlugin.root.path))
+			output.addOutlet(createOutlet(false, encoding, org.eclipse.xtext.generator.Generator.PLUGIN_UI, false, projectConfig.eclipsePlugin.root.path))
 		else if (projectConfig.runtime.root !== null)
-			output.addOutlet(createOutlet(false, encoding, Generator.PLUGIN_UI, false, projectConfig.runtime.root.path))
+			output.addOutlet(createOutlet(false, encoding, org.eclipse.xtext.generator.Generator.PLUGIN_UI, false, projectConfig.runtime.root.path))
 		if (projectConfig.eclipsePlugin.src !== null)
-			output.addOutlet(createOutlet(false, encoding, Generator.SRC_UI, false, projectConfig.eclipsePlugin.src.path))
+			output.addOutlet(createOutlet(false, encoding, org.eclipse.xtext.generator.Generator.SRC_UI, false, projectConfig.eclipsePlugin.src.path))
 		else if (projectConfig.runtime.src !== null)
-			output.addOutlet(createOutlet(false, encoding, Generator.SRC_UI, false, projectConfig.runtime.src.path))
+			output.addOutlet(createOutlet(false, encoding, org.eclipse.xtext.generator.Generator.SRC_UI, false, projectConfig.runtime.src.path))
 		if (projectConfig.eclipsePlugin.srcGen !== null)
-			output.addOutlet(createOutlet(false, encoding, Generator.SRC_GEN_UI, true, projectConfig.eclipsePlugin.srcGen.path))
+			output.addOutlet(createOutlet(false, encoding, org.eclipse.xtext.generator.Generator.SRC_GEN_UI, true, projectConfig.eclipsePlugin.srcGen.path))
 		else if (projectConfig.runtime.srcGen !== null)
-			output.addOutlet(createOutlet(false, encoding, Generator.SRC_GEN_UI, true, projectConfig.runtime.srcGen.path))
+			output.addOutlet(createOutlet(false, encoding, org.eclipse.xtext.generator.Generator.SRC_GEN_UI, true, projectConfig.runtime.srcGen.path))
 		if (projectConfig.genericIde.root !== null)
-			output.addOutlet(createOutlet(false, encoding, Generator.PLUGIN_IDE, false, projectConfig.genericIde.root.path))
+			output.addOutlet(createOutlet(false, encoding, org.eclipse.xtext.generator.Generator.PLUGIN_IDE, false, projectConfig.genericIde.root.path))
 		else if (projectConfig.eclipsePlugin.root !== null)
-			output.addOutlet(createOutlet(false, encoding, Generator.PLUGIN_IDE, false, projectConfig.eclipsePlugin.root.path))
+			output.addOutlet(createOutlet(false, encoding, org.eclipse.xtext.generator.Generator.PLUGIN_IDE, false, projectConfig.eclipsePlugin.root.path))
 		else if (projectConfig.runtime.root !== null)
-			output.addOutlet(createOutlet(false, encoding, Generator.PLUGIN_IDE, false, projectConfig.runtime.root.path))
+			output.addOutlet(createOutlet(false, encoding, org.eclipse.xtext.generator.Generator.PLUGIN_IDE, false, projectConfig.runtime.root.path))
 		if (projectConfig.genericIde.src !== null)
-			output.addOutlet(createOutlet(false, encoding, Generator.SRC_IDE, false, projectConfig.genericIde.src.path))
+			output.addOutlet(createOutlet(false, encoding, org.eclipse.xtext.generator.Generator.SRC_IDE, false, projectConfig.genericIde.src.path))
 		else if (projectConfig.eclipsePlugin.src !== null)
-			output.addOutlet(createOutlet(false, encoding, Generator.SRC_IDE, false, projectConfig.eclipsePlugin.src.path))
+			output.addOutlet(createOutlet(false, encoding, org.eclipse.xtext.generator.Generator.SRC_IDE, false, projectConfig.eclipsePlugin.src.path))
 		else if (projectConfig.runtime.src !== null)
-			output.addOutlet(createOutlet(false, encoding, Generator.SRC_IDE, false, projectConfig.runtime.src.path))
+			output.addOutlet(createOutlet(false, encoding, org.eclipse.xtext.generator.Generator.SRC_IDE, false, projectConfig.runtime.src.path))
 		if (projectConfig.genericIde.srcGen !== null)
-			output.addOutlet(createOutlet(false, encoding, Generator.SRC_GEN_IDE, true, projectConfig.genericIde.srcGen.path))
+			output.addOutlet(createOutlet(false, encoding, org.eclipse.xtext.generator.Generator.SRC_GEN_IDE, true, projectConfig.genericIde.srcGen.path))
 		else if (projectConfig.eclipsePlugin.srcGen !== null)
-			output.addOutlet(createOutlet(false, encoding, Generator.SRC_GEN_IDE, true, projectConfig.eclipsePlugin.srcGen.path))
+			output.addOutlet(createOutlet(false, encoding, org.eclipse.xtext.generator.Generator.SRC_GEN_IDE, true, projectConfig.eclipsePlugin.srcGen.path))
 		else if (projectConfig.runtime.srcGen !== null)
-			output.addOutlet(createOutlet(false, encoding, Generator.SRC_GEN_IDE, true, projectConfig.runtime.srcGen.path))
+			output.addOutlet(createOutlet(false, encoding, org.eclipse.xtext.generator.Generator.SRC_GEN_IDE, true, projectConfig.runtime.srcGen.path))
 		if (projectConfig.runtimeTest.root !== null)
-			output.addOutlet(createOutlet(false, encoding, Generator.PLUGIN_TEST, false, projectConfig.runtimeTest.root.path))
+			output.addOutlet(createOutlet(false, encoding, org.eclipse.xtext.generator.Generator.PLUGIN_TEST, false, projectConfig.runtimeTest.root.path))
 		else if (projectConfig.runtime.root !== null)
-			output.addOutlet(createOutlet(false, encoding, Generator.PLUGIN_TEST, false, projectConfig.runtime.root.path))
+			output.addOutlet(createOutlet(false, encoding, org.eclipse.xtext.generator.Generator.PLUGIN_TEST, false, projectConfig.runtime.root.path))
 		if (projectConfig.runtimeTest.src !== null)
-			output.addOutlet(createOutlet(false, encoding, Generator.SRC_TEST, false, projectConfig.runtimeTest.src.path))
+			output.addOutlet(createOutlet(false, encoding, org.eclipse.xtext.generator.Generator.SRC_TEST, false, projectConfig.runtimeTest.src.path))
 		else if (projectConfig.runtime.src !== null)
-			output.addOutlet(createOutlet(false, encoding, Generator.SRC_TEST, false, projectConfig.runtime.src.path))
+			output.addOutlet(createOutlet(false, encoding, org.eclipse.xtext.generator.Generator.SRC_TEST, false, projectConfig.runtime.src.path))
 		if (projectConfig.runtimeTest.srcGen !== null)
-			output.addOutlet(createOutlet(false, encoding, Generator.SRC_GEN_TEST, true, projectConfig.runtimeTest.srcGen.path))
+			output.addOutlet(createOutlet(false, encoding, org.eclipse.xtext.generator.Generator.SRC_GEN_TEST, true, projectConfig.runtimeTest.srcGen.path))
 		else if (projectConfig.runtime.srcGen !== null)
-			output.addOutlet(createOutlet(false, encoding, Generator.SRC_GEN_TEST, true, projectConfig.runtime.srcGen.path))
+			output.addOutlet(createOutlet(false, encoding, org.eclipse.xtext.generator.Generator.SRC_GEN_TEST, true, projectConfig.runtime.srcGen.path))
 		val Map<String, Variable> globalVars = Maps.newHashMap
 		globalVars.put(Naming.GLOBAL_VAR_NAME, new Variable(Naming.GLOBAL_VAR_NAME, naming))
 

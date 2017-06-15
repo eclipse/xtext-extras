@@ -44,6 +44,7 @@ public class GeneratedClassAnnotation implements IClassAnnotation {
 		return stringBuilder.append(')').toString();
 	}
 	
+	@SuppressWarnings("deprecation")
 	protected String getGeneratorName() {
 		return Generator.class.getName();
 	}

@@ -16,7 +16,6 @@ import org.eclipse.xtext.Grammar;
 import org.eclipse.xtext.GrammarUtil;
 import org.eclipse.xtext.generator.BindFactory;
 import org.eclipse.xtext.generator.Binding;
-import org.eclipse.xtext.generator.Generator;
 import org.eclipse.xtext.generator.Naming;
 import org.eclipse.xtext.parser.IParser;
 import org.eclipse.xtext.parser.ITokenToStringConverter;
@@ -37,11 +36,12 @@ import org.eclipse.xtext.parser.antlr.UnorderedGroupHelper;
  */
 public class XtextAntlrGeneratorFragment extends AbstractAntlrGeneratorFragment {
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void generate(Grammar grammar, XpandExecutionContext ctx) {
 		super.generate(grammar, ctx);
-		String srcGenPath = ctx.getOutput().getOutlet(Generator.SRC_GEN).getPath();
-		final String encoding = getEncoding(ctx, Generator.SRC_GEN);
+		String srcGenPath = ctx.getOutput().getOutlet(org.eclipse.xtext.generator.Generator.SRC_GEN).getPath();
+		final String encoding = getEncoding(ctx, org.eclipse.xtext.generator.Generator.SRC_GEN);
 		String absoluteGrammarFileName = srcGenPath+"/"+getGrammarFileName(grammar, getNaming()).replace('.', '/')+".g";
 		addAntlrParam("-fo");
 		addAntlrParam(absoluteGrammarFileName.substring(0, absoluteGrammarFileName.lastIndexOf('/')));

@@ -95,6 +95,7 @@ public class JvmModelGeneratorTest extends AbstractXbaseTestCase {
   @Inject
   private JvmModelCompleter completer;
   
+  @Deprecated
   @Test
   public void bug390290InnerClassMemberImport() {
     try {
@@ -394,6 +395,7 @@ public class JvmModelGeneratorTest extends AbstractXbaseTestCase {
     }
   }
   
+  @Deprecated
   @Test
   public void testBug380754() {
     try {
@@ -428,6 +430,7 @@ public class JvmModelGeneratorTest extends AbstractXbaseTestCase {
     }
   }
   
+  @Deprecated
   @Test
   public void testBug380754_2() {
     try {
@@ -456,6 +459,7 @@ public class JvmModelGeneratorTest extends AbstractXbaseTestCase {
     }
   }
   
+  @Deprecated
   @Test
   public void testBug419430() {
     try {
@@ -968,6 +972,7 @@ public class JvmModelGeneratorTest extends AbstractXbaseTestCase {
     return this.compileToClass(res, type, this.generate(res, type));
   }
   
+  @Deprecated
   public String generate(final Resource res, final JvmDeclaredType type) {
     String _xblockexpression = null;
     {

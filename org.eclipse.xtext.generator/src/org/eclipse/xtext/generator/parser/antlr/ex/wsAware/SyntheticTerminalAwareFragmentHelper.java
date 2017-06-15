@@ -10,7 +10,6 @@ package org.eclipse.xtext.generator.parser.antlr.ex.wsAware;
 import org.eclipse.xtext.TerminalRule;
 import org.eclipse.xtext.generator.Naming;
 import org.eclipse.xtext.generator.parser.antlr.ex.common.AntlrFragmentHelper;
-import org.eclipse.xtext.generator.serializer.SerializerFragment;
 import org.eclipse.xtext.generator.terminals.SyntheticTerminalDetector;
 
 /**

@@ -18,10 +18,8 @@ import org.eclipse.xtext.Grammar
 import org.eclipse.xtext.generator.BindFactory
 import org.eclipse.xtext.generator.Binding
 import org.eclipse.xtext.generator.IStubGenerating
-import org.eclipse.xtext.generator.LanguageConfig
 import org.eclipse.xtext.generator.Xtend2ExecutionContext
 import org.eclipse.xtext.generator.Xtend2GeneratorFragment
-import org.eclipse.xtext.generator.adapter.Generator2AdapterSetup
 import org.eclipse.xtext.generator.parser.antlr.ex.wsAware.SyntheticTerminalAwareFragmentHelper
 import org.eclipse.xtext.generator.terminals.SyntheticTerminalDetector
 import org.eclipse.xtext.parser.antlr.AbstractSplittingTokenSource
@@ -37,6 +35,7 @@ import org.eclipse.xtext.xtext.generator.CodeConfig
 /**
  * @author Moritz Eyshold - Initial contribution and API
  */
+@Deprecated
 class SerializerFragment extends Xtend2GeneratorFragment implements IStubGenerating, IStubGenerating.XtendOption {
 	
 	@Inject SerializerGenFileNames names
@@ -59,7 +58,7 @@ class SerializerFragment extends Xtend2GeneratorFragment implements IStubGenerat
 	
 	@Accessors boolean generateXtendStub
 	
-	Generator2AdapterSetup adapterSetup
+	org.eclipse.xtext.generator.adapter.Generator2AdapterSetup adapterSetup
 	
 	override protected addLocalBindings(Binder binder) {
 		binder
@@ -109,8 +108,9 @@ class SerializerFragment extends Xtend2GeneratorFragment implements IStubGenerat
 		return bf.bindings;
 	}
 	
-	override generate(LanguageConfig config, XpandExecutionContext ctx) {
-		adapterSetup = new Generator2AdapterSetup(config, ctx, naming)
+	@Deprecated
+	override generate(org.eclipse.xtext.generator.LanguageConfig config, XpandExecutionContext ctx) {
+		adapterSetup = new org.eclipse.xtext.generator.adapter.Generator2AdapterSetup(config, ctx, naming)
 		adapterSetup.additionalLanguageBindings = [
 			bind(org.eclipse.xtext.xtext.generator.util.SyntheticTerminalDetector)
 				.toInstance(syntheticTerminalDetector)

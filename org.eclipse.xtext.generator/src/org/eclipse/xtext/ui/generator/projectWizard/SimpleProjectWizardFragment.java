@@ -22,7 +22,6 @@ import org.eclipse.xtext.GrammarUtil;
 import org.eclipse.xtext.generator.AbstractGeneratorFragment;
 import org.eclipse.xtext.generator.BindFactory;
 import org.eclipse.xtext.generator.Binding;
-import org.eclipse.xtext.generator.Generator;
 import org.eclipse.xtext.generator.IGeneratorFragment;
 import org.eclipse.xtext.generator.Naming;
 
@@ -42,10 +41,11 @@ public class SimpleProjectWizardFragment extends AbstractGeneratorFragment {
 	private String modelFileExtension;
 	private boolean pluginProject = true;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void generate(final Grammar grammar, XpandExecutionContext ctx) {
 		final String templateName = getNewProjectTemplateName(grammar, getNaming());
-		final Outlet outlet = ctx.getOutput().getOutlet(Generator.SRC_UI);
+		final Outlet outlet = ctx.getOutput().getOutlet(org.eclipse.xtext.generator.Generator.SRC_UI);
 		final File templateFile = new File(new File(outlet.getPath()), templateName.replaceAll("::", "/") + '.' + XpandUtil.TEMPLATE_EXTENSION);
 		final boolean templateExisted = templateFile.exists();
 		List<Object> parameters = getParameters(grammar);

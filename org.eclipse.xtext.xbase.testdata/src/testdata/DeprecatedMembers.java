@@ -32,14 +32,14 @@ public class DeprecatedMembers {
 	}
 	
 	@Deprecated
-	public void deprecatedFunction(@SuppressWarnings("unused") String[] arg) {
+	public void deprecatedFunction(String[] arg) {
 	}
 
 	public void nodeprecatedFunction() {
 	}
 
 	@Deprecated
-	public static void deprecatedStaticFunction(@SuppressWarnings("unused") String... arg) {
+	public static void deprecatedStaticFunction(String... arg) {
 	}
 
 	public static void nodeprecatedStaticFunction() {

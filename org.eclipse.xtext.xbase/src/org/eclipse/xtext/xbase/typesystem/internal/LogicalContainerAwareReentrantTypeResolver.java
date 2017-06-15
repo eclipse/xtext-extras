@@ -572,8 +572,7 @@ public class LogicalContainerAwareReentrantTypeResolver extends DefaultReentrant
 		}
 	}
 	
-	@SuppressWarnings("unused")
-	protected void _doPrepare(ResolvedTypes resolvedTypes, IFeatureScopeSession featureScopeSession, JvmConstructor constructor, Map<JvmIdentifiableElement, ResolvedTypes> resolvedTypesByContext) {
+	protected void _doPrepare(ResolvedTypes resolvedTypes, @SuppressWarnings("unused") IFeatureScopeSession featureScopeSession, JvmConstructor constructor, Map<JvmIdentifiableElement, ResolvedTypes> resolvedTypesByContext) {
 		StackedResolvedTypes childResolvedTypes = declareTypeParameters(resolvedTypes, constructor, resolvedTypesByContext);
 		
 		JvmDeclaredType producedType = constructor.getDeclaringType();
@@ -729,8 +728,7 @@ public class LogicalContainerAwareReentrantTypeResolver extends DefaultReentrant
 		}
 	}
 
-	@SuppressWarnings("unused")
-	protected void _computeTypes(Map<JvmIdentifiableElement, ResolvedTypes> preparedResolvedTypes, ResolvedTypes resolvedTypes, IFeatureScopeSession featureScopeSession, final JvmField field) {
+	protected void _computeTypes(Map<JvmIdentifiableElement, ResolvedTypes> preparedResolvedTypes, @SuppressWarnings("unused") ResolvedTypes resolvedTypes, IFeatureScopeSession featureScopeSession, final JvmField field) {
 		ResolvedTypes childResolvedTypes = preparedResolvedTypes.get(field);
 		if (childResolvedTypes == null) {
 			if (preparedResolvedTypes.containsKey(field))

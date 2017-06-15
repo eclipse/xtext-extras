@@ -14,7 +14,6 @@ import com.google.inject.Module
 import org.eclipse.xpand2.XpandExecutionContext
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.xtext.Grammar
-import org.eclipse.xtext.generator.LanguageConfig
 import org.eclipse.xtext.generator.Naming
 import org.eclipse.xtext.xtext.generator.CodeConfig
 import org.eclipse.xtext.xtext.generator.DefaultGeneratorModule
@@ -24,14 +23,13 @@ import org.eclipse.xtext.xtext.generator.XtextGeneratorNaming
 import org.eclipse.xtext.xtext.generator.model.project.StandardProjectConfig
 import org.eclipse.xtext.xtext.generator.model.project.XtextProjectConfig
 
-import static org.eclipse.xtext.generator.Generator.*
-
 /**
  * @since 2.9
  */
+@Deprecated
 class Generator2AdapterSetup {
 	
-	val LanguageConfig languageConfig
+	val org.eclipse.xtext.generator.LanguageConfig languageConfig
 	val XpandExecutionContext xpandContext
 	val Naming naming
 	
@@ -43,7 +41,7 @@ class Generator2AdapterSetup {
 	@Accessors(PUBLIC_SETTER)
 	Module additionalLanguageBindings = []
 	
-	new(LanguageConfig languageConfig, XpandExecutionContext xpandContext, Naming naming) {
+	new(org.eclipse.xtext.generator.LanguageConfig languageConfig, XpandExecutionContext xpandContext, Naming naming) {
 		this.languageConfig = languageConfig
 		this.xpandContext = xpandContext
 		this.naming = naming
@@ -84,7 +82,7 @@ class Generator2AdapterSetup {
 		new StandardProjectConfig => [
 			createEclipseMetaData = true
 			baseName = naming.projectNameRt
-			val runtimeRoot = xpandContext.output.getOutlet(PLUGIN_RT).path
+			val runtimeRoot = xpandContext.output.getOutlet(org.eclipse.xtext.generator.Generator.PLUGIN_RT).path
 			val projectNameIndex = runtimeRoot.lastIndexOf(baseName)
 			if (projectNameIndex >= 0)
 				rootPath = runtimeRoot.substring(0, projectNameIndex)
@@ -92,19 +90,19 @@ class Generator2AdapterSetup {
 				rootPath = runtimeRoot
 			runtime.name = baseName
 			runtime.root = runtimeRoot
-			runtime.src = xpandContext.output.getOutlet(SRC).path
-			runtime.srcGen = xpandContext.output.getOutlet(SRC_GEN).path
-			runtime.ecoreModel = xpandContext.output.getOutlet(MODEL).path
+			runtime.src = xpandContext.output.getOutlet(org.eclipse.xtext.generator.Generator.SRC).path
+			runtime.srcGen = xpandContext.output.getOutlet(org.eclipse.xtext.generator.Generator.SRC_GEN).path
+			runtime.ecoreModel = xpandContext.output.getOutlet(org.eclipse.xtext.generator.Generator.MODEL).path
 			eclipsePlugin.enabled = true
 			eclipsePlugin.name = naming.projectNameUi
-			eclipsePlugin.root = xpandContext.output.getOutlet(PLUGIN_UI).path
-			eclipsePlugin.src = xpandContext.output.getOutlet(SRC_UI).path
-			eclipsePlugin.srcGen = xpandContext.output.getOutlet(SRC_GEN_UI).path
+			eclipsePlugin.root = xpandContext.output.getOutlet(org.eclipse.xtext.generator.Generator.PLUGIN_UI).path
+			eclipsePlugin.src = xpandContext.output.getOutlet(org.eclipse.xtext.generator.Generator.SRC_UI).path
+			eclipsePlugin.srcGen = xpandContext.output.getOutlet(org.eclipse.xtext.generator.Generator.SRC_GEN_UI).path
 			genericIde.enabled = true
 			genericIde.name = naming.projectNameIde
-			genericIde.root = xpandContext.output.getOutlet(PLUGIN_IDE).path
-			genericIde.src = xpandContext.output.getOutlet(SRC_IDE).path
-			genericIde.srcGen = xpandContext.output.getOutlet(SRC_GEN_IDE).path
+			genericIde.root = xpandContext.output.getOutlet(org.eclipse.xtext.generator.Generator.PLUGIN_IDE).path
+			genericIde.src = xpandContext.output.getOutlet(org.eclipse.xtext.generator.Generator.SRC_IDE).path
+			genericIde.srcGen = xpandContext.output.getOutlet(org.eclipse.xtext.generator.Generator.SRC_GEN_IDE).path
 		]
 	}
 	

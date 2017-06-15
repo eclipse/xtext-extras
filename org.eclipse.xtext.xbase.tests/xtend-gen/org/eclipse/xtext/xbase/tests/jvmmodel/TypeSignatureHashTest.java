@@ -75,6 +75,7 @@ public class TypeSignatureHashTest extends AbstractXbaseTestCase {
     Assert.assertFalse(Strings.equal("Bar", this._jvmDeclaredTypeSignatureHashProvider.getHash(bar)));
   }
   
+  @Deprecated
   @Test
   public void testRecursiveInheritance() {
     final EObject eObject = EcoreFactory.eINSTANCE.createEObject();

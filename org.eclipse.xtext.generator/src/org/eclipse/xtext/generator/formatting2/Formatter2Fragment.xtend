@@ -13,7 +13,6 @@ import org.eclipse.xtext.Grammar
 import org.eclipse.xtext.formatting2.IFormatter2
 import org.eclipse.xtext.generator.BindFactory
 import org.eclipse.xtext.generator.Binding
-import org.eclipse.xtext.generator.Generator
 import org.eclipse.xtext.generator.Xtend2ExecutionContext
 import org.eclipse.xtext.generator.Xtend2GeneratorFragment
 import org.eclipse.xtext.preferences.IPreferenceValuesProvider
@@ -56,7 +55,8 @@ class Formatter2Fragment extends Xtend2GeneratorFragment {
 		return bf.bindings
 	}
 
+	@Deprecated
 	override generate(Xtend2ExecutionContext ctx) {
-		ctx.writeFile(Generator.SRC, stubGenerator.stubFileName, stubGenerator.generateStubFileContents)
+		ctx.writeFile(org.eclipse.xtext.generator.Generator.SRC, stubGenerator.stubFileName, stubGenerator.generateStubFileContents)
 	}
 }

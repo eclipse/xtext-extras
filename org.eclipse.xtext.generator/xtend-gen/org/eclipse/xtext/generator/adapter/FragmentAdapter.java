@@ -64,6 +64,7 @@ import org.eclipse.xtext.xtext.generator.model.TypeReference;
 /**
  * @since 2.9
  */
+@Deprecated
 @SuppressWarnings("all")
 public class FragmentAdapter extends AbstractXtextGeneratorFragment {
   @Inject

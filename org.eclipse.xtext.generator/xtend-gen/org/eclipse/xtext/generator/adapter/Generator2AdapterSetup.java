@@ -36,6 +36,7 @@ import org.eclipse.xtext.xtext.generator.model.project.XtextProjectConfig;
 /**
  * @since 2.9
  */
+@Deprecated
 @SuppressWarnings("all")
 public class Generator2AdapterSetup {
   private final LanguageConfig languageConfig;

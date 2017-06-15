@@ -193,7 +193,7 @@ public class OnTheFlyJavaCompiler {
 	 */
 	static class PatchedMain extends Main {
 
-		@SuppressWarnings("rawtypes")
+		@SuppressWarnings({ "all" })
 		public PatchedMain(PrintWriter outWriter, PrintWriter errWriter,
 				boolean systemExitWhenFinished, Map customDefaultOptions,
 				CompilationProgress compilationProgress) {
@@ -397,6 +397,7 @@ public class OnTheFlyJavaCompiler {
 		parent.mkdirs();
 	}
 
+	@SuppressWarnings("unchecked")
 	protected Pair<String, String> createFullCode(String statementCode,
 			Type returnType, Pair<Type, String>... params) {
 		String className = "_$GeneratedClass";
@@ -495,6 +496,7 @@ public class OnTheFlyJavaCompiler {
 				errorStream)), false /* systemExit */, null /* options */, null);
 	}
 
+	@SuppressWarnings("unchecked")
 	protected Object internalCreateFunction(String code, Type returnType,
 			Pair<Type, String>... params) {
 		Pair<String, String> fullCode = createFullCode(code, returnType, params);

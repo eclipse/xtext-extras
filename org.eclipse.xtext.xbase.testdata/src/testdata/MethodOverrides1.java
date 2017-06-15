@@ -10,7 +10,6 @@ package testdata;
 /**
  * @author Sven Efftinge - Initial contribution and API
  */
-@SuppressWarnings("unused")
 public class MethodOverrides1 {
 	public String m1(String s) {
 		return "m1(String)";

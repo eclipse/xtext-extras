@@ -13,7 +13,6 @@ import java.util.Collection;
  * @author Sebastian Zarnekow - Initial contribution and API
  * @since 2.4
  */
-@SuppressWarnings("unused")
 public class CaseA {
 
 	public <T> String overloaded(Collection<T> collection, Iterable<? extends T> iterable) {

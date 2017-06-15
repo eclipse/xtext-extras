@@ -264,6 +264,7 @@ public class EMFGeneratorFragment extends AbstractGeneratorFragment {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	void updateBuildProperties(XpandExecutionContext ctx) throws Exception {
 		if (!updateBuildProperties || modelPluginID != null)
 			return;
@@ -548,6 +549,7 @@ public class EMFGeneratorFragment extends AbstractGeneratorFragment {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	public String getEditDirectory(XpandExecutionContext ctx) {
 		if (this.editDirectory == null || "".equals(this.editDirectory)) {
 			return ctx.getOutput().getOutlet(org.eclipse.xtext.generator.Generator.PLUGIN_RT).getPath()
@@ -556,6 +558,7 @@ public class EMFGeneratorFragment extends AbstractGeneratorFragment {
 		return editDirectory;
 	}
 
+	@SuppressWarnings("deprecation")
 	public String getEditorDirectory(XpandExecutionContext ctx) {
 		if (editorDirectory == null || "".equals(editorDirectory)) {
 			return ctx.getOutput().getOutlet(org.eclipse.xtext.generator.Generator.PLUGIN_RT).getPath()
@@ -681,6 +684,7 @@ public class EMFGeneratorFragment extends AbstractGeneratorFragment {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	protected String getJavaModelDirectory(XpandExecutionContext ctx) {
 		String javaPath;
 		if (javaModelDirectory == null || "".equals(javaModelDirectory))
@@ -710,6 +714,7 @@ public class EMFGeneratorFragment extends AbstractGeneratorFragment {
 		return Collections.singletonList((Object) getBasePackage(grammar));
 	}
 	
+	@SuppressWarnings("deprecation")
 	private List<Object> getParameters(Grammar grammar, XpandExecutionContext ctx) {
 		try {
 			File projectRootFile = new File(ctx.getOutput().getOutlet(org.eclipse.xtext.generator.Generator.PLUGIN_RT).getPath());
@@ -781,6 +786,7 @@ public class EMFGeneratorFragment extends AbstractGeneratorFragment {
 		return xmiModelDirectory;
 	}
 
+	@SuppressWarnings("deprecation")
 	protected String getXmiModelDirectory(Grammar grammar, String javaPath, XpandExecutionContext ctx) {
 		String xmiPath;
 		if (getXmiModelDirectory() == null || "".equals(getXmiModelDirectory())) {

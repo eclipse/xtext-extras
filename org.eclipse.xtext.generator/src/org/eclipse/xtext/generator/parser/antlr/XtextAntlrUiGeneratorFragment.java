@@ -27,7 +27,6 @@ import org.eclipse.xtext.ParserRule;
 import org.eclipse.xtext.UnorderedGroup;
 import org.eclipse.xtext.generator.BindFactory;
 import org.eclipse.xtext.generator.Binding;
-import org.eclipse.xtext.generator.Generator;
 import org.eclipse.xtext.generator.IGeneratorFragment;
 import org.eclipse.xtext.generator.Naming;
 import org.eclipse.xtext.xtext.generator.parser.antlr.splitting.BacktrackingGuardRemover;
@@ -99,16 +98,17 @@ public class XtextAntlrUiGeneratorFragment extends AbstractAntlrGeneratorFragmen
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void generate(Grammar grammar, XpandExecutionContext ctx) {
 		super.generate(grammar, ctx);
-		String srcUiGenPath = ctx.getOutput().getOutlet(Generator.SRC_GEN_IDE).getPath();
-		final String encoding = getEncoding(ctx, Generator.SRC_GEN_IDE);
+		String srcUiGenPath = ctx.getOutput().getOutlet(org.eclipse.xtext.generator.Generator.SRC_GEN_IDE).getPath();
+		final String encoding = getEncoding(ctx, org.eclipse.xtext.generator.Generator.SRC_GEN_IDE);
 		String absoluteGrammarFileName = srcUiGenPath + "/" + getGrammarFileName(grammar, getNaming()).replace('.', '/') + ".g";
 		addAntlrParam("-fo");
 		addAntlrParam(absoluteGrammarFileName.substring(0, absoluteGrammarFileName.lastIndexOf('/')));
 		getAntlrTool().runWithEncodingAndParams(absoluteGrammarFileName, encoding, getAntlrParams());
-		Charset charset = Charset.forName(getEncoding(ctx, Generator.SRC_GEN_IDE));
+		Charset charset = Charset.forName(getEncoding(ctx, org.eclipse.xtext.generator.Generator.SRC_GEN_IDE));
 		simplifyUnorderedGroupPredicatesIfRequired(grammar, absoluteGrammarFileName, charset);
 		splitParserAndLexerIfEnabled(absoluteGrammarFileName, charset);
 		suppressWarnings(absoluteGrammarFileName, charset);

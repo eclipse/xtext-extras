@@ -4,7 +4,6 @@ import org.apache.log4j.Logger;
 import org.eclipse.emf.mwe.utils.DirectoryCleaner;
 import org.eclipse.emf.mwe2.ecore.EcoreGenerator;
 import org.eclipse.xtext.generator.parser.antlr.AntlrOptions;
-import org.eclipse.xtext.generator.parser.antlr.XtextAntlrGeneratorComparisonFragment;
 import org.eclipse.xtext.xtext.generator.CodeConfig;
 import org.eclipse.xtext.xtext.generator.DefaultGeneratorModule;
 import org.eclipse.xtext.xtext.generator.XtextGenerator;
@@ -89,7 +88,7 @@ final class GenerateXbase {
 				addFragment(new ContentAssistFragment2());
 				antlr.setOptions(antlrOptions);
 				addFragment(antlr);
-				XtextAntlrGeneratorComparisonFragment comparison = new XtextAntlrGeneratorComparisonFragment();
+				org.eclipse.xtext.generator.parser.antlr.XtextAntlrGeneratorComparisonFragment comparison = new org.eclipse.xtext.generator.parser.antlr.XtextAntlrGeneratorComparisonFragment();
 				comparison.setOptions(antlrOptions);
 				addFragment(comparison);
 			}});
@@ -127,7 +126,7 @@ final class GenerateXbase {
 				addFragment(label);
 				addFragment(new OutlineTreeProviderFragment2());
 				addFragment(new ContentAssistFragment2());
-				XtextAntlrGeneratorComparisonFragment comparison = new XtextAntlrGeneratorComparisonFragment();
+				org.eclipse.xtext.generator.parser.antlr.XtextAntlrGeneratorComparisonFragment comparison = new org.eclipse.xtext.generator.parser.antlr.XtextAntlrGeneratorComparisonFragment();
 				comparison.setOptions(antlrOptions);
 				addFragment(comparison);
 			}});
@@ -163,7 +162,7 @@ final class GenerateXbase {
 				addFragment(label);
 				addFragment(new OutlineTreeProviderFragment2());
 				addFragment(new ContentAssistFragment2());
-				XtextAntlrGeneratorComparisonFragment comparison = new XtextAntlrGeneratorComparisonFragment();
+				org.eclipse.xtext.generator.parser.antlr.XtextAntlrGeneratorComparisonFragment comparison = new org.eclipse.xtext.generator.parser.antlr.XtextAntlrGeneratorComparisonFragment();
 				comparison.setOptions(antlrOptions);
 				addFragment(comparison);
 			}});

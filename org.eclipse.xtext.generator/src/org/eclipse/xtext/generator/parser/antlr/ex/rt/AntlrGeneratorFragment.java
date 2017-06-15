@@ -26,7 +26,6 @@ import org.eclipse.xtext.conversion.impl.AbstractIDValueConverter;
 import org.eclipse.xtext.conversion.impl.IgnoreCaseIDValueConverter;
 import org.eclipse.xtext.generator.BindFactory;
 import org.eclipse.xtext.generator.Binding;
-import org.eclipse.xtext.generator.Generator;
 import org.eclipse.xtext.generator.parser.antlr.AntlrGrammarGenUtil;
 import org.eclipse.xtext.generator.parser.antlr.ex.common.AbstractAntlrGeneratorFragmentEx;
 import org.eclipse.xtext.generator.parser.antlr.ex.common.KeywordHelper;
@@ -52,12 +51,13 @@ import org.eclipse.xtext.parsetree.reconstr.impl.IgnoreCaseKeywordSerializer;
  */
 public class AntlrGeneratorFragment extends AbstractAntlrGeneratorFragmentEx {
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void generate(final Grammar grammar, XpandExecutionContext ctx) {
 		KeywordHelper helper = new KeywordHelper(grammar, getOptions().isIgnoreCase());
 		super.generate(grammar, ctx);
-		final String srcGenPath = ctx.getOutput().getOutlet(Generator.SRC_GEN).getPath();
-		final String encoding = getEncoding(ctx, Generator.SRC_GEN);
+		final String srcGenPath = ctx.getOutput().getOutlet(org.eclipse.xtext.generator.Generator.SRC_GEN).getPath();
+		final String encoding = getEncoding(ctx, org.eclipse.xtext.generator.Generator.SRC_GEN);
 		final String lexerBaseFileName = srcGenPath+"/"+getFragmentHelper().getLexerGrammarFileName(grammar).replace('.', '/');
 		String libPath = lexerBaseFileName;
 		libPath = libPath.substring(0, libPath.lastIndexOf('/'));

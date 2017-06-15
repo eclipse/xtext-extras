@@ -17,10 +17,8 @@ import org.eclipse.xpand2.XpandExecutionContextImpl
 import org.eclipse.xpand2.XpandFacade
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.xtext.Grammar
-import org.eclipse.xtext.generator.Generator
 import org.eclipse.xtext.generator.IFileSystemAccess2
 import org.eclipse.xtext.generator.Naming
-import org.eclipse.xtext.generator.adapter.FragmentAdapter
 import org.eclipse.xtext.generator.parser.antlr.ex.ca.ContentAssistParserGeneratorFragment
 import org.eclipse.xtext.generator.parser.antlr.ex.common.AntlrFragmentHelper
 import org.eclipse.xtext.generator.parser.antlr.ex.rt.AntlrGeneratorFragment
@@ -44,8 +42,9 @@ import org.eclipse.xtext.xtext.generator.parser.antlr.GrammarNaming
  * @author Christian Schneider - Initial contribution and API
  * @noreference
  */
- @Log
-class XtextAntlrGeneratorComparisonFragment extends FragmentAdapter {
+@Log
+@Deprecated
+class XtextAntlrGeneratorComparisonFragment extends org.eclipse.xtext.generator.adapter.FragmentAdapter {
 
 	private static val ENCODING = Charsets.ISO_8859_1.name
 	
@@ -126,14 +125,16 @@ class XtextAntlrGeneratorComparisonFragment extends FragmentAdapter {
 	 * {@link Generator#SRC_GEN_UI Generator.SRC_GEN_UI} outlets
 	 * and injects the {@link #getTmpPath()}.
 	 */
+	@Deprecated
 	override protected createOutlet(boolean append, String encoding, String name, boolean overwrite, String path) {
-		if (name == Generator.SRC_GEN || name == Generator.SRC_GEN_IDE || name == Generator.SRC_GEN_UI) {
+		if (name == org.eclipse.xtext.generator.Generator.SRC_GEN || name == org.eclipse.xtext.generator.Generator.SRC_GEN_IDE || name == org.eclipse.xtext.generator.Generator.SRC_GEN_UI) {
 			super.createOutlet(append, encoding, name, overwrite, getTmpFolder().absolutePath)			
 		} else {			
 			super.createOutlet(append, encoding, name, overwrite, path)
 		}
 	}
 
+	@Deprecated
 	override generate() {
 		if (naming === null) {			
 			naming = createNaming()
@@ -147,11 +148,11 @@ class XtextAntlrGeneratorComparisonFragment extends FragmentAdapter {
 			
 		var RuntimeException exception = null;
 		if (projectConfig.runtime?.srcGen !== null) {
-			exception = projectConfig.runtime.srcGen.loadAndCompareGrammars(Generator.SRC_GEN, errorHandler)
+			exception = projectConfig.runtime.srcGen.loadAndCompareGrammars(org.eclipse.xtext.generator.Generator.SRC_GEN, errorHandler)
 		}
 		
 		if ((!failOnError || exception === null) && !skipContentAssistGrammarComparison && projectConfig.genericIde?.srcGen !== null) {
-			exception = projectConfig.genericIde.srcGen.loadAndCompareGrammars(Generator.SRC_GEN_IDE, errorHandler)
+			exception = projectConfig.genericIde.srcGen.loadAndCompareGrammars(org.eclipse.xtext.generator.Generator.SRC_GEN_IDE, errorHandler)
 		}
 		
 		deleteDir(tmpFolder)
@@ -165,6 +166,7 @@ class XtextAntlrGeneratorComparisonFragment extends FragmentAdapter {
 		new ErrorHandler()
 	}
 	
+	@Deprecated
 	protected def loadAndCompareGrammars(IFileSystemAccess2 fsa, String outlet, AntlrGrammarComparator.IErrorHandler errorHandler) {
 		val stopWatch = new StopWatch()
 		stopWatch.reset()
@@ -175,12 +177,12 @@ class XtextAntlrGeneratorComparisonFragment extends FragmentAdapter {
 		var String lexerGrammarFileName
 		var String type
 		
-		if (outlet == Generator.SRC_GEN) {
+		if (outlet == org.eclipse.xtext.generator.Generator.SRC_GEN) {
 			lexerGrammarFileName = productionNaming.getLexerGrammar(grammar).grammarFileName
 			parserGrammarFileName = productionNaming.getParserGrammar(grammar).grammarFileName
 			type = "runtime"
 			
-		} else if (outlet == Generator.SRC_GEN_IDE) {
+		} else if (outlet == org.eclipse.xtext.generator.Generator.SRC_GEN_IDE) {
 			lexerGrammarFileName = contentAssistNaming.getLexerGrammar(grammar).grammarFileName
 			parserGrammarFileName = contentAssistNaming.getParserGrammar(grammar).grammarFileName
 			type = "content assist"
@@ -272,9 +274,9 @@ class XtextAntlrGeneratorComparisonFragment extends FragmentAdapter {
 		override getContentAssistLexerGrammarFileName(Grammar g) {
 			return caNaming.getLexerGrammar(g).name
 		}
-
 	}
 
+	@Deprecated
 	def protected void performXpandBasedGeneration(String outlet) { 
 		val RuleFilter filter = new RuleFilter();
 		filter.setDiscardUnreachableRules(options.isSkipUnusedRules());
@@ -302,7 +304,7 @@ class XtextAntlrGeneratorComparisonFragment extends FragmentAdapter {
 		//  in 'AntlrFragmentHelperEx' defined above
 		new CombinedGrammarMarker(combined).attachToEmfObject(flattened)
 		
-		if (outlet == Generator.SRC_GEN && context.output.getOutlet(Generator.SRC_GEN) !== null) {
+		if (outlet == org.eclipse.xtext.generator.Generator.SRC_GEN && context.output.getOutlet(org.eclipse.xtext.generator.Generator.SRC_GEN) !== null) {
 			
 			if (combined) {
 				template = XtextAntlrGeneratorFragment.name
@@ -314,7 +316,7 @@ class XtextAntlrGeneratorComparisonFragment extends FragmentAdapter {
 			
 			XpandFacade.create(context).evaluate2(template.replaceAll("\\.", "::") + "::generate", flattened, params);
 			
-		} else if (outlet == Generator.SRC_GEN_IDE && context.output.getOutlet(Generator.SRC_GEN_IDE) !== null) {
+		} else if (outlet == org.eclipse.xtext.generator.Generator.SRC_GEN_IDE && context.output.getOutlet(org.eclipse.xtext.generator.Generator.SRC_GEN_IDE) !== null) {
 			
 			if (combined) {
 				template = XtextAntlrUiGeneratorFragment.name

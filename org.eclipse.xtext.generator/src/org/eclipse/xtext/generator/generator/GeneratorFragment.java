@@ -25,7 +25,6 @@ import org.eclipse.xtext.generator.Binding;
 import org.eclipse.xtext.generator.IGenerator;
 import org.eclipse.xtext.generator.IGeneratorFragment;
 import org.eclipse.xtext.generator.IStubGenerating;
-import org.eclipse.xtext.generator.LanguageConfig;
 import org.eclipse.xtext.generator.Naming;
 import org.eclipse.xtext.generator.xbase.XbaseGeneratorFragment;
 import org.eclipse.xtext.util.Strings;
@@ -112,8 +111,9 @@ public class GeneratorFragment extends AbstractGeneratorFragment implements IStu
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
-	public void addToPluginXmlUi(LanguageConfig config, XpandExecutionContext ctx) {
+	public void addToPluginXmlUi(org.eclipse.xtext.generator.LanguageConfig config, XpandExecutionContext ctx) {
 		Grammar grammar = config.getGrammar();
 		List<Object> parameters = newArrayList();
 		parameters.addAll(getParameters(grammar));

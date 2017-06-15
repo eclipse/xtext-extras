@@ -51,6 +51,7 @@ class JvmModelGeneratorTest extends AbstractXbaseTestCase {
 	@Inject TypesFactory typesFactory;
 	@Inject JvmModelCompleter completer
 	
+	@Deprecated
 	@Test
 	def void bug390290InnerClassMemberImport() {
 		val expression = expression("null")
@@ -230,6 +231,7 @@ class JvmModelGeneratorTest extends AbstractXbaseTestCase {
 		compile(expression.eResource,clazz);
 	}
 
+	@Deprecated
 	@Test
 	def void testBug380754(){
 		val expression = expression("null")
@@ -250,6 +252,7 @@ class JvmModelGeneratorTest extends AbstractXbaseTestCase {
 
 	}
 	
+	@Deprecated
 	@Test
 	def void testBug380754_2() {
 		val expression = expression("null")
@@ -265,6 +268,7 @@ class JvmModelGeneratorTest extends AbstractXbaseTestCase {
 		compile(expression.eResource, clazz)
 	}
 	
+	@Deprecated
 	@Test
 	def void testBug419430() {
 		val expression = expression("null")
@@ -562,6 +566,7 @@ class JvmModelGeneratorTest extends AbstractXbaseTestCase {
 		res.compileToClass(type, res.generate(type))
 	}
 	
+	@Deprecated
 	def generate(Resource res, JvmDeclaredType type) {
 		res.eSetDeliver(false)
 		res.contents += type

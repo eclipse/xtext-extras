@@ -1574,11 +1574,11 @@ public class XbaseCompiler extends FeatureCallCompiler {
 		b.trace(synchronizedExpression, false).append(getVarName(synchronizedExpression, b));
 	}
 
-	protected void _toJavaExpression(XReturnExpression returnExpression, ITreeAppendable b) {
+	protected void _toJavaExpression(@SuppressWarnings("unused") XReturnExpression returnExpression, ITreeAppendable b) {
 		b.append("/* error - couldn't compile nested return */");
 	}
 
-	protected void _toJavaExpression(XThrowExpression throwExpression, ITreeAppendable b) {
+	protected void _toJavaExpression(@SuppressWarnings("unused") XThrowExpression throwExpression, ITreeAppendable b) {
 		b.append("/* error - couldn't compile invalid throw */");
 	}
 
@@ -1665,6 +1665,7 @@ public class XbaseCompiler extends FeatureCallCompiler {
 		return b.decreaseIndentation().newLine().append("}");
 	}
 	
+	@SuppressWarnings("unused")
 	protected boolean needSyntheticSelfVariable(XClosure closure, LightweightTypeReference typeRef) {
 		return false;
 	}

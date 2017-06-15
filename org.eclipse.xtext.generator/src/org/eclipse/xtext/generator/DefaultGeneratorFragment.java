@@ -25,6 +25,7 @@ public class DefaultGeneratorFragment implements IGeneratorFragment,IGeneratorFr
 	/**
 	 * @since 2.6
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
 	public void addToPluginXmlRt(LanguageConfig config, XpandExecutionContext ctx) {
 		addToPluginXmlRt(config.getGrammar(), ctx);
@@ -37,6 +38,7 @@ public class DefaultGeneratorFragment implements IGeneratorFragment,IGeneratorFr
 	/**
 	 * @since 2.6
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
 	public void addToPluginXmlUi(LanguageConfig config, XpandExecutionContext ctx) {
 		addToPluginXmlUi(config.getGrammar(), ctx);
@@ -50,6 +52,7 @@ public class DefaultGeneratorFragment implements IGeneratorFragment,IGeneratorFr
 	/**
 	 * @since 2.6
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
 	public void addToStandaloneSetup(LanguageConfig config, XpandExecutionContext ctx) {
 		addToStandaloneSetup(config.getGrammar(), ctx);
@@ -162,6 +165,7 @@ public class DefaultGeneratorFragment implements IGeneratorFragment,IGeneratorFr
 	/**
 	 * @since 2.6
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
 	public void generate(LanguageConfig config, XpandExecutionContext ctx) {
 		generate(config.getGrammar(), ctx);

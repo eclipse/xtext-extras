@@ -118,6 +118,7 @@ public class ContentAssistFragment extends Xtend2GeneratorFragment implements II
     return _xblockexpression;
   }
   
+  @Deprecated
   @Override
   public void generate(final Xtend2ExecutionContext ctx) {
     if (this.generateStub) {

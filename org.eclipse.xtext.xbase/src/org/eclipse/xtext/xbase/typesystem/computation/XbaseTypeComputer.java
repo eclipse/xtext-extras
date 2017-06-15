@@ -299,7 +299,6 @@ public class XbaseTypeComputer extends AbstractTypeComputer implements ITypeComp
 		return ifExpression.getThen();
 	}
 	
-	@SuppressWarnings("null")
 	protected void _computeTypes(XSwitchExpression object, ITypeComputationState state) {
 		ITypeComputationState switchExpressionState = getSwitchExpressionState(object, state); 
 		ITypeComputationResult computedType = switchExpressionState.computeTypes(object.getSwitch());

@@ -15,7 +15,6 @@ import org.eclipse.xtext.GeneratedMetamodel
 import org.eclipse.xtext.Grammar
 import org.eclipse.xtext.generator.BindFactory
 import org.eclipse.xtext.generator.Binding
-import org.eclipse.xtext.generator.Generator
 import org.eclipse.xtext.generator.IInheriting
 import org.eclipse.xtext.generator.IStubGenerating
 import org.eclipse.xtext.generator.Naming
@@ -64,8 +63,9 @@ class ValidatorFragment extends Xtend2GeneratorFragment implements IInheriting, 
 		bindFactory.bindings
 	}
 	
+	@Deprecated
 	override generate(Xtend2ExecutionContext ctx) {
-		ctx.writeFile(Generator.SRC_GEN, abstractValidatorName.asPath + ".java", '''
+		ctx.writeFile(org.eclipse.xtext.generator.Generator.SRC_GEN, abstractValidatorName.asPath + ".java", '''
 			«fileHeader»
 			package «abstractValidatorName.packageName»;
 			
@@ -96,7 +96,7 @@ class ValidatorFragment extends Xtend2GeneratorFragment implements IInheriting, 
 			}
 		''')
 		if(generateStub) {
-			ctx.writeFile(Generator.SRC, grammar.validatorName.asPath + '.xtend', '''
+			ctx.writeFile(org.eclipse.xtext.generator.Generator.SRC, grammar.validatorName.asPath + '.xtend', '''
 				«fileHeader»
 				package «grammar.validatorName.packageName»
 				
