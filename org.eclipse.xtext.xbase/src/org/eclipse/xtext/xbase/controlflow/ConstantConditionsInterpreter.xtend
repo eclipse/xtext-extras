@@ -356,6 +356,17 @@ class ConstantConditionsInterpreter {
 	}
 	
 	def dispatch EvaluationResult internalEvaluate(XCastedExpression expression, EvaluationContext context) {
+		val declaredType = context.resolvedTypes.getActualType(expression.target)
+		if (declaredType?.primitive) {
+			val castedType = context.resolvedTypes.getActualType(expression)
+			if (castedType !== null && castedType.isPrimitive) {
+				val targetResult = expression.target.doEvaluate(context)
+				if (targetResult.rawValue instanceof Number) {
+					val castedValue = constantOperators.cast(targetResult.rawValue as Number, castedType.identifier)
+					return new EvaluationResult(castedValue,true)
+				}
+			}
+		}
 		return doEvaluate(expression.target, context)
 	}
 

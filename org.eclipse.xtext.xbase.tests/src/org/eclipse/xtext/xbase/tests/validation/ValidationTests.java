@@ -651,6 +651,42 @@ public class ValidationTests extends AbstractXbaseTestCase {
 		helper.assertNoErrors(expression);
 	}
 	
+	@Test
+	public void testConstantCondition_12() throws Exception {
+		XExpression expression = ((XBlockExpression) expression("{val double a = 1.0 val b = a as int if (a == b) {}}")).getExpressions()
+				.get(2);
+		helper.assertNoWarnings(expression, XbasePackage.Literals.XBINARY_OPERATION, CONSTANT_BOOLEAN_CONDITION,
+				"Constant condition is always true");
+		helper.assertNoErrors(expression);
+	}
+
+	@Test
+	public void testConstantCondition_13() throws Exception {
+		XExpression expression = ((XBlockExpression) expression("{val double c = 1.0 val d = c as double if (c == d) {}}")).getExpressions()
+				.get(2);
+		helper.assertWarning(expression, XbasePackage.Literals.XBINARY_OPERATION, CONSTANT_BOOLEAN_CONDITION,
+				"Constant condition is always true");
+		helper.assertNoErrors(expression);
+	}
+
+	@Test
+	public void testConstantCondition_14() throws Exception {
+		XExpression expression = ((XBlockExpression) expression("{val double e = 1.0 val double f = e as int if (e == f) {}}"))
+				.getExpressions().get(2);
+		helper.assertNoWarnings(expression, XbasePackage.Literals.XBINARY_OPERATION, CONSTANT_BOOLEAN_CONDITION,
+				"Constant condition is always true");
+		helper.assertNoErrors(expression);
+	}
+	
+	@Test
+	public void testConstantCondition_15() throws Exception {
+		XExpression expression = ((XBlockExpression) expression("{val int e = 257 val byte f = e as byte if (1 as byte == f) {}}"))
+				.getExpressions().get(2);
+		helper.assertWarning(expression, XbasePackage.Literals.XBINARY_OPERATION, CONSTANT_BOOLEAN_CONDITION,
+				"Constant condition is always true");
+		helper.assertNoErrors(expression);
+	}
+	
 	@Test public void testUnreachableCode421508_01() throws Exception {
 		XExpression expression = expression(
 				"{  val a = true val b = true" +
