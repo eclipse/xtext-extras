@@ -53,6 +53,7 @@ import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Pure;
 import org.eclipse.xtext.xbase.scoping.XImportSectionNamespaceScopeProvider;
 import org.eclipse.xtext.xbase.typesystem.computation.NumberLiterals;
+import org.eclipse.xtext.xbase.typesystem.references.LightweightTypeReference;
 
 /**
  * Interpreter for expressions at development time that uses the static linking
@@ -539,6 +540,23 @@ public class ConstantConditionsInterpreter {
   }
   
   protected EvaluationResult _internalEvaluate(final XCastedExpression expression, final EvaluationContext context) {
+    final LightweightTypeReference declaredType = context.getResolvedTypes().getActualType(expression.getTarget());
+    boolean _isPrimitive = false;
+    if (declaredType!=null) {
+      _isPrimitive=declaredType.isPrimitive();
+    }
+    if (_isPrimitive) {
+      final LightweightTypeReference castedType = context.getResolvedTypes().getActualType(expression);
+      if (((castedType != null) && castedType.isPrimitive())) {
+        final EvaluationResult targetResult = this.doEvaluate(expression.getTarget(), context);
+        Object _rawValue = targetResult.getRawValue();
+        if ((_rawValue instanceof Number)) {
+          Object _rawValue_1 = targetResult.getRawValue();
+          final Object castedValue = this.constantOperators.cast(((Number) _rawValue_1), castedType.getIdentifier());
+          return new EvaluationResult(castedValue, true);
+        }
+      }
+    }
     return this.doEvaluate(expression.getTarget(), context);
   }
   

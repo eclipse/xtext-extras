@@ -627,5 +627,17 @@ class ConstantOperators {
 	def dispatch boolean notSame(Integer left, Long right) { left.intValue() !== right.longValue() }
 	def dispatch boolean notSame(Integer left, Short right) { left.intValue() !== right.shortValue() }
 	def dispatch boolean notSame(Integer left, Integer right) { left.intValue() !== right.intValue() }
+	
+	def Object cast(Number value, String to) {
+		switch(to) {
+			case Byte.TYPE.name: return value.byteValue
+			case Short.TYPE.name: return value.shortValue
+			case Integer.TYPE.name: return value.intValue
+			case Long.TYPE.name: return value.longValue
+			case Float.TYPE.name: return value.floatValue
+			case Double.TYPE.name: return value.doubleValue
+			default: throw new IllegalArgumentException('''Cannot cast «value.class» to «to»''')
+		}
+	}
 
 }

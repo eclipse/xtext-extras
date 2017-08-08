@@ -7,6 +7,7 @@
  */
 package org.eclipse.xtext.xbase.interpreter;
 
+import com.google.common.base.Objects;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
@@ -2619,6 +2620,57 @@ public class ConstantOperators {
     int _intValue = left.intValue();
     int _intValue_1 = right.intValue();
     return (_intValue != _intValue_1);
+  }
+  
+  public Object cast(final Number value, final String to) {
+    boolean _matched = false;
+    String _name = Byte.TYPE.getName();
+    if (Objects.equal(to, _name)) {
+      _matched=true;
+      return Byte.valueOf(value.byteValue());
+    }
+    if (!_matched) {
+      String _name_1 = Short.TYPE.getName();
+      if (Objects.equal(to, _name_1)) {
+        _matched=true;
+        return Short.valueOf(value.shortValue());
+      }
+    }
+    if (!_matched) {
+      String _name_2 = Integer.TYPE.getName();
+      if (Objects.equal(to, _name_2)) {
+        _matched=true;
+        return Integer.valueOf(value.intValue());
+      }
+    }
+    if (!_matched) {
+      String _name_3 = Long.TYPE.getName();
+      if (Objects.equal(to, _name_3)) {
+        _matched=true;
+        return Long.valueOf(value.longValue());
+      }
+    }
+    if (!_matched) {
+      String _name_4 = Float.TYPE.getName();
+      if (Objects.equal(to, _name_4)) {
+        _matched=true;
+        return Float.valueOf(value.floatValue());
+      }
+    }
+    if (!_matched) {
+      String _name_5 = Double.TYPE.getName();
+      if (Objects.equal(to, _name_5)) {
+        _matched=true;
+        return Double.valueOf(value.doubleValue());
+      }
+    }
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("Cannot cast ");
+    Class<? extends Number> _class = value.getClass();
+    _builder.append(_class);
+    _builder.append(" to ");
+    _builder.append(to);
+    throw new IllegalArgumentException(_builder.toString());
   }
   
   public Object minus(final Object e) {
