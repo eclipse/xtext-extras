@@ -32,6 +32,7 @@ import com.google.inject.Inject;
  * Utility to compute information about the inheritance relationship of two operations.
  * 
  * @author Sebastian Zarnekow - Initial contribution and API
+ * @author Stephane Galland - Test the function type overriding into the parameter list.
  */
 public class OverrideTester {
 
@@ -278,7 +279,25 @@ public class OverrideTester {
 		for(int i = 0; i < overridingParameterTypes.size(); i++) {
 			LightweightTypeReference overridingParameterType = overridingParameterTypes.get(i);
 			LightweightTypeReference overriddenParameterType = overriddenParameterTypes.get(i);
-			String overridingParameterTypeIdentifier = overridingParameterType.getJavaIdentifier();
+			if (overridingParameterType.isFunctionType() != overriddenParameterType.isFunctionType()) {
+				return false;
+			}
+			String overridingParameterTypeIdentifier;
+			String overriddenParameterTypeIdentifier;
+			if (overriddenParameterType.isFunctionType()) {
+				final FunctionTypeReference typeRef1 = overridingParameterType.getAsFunctionTypeReference();
+				final FunctionTypeReference typeRef2 = overriddenParameterType.getAsFunctionTypeReference();
+				overridingParameterTypeIdentifier = typeRef1.getIdentifier();
+				overriddenParameterTypeIdentifier = typeRef2.getIdentifier();
+				if (!overridingParameterTypeIdentifier.equals(overriddenParameterTypeIdentifier)) {
+					// Primitive types are translated to Object equivalent types.
+					overridingParameterTypeIdentifier = typeRef1.getJavaIdentifier();
+					overriddenParameterTypeIdentifier = typeRef2.getJavaIdentifier();
+				}
+			} else {
+				overridingParameterTypeIdentifier = overridingParameterType.getJavaIdentifier();
+				overriddenParameterTypeIdentifier = overriddenParameterType.getJavaIdentifier();
+			}
 			if (!overridingParameterTypeIdentifier.equals(overriddenParameterType.getJavaIdentifier())) {
 				if (!overriding.getTypeParameters().isEmpty()) {
 					return false;
