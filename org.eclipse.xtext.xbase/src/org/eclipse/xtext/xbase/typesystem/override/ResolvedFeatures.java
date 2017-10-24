@@ -10,6 +10,7 @@ package org.eclipse.xtext.xbase.typesystem.override;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -39,6 +40,7 @@ import com.google.common.collect.Sets;
 /**
  * @author Sebastian Zarnekow - Initial contribution and API
  * @author Lorenzo Bettini - https://bugs.eclipse.org/bugs/show_bug.cgi?id=454786
+ * @author Stephane Galland - https://github.com/eclipse/xtext-xtend/issues/191
  */
 public class ResolvedFeatures extends AbstractResolvedFeatures {
 
@@ -250,6 +252,9 @@ public class ResolvedFeatures extends AbstractResolvedFeatures {
 
 			private Set<JvmType> seen = Sets.newHashSet();
 			
+			private boolean isSuperclassBranch;
+			private Multimap<String, AbstractResolvedOperation> superclassBranchOperations;
+			
 			@Override
 			public Boolean doSwitch(EObject theEObject) {
 				if (theEObject == null)
@@ -286,22 +291,27 @@ public class ResolvedFeatures extends AbstractResolvedFeatures {
 						return Boolean.FALSE;
 					}
 					if (was == 1) {
-						computeAllOperations(object, processedOperations);
+						computeAllOperationsForInterface(this.isSuperclassBranch, this.superclassBranchOperations, object, processedOperations);
 					}
 					for (JvmTypeReference superType : object.getSuperTypes()) {
 						doSwitch(superType);
 					}
 					return was > 1;
 				} else if (seen.add(object)) {
+					boolean saved = this.isSuperclassBranch;
+					this.isSuperclassBranch = object != rootType;
 					for (JvmTypeReference superType : object.getSuperTypes()) {
 						doSwitch(superType);
 					}
+					this.isSuperclassBranch = saved;
 					return Boolean.TRUE;
 				}
 				return Boolean.FALSE;
 			}
 			
 			public void consume(JvmType rootType) {
+				this.isSuperclassBranch = false;
+				this.superclassBranchOperations = LinkedHashMultimap.create();
 				doSwitch(rootType);
 			}
 			
@@ -347,6 +357,99 @@ public class ResolvedFeatures extends AbstractResolvedFeatures {
 		return Collections.unmodifiableList(result);
 	}
 	
+	/**
+	 * When the inherited operations are computed for Java 8, we have to check for conflicting default interface method implementations.
+	 */
+	protected void computeAllOperationsForInterface(boolean isSuperClassBranch, Multimap<String, AbstractResolvedOperation> superClassBranchOperations,
+			JvmDeclaredType type, Multimap<String, AbstractResolvedOperation> processedOperations) {
+		for (JvmOperation operation: type.getDeclaredOperations()) {
+			boolean addToResult = true;
+			if (targetVersion.isAtLeast(JavaVersion.JAVA8)) {
+				addToResult = handleOverridesAndConflictsForDirectSuperInterfaces(isSuperClassBranch, operation, processedOperations, superClassBranchOperations);
+			} else {
+				String simpleName = operation.getSimpleName();
+				if (processedOperations.containsKey(simpleName)) {
+					addToResult = !isOverridden(operation, processedOperations.get(simpleName));
+				}
+			}
+			if (addToResult) {
+				BottomResolvedOperation resolvedOperation = createResolvedOperation(operation);
+				processedOperations.put(operation.getSimpleName(), resolvedOperation);
+				if (isSuperClassBranch) {
+					superClassBranchOperations.put(operation.getSimpleName(), resolvedOperation);
+				}
+			}
+		}
+	}
+
+	/**
+	 * When the inherited operations are computed for Java 8, we have to check for conflicting default interface method implementations.
+	 */
+	private boolean handleOverridesAndConflictsForDirectSuperInterfaces(boolean isSuperClassBranch,
+			JvmOperation operation, Multimap<String, AbstractResolvedOperation> processedOperations,
+			Multimap<String, AbstractResolvedOperation> superClassBranchOperations) {
+		String simpleName = operation.getSimpleName();
+		if (!processedOperations.containsKey(simpleName)) {
+			return true;
+		}
+		List<AbstractResolvedOperation> conflictingOperations = null;
+		Iterator<AbstractResolvedOperation> iterator = processedOperations.get(simpleName).iterator();
+		while (iterator.hasNext()) {
+			AbstractResolvedOperation candidate = iterator.next();
+			OverrideTester overrideTester = candidate.getOverrideTester();
+			IOverrideCheckResult checkResult = overrideTester.isSubsignature(candidate, operation, false);
+			if (checkResult.getDetails().contains(OverrideCheckDetails.DEFAULT_IMPL_CONFLICT)) {
+				if (!isSuperClassBranch && superClassBranchOperations.containsKey(simpleName)) {
+					iterator.remove();
+				} else {
+					// The current operation conflicts with the candidate
+					if (conflictingOperations == null)
+						conflictingOperations = Lists.newLinkedList();
+					conflictingOperations.add(candidate);
+				}
+			} else if (checkResult.isOverridingOrImplementing()) {
+				return false;
+			}
+		}
+		if (conflictingOperations != null) {
+			if (conflictingOperations.size() == 1 && conflictingOperations.get(0) instanceof ConflictingDefaultOperation) {
+				// The current operation contributes to the already existing conflict
+				ConflictingDefaultOperation conflictingDefaultOperation = (ConflictingDefaultOperation) conflictingOperations.get(0);
+				boolean isOverridden = false;
+				for (IResolvedOperation conflictingOp : conflictingDefaultOperation.getConflictingOperations()) {
+					if (conflictingOp.getResolvedDeclarator().isSubtypeOf(operation.getDeclaringType())) {
+						isOverridden = true;
+						break;
+					}
+				}
+				if (!isOverridden)
+					conflictingDefaultOperation.getConflictingOperations().add(createResolvedOperation(operation));
+				return false;
+			}
+			// A new conflict of default implementations was found
+			if (operation.isAbstract()) {
+				ConflictingDefaultOperation resolvedOperation = createConflictingOperation(conflictingOperations.get(0).getDeclaration());
+				resolvedOperation.getConflictingOperations().add(createResolvedOperation(operation));
+				for (AbstractResolvedOperation conflictingOp : conflictingOperations) {
+					processedOperations.remove(simpleName, conflictingOp);
+					if (conflictingOp.getDeclaration() != resolvedOperation.getDeclaration()) {
+						resolvedOperation.getConflictingOperations().add(conflictingOp);
+					}
+				}
+				processedOperations.put(simpleName, resolvedOperation);
+			} else {
+				ConflictingDefaultOperation resolvedOperation = createConflictingOperation(operation);
+				for (AbstractResolvedOperation conflictingOp : conflictingOperations) {
+					processedOperations.remove(simpleName, conflictingOp);
+					resolvedOperation.getConflictingOperations().add(conflictingOp);
+				}
+				processedOperations.put(simpleName, resolvedOperation);
+			}
+			return false;
+		}
+		return true;
+	}
+
 	/**
 	 * When the inherited operations are computed for Java 8, we have to check for conflicting default interface method implementations.
 	 */
