@@ -31,7 +31,7 @@ public class AbstractTypeComputer {
 
 	@Inject
 	private CommonTypeComputationServices services;
-	
+
 	/* @NotNull */
 	protected LightweightTypeReference getTypeForName(Class<?> clazz, ITypeComputationState state) {
 		JvmType type = findDeclaredType(clazz, state);
@@ -41,11 +41,35 @@ public class AbstractTypeComputer {
 		}
 		return owner.toLightweightTypeReference(type);
 	}
-	
+
+	/* @NotNull */
+	/**
+	 * @since 2.14
+	 */
+	protected LightweightTypeReference getTypeForName(String clazzName, ITypeComputationState state) {
+		JvmType type = findDeclaredType(clazzName, state);
+		ITypeReferenceOwner owner = state.getReferenceOwner();
+		if (type == null) {
+			return owner.newUnknownTypeReference(clazzName);
+		}
+		return owner.toLightweightTypeReference(type);
+	}
+
 	protected LightweightTypeReference getRawTypeForName(Class<?> clazz, ITypeComputationState state) {
 		return state.getReferenceOwner().newReferenceTo(clazz);
 	}
-	
+
+	/**
+	 * @since 2.14
+	 */
+	protected LightweightTypeReference getRawTypeForName(String clazzName, ITypeComputationState state) {
+		JvmType rawType = state.getReferenceOwner().getServices().getTypeReferences().findDeclaredType(clazzName, state.getReferenceOwner().getContextResourceSet());
+		if (rawType == null) {
+			return state.getReferenceOwner().newUnknownTypeReference(clazzName);
+		}
+		return state.getReferenceOwner().toPlainTypeReference(rawType);
+	}
+
 	/**
 	 * @deprecated use {@link ITypeReferenceOwner#newReferenceTo(Class)} instead.
 	 */
@@ -54,16 +78,34 @@ public class AbstractTypeComputer {
 	protected LightweightTypeReference getRawTypeForName(Class<?> clazz, ITypeReferenceOwner owner) {
 		return owner.newReferenceTo(clazz);
 	}
-	
+
 	/* @Nullable */
 	protected <Type extends JvmType> Type findDeclaredType(Class<?> clazz, ITypeComputationState state) {
 		return findDeclaredType(clazz, state.getReferenceOwner());
 	}
 
 	/* @Nullable */
+	/**
+	 * @since 2.14
+	 */
+	protected <Type extends JvmType> Type findDeclaredType(String clazzName, ITypeComputationState state) {
+		return findDeclaredType(clazzName, state.getReferenceOwner());
+	}
+
+	/* @Nullable */
 	protected <Type extends JvmType> Type findDeclaredType(Class<?> clazz, ITypeReferenceOwner owner) {
 		@SuppressWarnings("unchecked")
 		Type result = (Type) services.getTypeReferences().findDeclaredType(clazz, owner.getContextResourceSet());
+		return result;
+	}
+
+	/* @Nullable */
+	/**
+	 * @since 2.14
+	 */
+	protected <Type extends JvmType> Type findDeclaredType(String clazzName, ITypeReferenceOwner owner) {
+		@SuppressWarnings("unchecked")
+		Type result = (Type) services.getTypeReferences().findDeclaredType(clazzName, owner.getContextResourceSet());
 		return result;
 	}
 	
@@ -85,7 +127,7 @@ public class AbstractTypeComputer {
 	protected LightweightTypeReference getCommonSuperType(List<LightweightTypeReference> types, ITypeReferenceOwner owner) {
 		return services.getTypeConformanceComputer().getCommonSuperType(types, owner);
 	}
-	
+
 	protected void deferredBindTypeArgument(/* @Nullable */ LightweightTypeReference declared, LightweightTypeReference actual, ITypeComputationState state) {
 		if (declared != null && actual != null) { 
 			// TODO double check other clients of the ExpectationTypeParameterHintCollector
