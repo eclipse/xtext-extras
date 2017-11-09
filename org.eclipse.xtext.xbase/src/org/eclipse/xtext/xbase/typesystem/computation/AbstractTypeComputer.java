@@ -44,6 +44,7 @@ public class AbstractTypeComputer {
 
 	/* @NotNull */
 	/**
+	 * @see #findDeclaredType(String, ITypeReferenceOwner)
 	 * @since 2.14
 	 */
 	protected LightweightTypeReference getTypeForName(String clazzName, ITypeComputationState state) {
@@ -63,7 +64,7 @@ public class AbstractTypeComputer {
 	 * @since 2.14
 	 */
 	protected LightweightTypeReference getRawTypeForName(String clazzName, ITypeComputationState state) {
-		JvmType rawType = state.getReferenceOwner().getServices().getTypeReferences().findDeclaredType(clazzName, state.getReferenceOwner().getContextResourceSet());
+		JvmType rawType = findDeclaredType(clazzName, state);
 		if (rawType == null) {
 			return state.getReferenceOwner().newUnknownTypeReference(clazzName);
 		}
@@ -86,6 +87,7 @@ public class AbstractTypeComputer {
 
 	/* @Nullable */
 	/**
+	 * @see #findDeclaredType(String, ITypeReferenceOwner)
 	 * @since 2.14
 	 */
 	protected <Type extends JvmType> Type findDeclaredType(String clazzName, ITypeComputationState state) {
@@ -101,6 +103,9 @@ public class AbstractTypeComputer {
 
 	/* @Nullable */
 	/**
+	 * @param clazzName FQN of the type to find. see {@link org.eclipse.xtext.common.types.access.IJvmTypeProvider#findTypeByName(String)}.
+	 * @param owner the reference owner
+	 * 
 	 * @since 2.14
 	 */
 	protected <Type extends JvmType> Type findDeclaredType(String clazzName, ITypeReferenceOwner owner) {
