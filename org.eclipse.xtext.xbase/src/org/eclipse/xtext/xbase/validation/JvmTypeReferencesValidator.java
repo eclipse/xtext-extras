@@ -10,15 +10,22 @@ package org.eclipse.xtext.xbase.validation;
 import static com.google.common.collect.Lists.*;
 import static org.eclipse.xtext.xbase.validation.IssueCodes.*;
 
+import java.lang.annotation.Annotation;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.xtext.common.types.JvmAnnotationReference;
+import org.eclipse.xtext.common.types.JvmAnnotationTarget;
+import org.eclipse.xtext.common.types.JvmCustomAnnotationValue;
 import org.eclipse.xtext.common.types.JvmFormalParameter;
 import org.eclipse.xtext.common.types.JvmGenericType;
+import org.eclipse.xtext.common.types.JvmIdentifiableElement;
 import org.eclipse.xtext.common.types.JvmParameterizedTypeReference;
 import org.eclipse.xtext.common.types.JvmType;
 import org.eclipse.xtext.common.types.JvmTypeConstraint;
@@ -26,10 +33,12 @@ import org.eclipse.xtext.common.types.JvmTypeReference;
 import org.eclipse.xtext.common.types.JvmVoid;
 import org.eclipse.xtext.common.types.JvmWildcardTypeReference;
 import org.eclipse.xtext.common.types.TypesPackage;
+import org.eclipse.xtext.common.types.util.AnnotationLookup;
 import org.eclipse.xtext.common.types.util.Primitives;
 import org.eclipse.xtext.common.types.util.TypeReferences;
 import org.eclipse.xtext.validation.AbstractDeclarativeValidator;
 import org.eclipse.xtext.validation.Check;
+import org.eclipse.xtext.xbase.XStringLiteral;
 import org.eclipse.xtext.xbase.jvmmodel.IJvmModelAssociations;
 import org.eclipse.xtext.xtype.XFunctionTypeRef;
 import org.eclipse.xtext.xtype.XtypePackage;
@@ -52,6 +61,9 @@ public class JvmTypeReferencesValidator extends AbstractDeclarativeValidator {
 	
 	@Inject
 	private ProxyAwareUIStrings proxyAwareUIStrings;
+	
+	@Inject
+	private AnnotationLookup annotationLookup;
 	
 	@Override
 	protected List<EPackage> getEPackages() {
@@ -121,13 +133,59 @@ public class JvmTypeReferencesValidator extends AbstractDeclarativeValidator {
 	}
 
 	protected void warnRawType(JvmType type, JvmParameterizedTypeReference typeRef) {
-		StringBuilder message = new StringBuilder(64);
-		message.append(type.getSimpleName());
-		message.append(" is a raw type. References to generic type ");
-		message = proxyAwareUIStrings.appendTypeSignature(type, message);
-		message.append(" should be parameterized");
-		warning(message.toString(), IssueCodes.RAW_TYPE, typeRef);
+		if (!doSuppressRawTypeWarning(typeRef)) {
+			StringBuilder message = new StringBuilder(64);
+			message.append(type.getSimpleName());
+			message.append(" is a raw type. References to generic type ");
+			message = proxyAwareUIStrings.appendTypeSignature(type, message);
+			message.append(" should be parameterized");
+			warning(message.toString(), IssueCodes.RAW_TYPE, typeRef);
+		}
 	}
+	
+	private boolean doSuppressRawTypeWarning (JvmParameterizedTypeReference typeRef) {
+		JvmAnnotationReference suppressWarningsAnnotation = findAnnotationOfType(typeRef, SuppressWarnings.class);
+		
+		if (suppressWarningsAnnotation == null) {
+			return false;
+		}
+		
+		// collect the values from the annotation reference
+		Set<String> suppressedWarnings = suppressWarningsAnnotation.getValues().stream()
+			.filter(JvmCustomAnnotationValue.class::isInstance)
+			.map(JvmCustomAnnotationValue.class::cast)
+			.flatMap(a -> a.getValues().stream())
+			.map(XStringLiteral.class::cast)
+			.map(XStringLiteral::getValue)
+			.collect(Collectors.toSet())
+			;
+		return suppressedWarnings.contains("rawtypes") || suppressedWarnings.contains("all");
+	}
+	
+	/**
+	 * Recursively searches for an annotation on an element
+	 */
+	private JvmAnnotationReference findAnnotationOfType (EObject context, Class<? extends Annotation> lookupType) {
+		JvmAnnotationReference annotation = null;
+		if (context instanceof JvmAnnotationTarget) {
+			annotation = annotationLookup.findAnnotation((JvmAnnotationTarget) context, lookupType);
+		} else if (! (context instanceof JvmIdentifiableElement)) {
+			// context is not itself a JVM element, lookup on its JVM elements if any
+			Set<EObject> jvmElements = jvmModelAssociations.getJvmElements(context);
+			for (EObject jvmElement: jvmElements) {
+				annotation = findAnnotationOfType(jvmElement, lookupType);
+				if (annotation != null) {
+					break;
+				}
+			}
+		}
+		// recurse when not found yet on the context container
+		if (annotation == null && context.eContainer() != null) {
+			return findAnnotationOfType(context.eContainer(), lookupType);
+		}
+		return annotation;
+	}
+	
 
 	protected void errorTypeIsNotGeneric(JvmType type, JvmParameterizedTypeReference typeRef) {
 		StringBuilder message = new StringBuilder(64);
