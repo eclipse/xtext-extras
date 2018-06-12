@@ -12,6 +12,7 @@ import org.eclipse.jdt.internal.compiler.env.NameEnvironmentAnswer;
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor;
 import org.eclipse.xtext.common.types.TypesPackage;
 import org.eclipse.xtext.common.types.descriptions.EObjectDescriptionBasedStubGenerator;
+import org.eclipse.xtext.java.resource.ClassFileCache;
 import org.eclipse.xtext.java.resource.JavaResource;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.resource.IEObjectDescription;
@@ -35,6 +36,8 @@ public class IndexAwareNameEnvironment implements INameEnvironment {
   
   private final EObjectDescriptionBasedStubGenerator stubGenerator;
   
+  private final ClassFileCache classFileCache;
+  
   private Map<QualifiedName, NameEnvironmentAnswer> cache = CollectionLiterals.<QualifiedName, NameEnvironmentAnswer>newHashMap();
   
   @Override
@@ -53,8 +56,12 @@ public class IndexAwareNameEnvironment implements INameEnvironment {
   
   public NameEnvironmentAnswer findType(final QualifiedName className) {
     try {
-      boolean _containsKey = this.cache.containsKey(className);
+      boolean _containsKey = this.classFileCache.containsKey(className);
       if (_containsKey) {
+        return this.classFileCache.get(className);
+      }
+      boolean _containsKey_1 = this.cache.containsKey(className);
+      if (_containsKey_1) {
         return this.cache.get(className);
       }
       final IEObjectDescription candidate = IterableExtensions.<IEObjectDescription>head(this.resourceDescriptions.getExportedObjects(TypesPackage.Literals.JVM_DECLARED_TYPE, className, false));
@@ -115,11 +122,12 @@ public class IndexAwareNameEnvironment implements INameEnvironment {
     return Character.isLowerCase((IterableExtensions.<Character>head(((Iterable<Character>)Conversions.doWrapArray(packageName)))).charValue());
   }
   
-  public IndexAwareNameEnvironment(final Resource resource, final ClassLoader classLoader, final IResourceDescriptions resourceDescriptions, final EObjectDescriptionBasedStubGenerator stubGenerator) {
+  public IndexAwareNameEnvironment(final Resource resource, final ClassLoader classLoader, final IResourceDescriptions resourceDescriptions, final EObjectDescriptionBasedStubGenerator stubGenerator, final ClassFileCache classFileCache) {
     super();
     this.resource = resource;
     this.classLoader = classLoader;
     this.resourceDescriptions = resourceDescriptions;
     this.stubGenerator = stubGenerator;
+    this.classFileCache = classFileCache;
   }
 }

@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.resource.Resource
 	val ClassLoader classLoader
 	val IResourceDescriptions resourceDescriptions
 	val EObjectDescriptionBasedStubGenerator stubGenerator
+	val ClassFileCache classFileCache
 
 	Map<QualifiedName, NameEnvironmentAnswer> cache = newHashMap()
     
@@ -32,6 +33,9 @@ import org.eclipse.emf.ecore.resource.Resource
 	}
 	
 	def findType(QualifiedName className) {
+		if (classFileCache.containsKey(className)) {
+			return classFileCache.get(className)
+		}
 		if (cache.containsKey(className)) {
 			return cache.get(className)
 		}
