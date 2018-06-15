@@ -234,6 +234,11 @@ public class BinaryClass {
 	private static final boolean IS_CASE_SENSITIVE = isCaseSensitive();
 	
 	private static boolean isCaseSensitive() {
+		String result = System.getProperty("org.eclipse.xtext.common.types.access.binary.BinaryClass.ASSUME_CASE_SENSITIVE", Boolean.toString(inferIsCaseSensitive()));
+		return Boolean.parseBoolean(result);
+	}
+	
+	private static boolean inferIsCaseSensitive() {
 		try {
 			File tempFile = File.createTempFile("prefix", "");
 			File upperCase = new File(tempFile.getParentFile(), tempFile.getName().toUpperCase());
