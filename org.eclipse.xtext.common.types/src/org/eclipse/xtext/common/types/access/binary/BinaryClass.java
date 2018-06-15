@@ -7,8 +7,10 @@
  *******************************************************************************/
 package org.eclipse.xtext.common.types.access.binary;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.eclipse.emf.common.util.URI;
@@ -216,7 +218,7 @@ public class BinaryClass {
 			}
 		}
 		URL url = classLoader.getResource(toClassFile(clazzName));
-		if (url != null) {
+		if (url != null && fileSystemAwareExists(url)) {
 			return new BinaryClass(clazzName, classLoader);
 		}
 		throw new ClassNotFoundException(clazzName) {
@@ -227,6 +229,30 @@ public class BinaryClass {
 				return this;
 			}
 		};
+	}
+	
+	private static final boolean IS_CASE_SENSITIVE = isCaseSensitive();
+	
+	private static boolean isCaseSensitive() {
+		try {
+			File tempFile = File.createTempFile("prefix", "");
+			File upperCase = new File(tempFile.getParentFile(), tempFile.getName().toUpperCase());
+			return !(upperCase.exists() && upperCase.getCanonicalFile().getName().equals(tempFile.getName()));
+		} catch(IOException ex) {
+			return false;
+		}
+	}
+	
+	private static boolean fileSystemAwareExists(URL url) {
+		if (!IS_CASE_SENSITIVE && "file".equals(url.getProtocol())) {
+			try {
+				File file = new File(url.toURI());
+				return file.getCanonicalFile().getName().equals(file.getName());
+			} catch(IOException|URISyntaxException e) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	protected static String toClassFile(String name) {
