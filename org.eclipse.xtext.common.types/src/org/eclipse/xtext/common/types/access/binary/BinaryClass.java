@@ -247,7 +247,7 @@ public class BinaryClass {
 		if (!IS_CASE_SENSITIVE && "file".equals(url.getProtocol())) {
 			try {
 				File file = new File(url.toURI());
-				return file.getCanonicalFile().getName().equals(file.getName());
+				return file.getCanonicalFile().getPath().equals(file.getPath());
 			} catch(IOException|URISyntaxException e) {
 				return false;
 			}
