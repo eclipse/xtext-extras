@@ -15,6 +15,7 @@ import java.net.URL;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.xtext.common.types.access.impl.URIHelperConstants;
+import org.eclipse.xtext.util.IAcceptor;
 
 import com.google.common.base.Strings;
 
@@ -231,7 +232,20 @@ public class BinaryClass {
 		};
 	}
 	
-	private static final boolean IS_CASE_SENSITIVE = isCaseSensitive();
+	private static boolean IS_CASE_SENSITIVE = isCaseSensitive();
+	
+	/*
+	 * Public for testing purpose
+	 */
+	public static void assumeCaseSensitive(IAcceptor<Boolean> r) {
+		boolean oldValue = IS_CASE_SENSITIVE;
+		try {
+			IS_CASE_SENSITIVE = true;
+			r.accept(oldValue);
+		} finally {
+			IS_CASE_SENSITIVE = oldValue;
+		}
+	}
 	
 	private static boolean isCaseSensitive() {
 		String result = System.getProperty("org.eclipse.xtext.common.types.access.binary.BinaryClass.ASSUME_CASE_SENSITIVE", Boolean.toString(inferIsCaseSensitive()));
