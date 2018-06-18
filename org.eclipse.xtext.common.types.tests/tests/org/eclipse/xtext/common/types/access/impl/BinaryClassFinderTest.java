@@ -7,6 +7,7 @@
  *******************************************************************************/
 package org.eclipse.xtext.common.types.access.impl;
 
+import org.eclipse.xtext.common.types.access.binary.BinaryClass;
 import org.eclipse.xtext.common.types.access.binary.BinaryClassFinder;
 import org.junit.After;
 import org.junit.Assert;
@@ -56,6 +57,27 @@ public class BinaryClassFinderTest extends Assert {
 	
 	@Test public void testObjectArray_02() throws ClassNotFoundException {
 		assertEquals(Object[].class.getName(), classFinder.forName(Object[].class.getName()).getName());
+	}
+	
+	@Test public void testBinaryClassFinder() throws ClassNotFoundException {
+		assertEquals(BinaryClassFinder.class.getName(), classFinder.forName(BinaryClassFinder.class.getName()).getName());
+	}
+	
+	@Test(expected=ClassNotFoundException.class) public void testBinaryClassFinderWrongCasing() throws ClassNotFoundException {
+		classFinder.forName(BinaryClassFinder.class.getName().toUpperCase());
+	}
+	
+	@Test public void testBinaryClassFinderWrongCasingForcedCaseSensitive() throws ClassNotFoundException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		BinaryClass.assumeCaseSensitive((originalValue)->{
+			try {
+				String upperCase = BinaryClassFinder.class.getName().toUpperCase();
+				BinaryClass found = classFinder.forName(upperCase);
+				assertFalse(originalValue);
+				assertEquals(upperCase, found.getName());
+			} catch(ClassNotFoundException e) {
+				assertTrue(originalValue);
+			}
+		});
 	}
 	
 }
