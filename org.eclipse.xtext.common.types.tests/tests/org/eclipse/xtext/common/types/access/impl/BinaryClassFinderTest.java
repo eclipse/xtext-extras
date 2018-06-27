@@ -60,17 +60,17 @@ public class BinaryClassFinderTest extends Assert {
 	}
 	
 	@Test public void testBinaryClassFinder() throws ClassNotFoundException {
-		assertEquals(BinaryClassFinder.class.getName(), classFinder.forName(BinaryClassFinder.class.getName()).getName());
+		assertEquals(BinaryClassFinderTest.class.getName(), classFinder.forName(BinaryClassFinderTest.class.getName()).getName());
 	}
 	
 	@Test(expected=ClassNotFoundException.class) public void testBinaryClassFinderWrongCasing() throws ClassNotFoundException {
-		classFinder.forName(BinaryClassFinder.class.getName().toUpperCase());
+		classFinder.forName(BinaryClassFinderTest.class.getName().toUpperCase());
 	}
 	
-	@Test public void testBinaryClassFinderWrongCasingForcedCaseSensitive() throws ClassNotFoundException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+	@Test public void testBinaryClassFinderWrongCasingForcedCaseSensitive() throws Exception {
 		BinaryClass.assumeCaseSensitive((originalValue)->{
 			try {
-				String upperCase = BinaryClassFinder.class.getName().toUpperCase();
+				String upperCase = BinaryClassFinderTest.class.getName().toUpperCase();
 				BinaryClass found = classFinder.forName(upperCase);
 				assertFalse(originalValue);
 				assertEquals(upperCase, found.getName());
