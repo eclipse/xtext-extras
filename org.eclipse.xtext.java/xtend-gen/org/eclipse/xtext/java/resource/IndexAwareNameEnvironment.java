@@ -15,6 +15,7 @@ import org.eclipse.xtext.common.types.TypesPackage;
 import org.eclipse.xtext.common.types.descriptions.EObjectDescriptionBasedStubGenerator;
 import org.eclipse.xtext.java.resource.ClassFileCache;
 import org.eclipse.xtext.java.resource.JavaResource;
+import org.eclipse.xtext.naming.IQualifiedNameConverter;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.resource.IEObjectDescription;
 import org.eclipse.xtext.resource.IResourceDescription;
@@ -39,7 +40,9 @@ public class IndexAwareNameEnvironment implements INameEnvironment {
   
   private final ClassFileCache classFileCache;
   
-  private Map<QualifiedName, NameEnvironmentAnswer> cache = CollectionLiterals.<QualifiedName, NameEnvironmentAnswer>newHashMap();
+  private final IQualifiedNameConverter qualifiedNameConverter;
+  
+  private Map<String, NameEnvironmentAnswer> cache = CollectionLiterals.<String, NameEnvironmentAnswer>newHashMap();
   
   @Override
   public void cleanup() {
@@ -52,10 +55,10 @@ public class IndexAwareNameEnvironment implements INameEnvironment {
       return String.valueOf(it);
     };
     final QualifiedName className = QualifiedName.create(ListExtensions.<char[], String>map(((List<char[]>)Conversions.doWrapArray(compoundTypeName)), _function));
-    return this.findType(className);
+    return this.findType(className.toString());
   }
   
-  public NameEnvironmentAnswer findType(final QualifiedName className) {
+  public NameEnvironmentAnswer findType(final String className) {
     try {
       boolean _containsKey = this.classFileCache.containsKey(className);
       if (_containsKey) {
@@ -69,7 +72,7 @@ public class IndexAwareNameEnvironment implements INameEnvironment {
       if (_containsKey_1) {
         return this.cache.get(className);
       }
-      final IEObjectDescription candidate = IterableExtensions.<IEObjectDescription>head(this.resourceDescriptions.getExportedObjects(TypesPackage.Literals.JVM_DECLARED_TYPE, className, false));
+      final IEObjectDescription candidate = IterableExtensions.<IEObjectDescription>head(this.resourceDescriptions.getExportedObjects(TypesPackage.Literals.JVM_DECLARED_TYPE, this.qualifiedNameConverter.toQualifiedName(className), false));
       NameEnvironmentAnswer result = null;
       if ((candidate != null)) {
         final IResourceDescription resourceDescription = this.resourceDescriptions.getResourceDescription(candidate.getEObjectURI().trimFragment());
@@ -82,14 +85,14 @@ public class IndexAwareNameEnvironment implements INameEnvironment {
         }
         final String source = _xifexpression;
         char[] _charArray = source.toCharArray();
-        String _string = className.toString("/");
-        String _plus = (_string + ".java");
+        String _replace = className.replace(".", "/");
+        String _plus = (_replace + ".java");
         CompilationUnit _compilationUnit = new CompilationUnit(_charArray, _plus, null);
         NameEnvironmentAnswer _nameEnvironmentAnswer = new NameEnvironmentAnswer(_compilationUnit, null);
         result = _nameEnvironmentAnswer;
       } else {
-        String _string_1 = className.toString("/");
-        final String fileName = (_string_1 + ".class");
+        String _replace_1 = className.replace(".", "/");
+        final String fileName = (_replace_1 + ".class");
         final URL url = this.classLoader.getResource(fileName);
         if ((url == null)) {
           this.cache.put(className, null);
@@ -118,7 +121,7 @@ public class IndexAwareNameEnvironment implements INameEnvironment {
     String _valueOf = String.valueOf(typeName);
     list.add(_valueOf);
     final QualifiedName className = QualifiedName.create(list);
-    return this.findType(className);
+    return this.findType(className.toString());
   }
   
   @Override
@@ -129,12 +132,13 @@ public class IndexAwareNameEnvironment implements INameEnvironment {
     return Character.isLowerCase((IterableExtensions.<Character>head(((Iterable<Character>)Conversions.doWrapArray(packageName)))).charValue());
   }
   
-  public IndexAwareNameEnvironment(final Resource resource, final ClassLoader classLoader, final IResourceDescriptions resourceDescriptions, final EObjectDescriptionBasedStubGenerator stubGenerator, final ClassFileCache classFileCache) {
+  public IndexAwareNameEnvironment(final Resource resource, final ClassLoader classLoader, final IResourceDescriptions resourceDescriptions, final EObjectDescriptionBasedStubGenerator stubGenerator, final ClassFileCache classFileCache, final IQualifiedNameConverter qualifiedNameConverter) {
     super();
     this.resource = resource;
     this.classLoader = classLoader;
     this.resourceDescriptions = resourceDescriptions;
     this.stubGenerator = stubGenerator;
     this.classFileCache = classFileCache;
+    this.qualifiedNameConverter = qualifiedNameConverter;
   }
 }

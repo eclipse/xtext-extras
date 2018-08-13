@@ -124,15 +124,16 @@ class JavaDerivedStateComputer {
 		if (data === null)
 			throw new IllegalStateException("no index installed")
 		// TODO use container manager
-		val nameEnv = new IndexAwareNameEnvironment(resource, classLoader, data, stubGenerator, classFileCache)
+		val nameEnv = new IndexAwareNameEnvironment(resource, classLoader, data, stubGenerator, classFileCache, qualifiedNameConverter)
 		val compiler = new Compiler(nameEnv, DefaultErrorHandlingPolicies.proceedWithAllProblems(), resource.compilerOptions, [
 			for (cls : it.classFiles) {
 				// TODO What is with inner classes (they contain $)
 				// TODO is there a better way to obtain the class name
-				val key = qualifiedNameConverter.toQualifiedName(new String(cls.fileName).replace("/","."))
-				if (!classFileCache.containsKey(key)) {
-					classFileCache.put(key, new ClassFileReader(cls.bytes,cls.fileName))
-				}
+				val key = new String(cls.fileName).replace("/",".")
+				classFileCache.computeIfAbsent(key,[n|new ClassFileReader(cls.bytes,cls.fileName)])
+//				if (!classFileCache.containsKey(key)) {
+//					classFileCache.put(key, new ClassFileReader(cls.bytes,cls.fileName))
+//				}
 			}
 			if (Arrays.equals(it.fileName, compilationUnit.fileName)) {
 				val map = newHashMap
