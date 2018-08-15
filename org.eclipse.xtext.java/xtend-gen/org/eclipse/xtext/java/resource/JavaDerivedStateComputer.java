@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Function;
 import org.apache.log4j.Logger;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -20,6 +21,8 @@ import org.eclipse.jdt.internal.compiler.ast.ImportReference;
 import org.eclipse.jdt.internal.compiler.ast.TypeDeclaration;
 import org.eclipse.jdt.internal.compiler.ast.TypeParameter;
 import org.eclipse.jdt.internal.compiler.batch.CompilationUnit;
+import org.eclipse.jdt.internal.compiler.classfmt.ClassFileReader;
+import org.eclipse.jdt.internal.compiler.env.IBinaryType;
 import org.eclipse.jdt.internal.compiler.env.ICompilationUnit;
 import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
 import org.eclipse.jdt.internal.compiler.parser.Parser;
@@ -34,10 +37,12 @@ import org.eclipse.xtext.common.types.access.binary.BinaryClass;
 import org.eclipse.xtext.common.types.access.binary.asm.ClassFileBytesAccess;
 import org.eclipse.xtext.common.types.access.binary.asm.JvmDeclaredTypeBuilder;
 import org.eclipse.xtext.common.types.descriptions.EObjectDescriptionBasedStubGenerator;
+import org.eclipse.xtext.java.resource.ClassFileCache;
 import org.eclipse.xtext.java.resource.InMemoryClassLoader;
 import org.eclipse.xtext.java.resource.IndexAwareNameEnvironment;
 import org.eclipse.xtext.java.resource.JavaConfig;
 import org.eclipse.xtext.java.resource.JavaResource;
+import org.eclipse.xtext.naming.IQualifiedNameConverter;
 import org.eclipse.xtext.parser.antlr.IReferableElementsUnloader;
 import org.eclipse.xtext.resource.IResourceDescriptions;
 import org.eclipse.xtext.resource.IResourceDescriptionsProvider;
@@ -64,6 +69,9 @@ public class JavaDerivedStateComputer {
   
   @Inject
   private IResourceDescriptionsProvider resourceDescriptionsProvider;
+  
+  @Inject
+  private IQualifiedNameConverter qualifiedNameConverter;
   
   public void discardDerivedState(final Resource resource) {
     EList<EObject> resourcesContentsList = resource.getContents();
@@ -169,27 +177,59 @@ public class JavaDerivedStateComputer {
     return ((JavaResource) resource).getCompilationUnit();
   }
   
+  protected ClassFileCache findOrCreateClassFileCache(final ResourceSet rs) {
+    ClassFileCache _xblockexpression = null;
+    {
+      ClassFileCache cache = ClassFileCache.findInEmfObject(rs);
+      if ((cache == null)) {
+        ClassFileCache _classFileCache = new ClassFileCache();
+        cache = _classFileCache;
+        cache.attachToEmfObject(rs);
+      }
+      _xblockexpression = cache;
+    }
+    return _xblockexpression;
+  }
+  
   public void installFull(final Resource resource) {
     boolean _isInfoFile = this.isInfoFile(resource);
     if (_isInfoFile) {
       return;
     }
+    final ClassFileCache classFileCache = this.findOrCreateClassFileCache(resource.getResourceSet());
     final CompilationUnit compilationUnit = this.getCompilationUnit(resource);
     final ClassLoader classLoader = this.getClassLoader(resource);
     final IResourceDescriptions data = this.resourceDescriptionsProvider.getResourceDescriptions(resource.getResourceSet());
     if ((data == null)) {
       throw new IllegalStateException("no index installed");
     }
-    final IndexAwareNameEnvironment nameEnv = new IndexAwareNameEnvironment(resource, classLoader, data, this.stubGenerator);
+    final IndexAwareNameEnvironment nameEnv = new IndexAwareNameEnvironment(resource, classLoader, data, this.stubGenerator, classFileCache, this.qualifiedNameConverter);
     IErrorHandlingPolicy _proceedWithAllProblems = DefaultErrorHandlingPolicies.proceedWithAllProblems();
     CompilerOptions _compilerOptions = this.getCompilerOptions(resource);
     final ICompilerRequestor _function = (CompilationResult it) -> {
+      ClassFile[] _classFiles = it.getClassFiles();
+      for (final ClassFile cls : _classFiles) {
+        {
+          char[] _fileName = cls.fileName();
+          final String key = new String(_fileName).replace("/", ".");
+          final Function<String, IBinaryType> _function_1 = (String n) -> {
+            try {
+              byte[] _bytes = cls.getBytes();
+              char[] _fileName_1 = cls.fileName();
+              return new ClassFileReader(_bytes, _fileName_1);
+            } catch (Throwable _e) {
+              throw Exceptions.sneakyThrow(_e);
+            }
+          };
+          classFileCache.computeIfAbsent(key, _function_1);
+        }
+      }
       boolean _equals = Arrays.equals(it.fileName, compilationUnit.fileName);
       if (_equals) {
         final HashMap<String, byte[]> map = CollectionLiterals.<String, byte[]>newHashMap();
         List<String> topLevelTypes = CollectionLiterals.<String>newArrayList();
-        ClassFile[] _classFiles = it.getClassFiles();
-        for (final ClassFile cf : _classFiles) {
+        ClassFile[] _classFiles_1 = it.getClassFiles();
+        for (final ClassFile cf : _classFiles_1) {
           {
             final Function1<char[], String> _function_1 = (char[] it_1) -> {
               return String.valueOf(it_1);
