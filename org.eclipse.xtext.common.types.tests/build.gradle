@@ -12,6 +12,7 @@ dependencies {
 	compile "org.eclipse.xtext:org.eclipse.xtext.testing:$versions.xtext"
 	compile "com.google.errorprone:error_prone_annotations"
 	compile "junit:junit"
+	compile "javax.annotation:javax.annotation-api"
 }
 
 sourceSets.test.java {
