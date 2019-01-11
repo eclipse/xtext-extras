@@ -4,9 +4,9 @@ description = 'Builder infrastructure for Xtext.'
 dependencies {
 	compile project(':org.eclipse.xtext.xbase')
 	compile project(':org.eclipse.xtext.common.types')
-	compile "org.eclipse.platform:org.eclipse.equinox.common"
-	compile "org.eclipse.platform:org.eclipse.core.runtime"
-	compile "org.eclipse.jdt:org.eclipse.jdt.core"
-	compile "org.eclipse.jdt:org.eclipse.jdt.compiler.apt"
-	compile "org.eclipse.jdt:org.eclipse.jdt.compiler.tool"
+	compile 'org.eclipse.platform:org.eclipse.equinox.common'
+	compile 'org.eclipse.platform:org.eclipse.core.runtime'
+	compile 'org.eclipse.jdt:org.eclipse.jdt.core'
+	compile 'org.eclipse.jdt:org.eclipse.jdt.compiler.apt'
+	compile 'org.eclipse.jdt:org.eclipse.jdt.compiler.tool'
 }

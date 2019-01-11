@@ -8,11 +8,11 @@ dependencies {
 	compile project(':org.eclipse.xtext.xbase.testdata')
 	compile project(':org.eclipse.xtext.xbase.ide')
 
-	compile "org.eclipse.platform:org.eclipse.equinox.common"
-	compile "org.eclipse.platform:org.eclipse.core.runtime"
-	compile "org.eclipse.jdt:org.eclipse.jdt.core"
-	compile "org.eclipse.jdt:org.eclipse.jdt.compiler.apt"
-	compile "org.eclipse.jdt:org.eclipse.jdt.compiler.tool"
 	compile "org.eclipse.xtext:org.eclipse.xtext.testing:$versions.xtext"
-	compile "junit:junit"
+	compile 'org.eclipse.platform:org.eclipse.equinox.common'
+	compile 'org.eclipse.platform:org.eclipse.core.runtime'
+	compile 'org.eclipse.jdt:org.eclipse.jdt.core'
+	compile 'org.eclipse.jdt:org.eclipse.jdt.compiler.apt'
+	compile 'org.eclipse.jdt:org.eclipse.jdt.compiler.tool'
+	compile 'junit:junit'
 }
