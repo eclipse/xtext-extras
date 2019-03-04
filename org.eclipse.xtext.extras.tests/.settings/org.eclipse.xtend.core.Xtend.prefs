@@ -1,7 +1,8 @@
 //outlet.DEFAULT_OUTPUT.sourceFolder.generator/src.directory=generator/xtend-gen
-//outlet.DEFAULT_OUTPUT.sourceFolder.generator/src.ignore=
+//outlet.DEFAULT_OUTPUT.sourceFolder.generator/src.ignore=false
 //outlet.DEFAULT_OUTPUT.sourceFolder.generator/xtend-gen.directory=
 //outlet.DEFAULT_OUTPUT.sourceFolder.generator/xtend-gen.ignore=true
+//outlet.DEFAULT_OUTPUT.sourceFolder.src/main/java.directory=xtend-gen
 BuilderConfiguration.is_project_specific=true
 autobuilding=true
 eclipse.preferences.version=1
@@ -22,6 +23,7 @@ outlet.DEFAULT_OUTPUT.sourceFolder.emf-gen.directory=
 outlet.DEFAULT_OUTPUT.sourceFolder.emf-gen.ignore=true
 outlet.DEFAULT_OUTPUT.sourceFolder.src-gen.directory=
 outlet.DEFAULT_OUTPUT.sourceFolder.src-gen.ignore=true
+outlet.DEFAULT_OUTPUT.sourceFolder.src-gen2.ignore=true
 outlet.DEFAULT_OUTPUT.sourceFolder.src.directory=xtend-gen
 outlet.DEFAULT_OUTPUT.sourceFolder.src.ignore=
 outlet.DEFAULT_OUTPUT.sourceFolder.xtend-gen.directory=

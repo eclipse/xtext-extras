@@ -1,5 +1,7 @@
 /.m2/
 bin/
+test-bin/
+target/
 build/
 .gradle/
 *._trace

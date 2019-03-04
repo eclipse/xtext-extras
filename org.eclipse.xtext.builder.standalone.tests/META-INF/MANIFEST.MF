@@ -12,7 +12,9 @@ Require-Bundle: org.eclipse.xtext,
  org.eclipse.emf.ecore,
  org.eclipse.emf.common,
  org.antlr.runtime;bundle-version="[3.2.0,3.2.1)",
- org.eclipse.xtext.xbase.lib
+ org.eclipse.xtext.xbase.lib,
+ org.eclipse.xtext.generator,
+ org.eclipse.xtend.lib
 Export-Package: org.eclipse.xtext.builder.tests.builderTestLanguage,
  org.eclipse.xtext.builder.tests.builderTestLanguage.impl,
  org.eclipse.xtext.builder.tests.builderTestLanguage.util,

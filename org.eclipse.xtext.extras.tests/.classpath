@@ -1,45 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" output="bin/test" path="src">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="src" output="test-bin" path="src">
 		<attributes>
-			<attribute name="gradle_scope" value="test"/>
-			<attribute name="gradle_used_by_scope" value="test"/>
+			<attribute name="test" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry including="**/*.java|**/*.xtend" kind="src" output="bin/test" path="xtend-gen">
+	<classpathentry kind="src" output="generator/bin" path="generator/src"/>
+	<classpathentry kind="src" output="generator/bin" path="generator/xtend-gen"/>
+	<classpathentry kind="src" output="test-bin" path="src-gen">
 		<attributes>
-			<attribute name="gradle_scope" value="test"/>
-			<attribute name="gradle_used_by_scope" value="test"/>
+			<attribute name="test" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" output="bin/test" path="src-gen">
+	<classpathentry kind="src" output="test-bin" path="src-gen2">
 		<attributes>
-			<attribute name="gradle_scope" value="test"/>
-			<attribute name="gradle_used_by_scope" value="test"/>
-			<attribute name="ignore_optional_problems" value="true"/>
+			<attribute name="test" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" output="bin/mwe2" path="emf-gen">
+	<classpathentry kind="src" output="test-bin" path="emf-gen">
 		<attributes>
-			<attribute name="gradle_scope" value="mwe2"/>
-			<attribute name="gradle_used_by_scope" value="test,mwe2"/>
-			<attribute name="ignore_optional_problems" value="true"/>
+			<attribute name="test" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" output="bin/mwe2" path="generator/src">
+	<classpathentry kind="src" output="test-bin" path="xtend-gen">
 		<attributes>
-			<attribute name="gradle_scope" value="mwe2"/>
-			<attribute name="gradle_used_by_scope" value="test,mwe2"/>
+			<attribute name="test" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" output="bin/mwe2" path="generator/xtend-gen">
-		<attributes>
-			<attribute name="gradle_scope" value="mwe2"/>
-			<attribute name="gradle_used_by_scope" value="test,mwe2"/>
-			<attribute name="ignore_optional_problems" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8/"/>
-	<classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
-	<classpathentry kind="output" path="bin/main"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>

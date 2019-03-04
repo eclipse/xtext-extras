@@ -47,7 +47,9 @@ Require-Bundle: org.antlr.runtime;bundle-version="[3.2.0,3.2.1)",
  org.eclipse.xtext.testing,
  org.eclipse.xtext.util,
  org.eclipse.xtext.xbase.lib,
- org.eclipse.xtend.lib
+ org.eclipse.xtend.lib,
+ org.eclipse.xtext.generator,
+ org.eclipse.xtext.xbase
 Import-Package: org.apache.log4j,
  org.junit;version="4.12.0",
  org.junit.rules;version="4.12.0",
