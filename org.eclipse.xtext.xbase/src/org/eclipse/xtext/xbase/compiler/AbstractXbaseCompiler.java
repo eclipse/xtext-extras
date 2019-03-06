@@ -37,6 +37,7 @@ import org.eclipse.xtext.xbase.XBlockExpression;
 import org.eclipse.xtext.xbase.XConstructorCall;
 import org.eclipse.xtext.xbase.XExpression;
 import org.eclipse.xtext.xbase.XFeatureCall;
+import org.eclipse.xtext.xbase.XTryCatchFinallyExpression;
 import org.eclipse.xtext.xbase.XVariableDeclaration;
 import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable;
 import org.eclipse.xtext.xbase.controlflow.IEarlyExitComputer;
@@ -345,7 +346,7 @@ public abstract class AbstractXbaseCompiler {
 	protected boolean needsSneakyThrow(XExpression obj, Collection<JvmTypeReference> declaredExceptions) {
 		IResolvedTypes resolvedTypes = getResolvedTypes(obj);
 		List<LightweightTypeReference> thrownExceptions = resolvedTypes.getThrownExceptions(obj);
-		return hasUnhandledException(thrownExceptions, declaredExceptions);
+		return (hasUnhandledException(thrownExceptions, declaredExceptions) || containsTryWithResourcesBlock(obj));
 	}
 	
 	protected boolean hasUnhandledException(List<LightweightTypeReference> thrownExceptions, Collection<JvmTypeReference> declaredExceptions) {
@@ -366,6 +367,23 @@ public abstract class AbstractXbaseCompiler {
 			}
 		}
 		return true;
+	}
+	
+	/**
+	 * If obj contains a try with resources block the "close()" method the
+	 * resource has implemented might throw an exception. The "close()" method
+	 * is demanded by the obligatory implementation of the AutoCLosable
+	 * interface
+	 */
+	protected boolean containsTryWithResourcesBlock(XExpression obj) {
+		if (obj instanceof XBlockExpression) {
+			for (XExpression expr : ((XBlockExpression) obj).getExpressions()) {
+				if (expr instanceof XTryCatchFinallyExpression
+						&& !((XTryCatchFinallyExpression) expr).getResources().isEmpty())
+					return true;
+			}
+		}
+		return false;
 	}
 
 	/**

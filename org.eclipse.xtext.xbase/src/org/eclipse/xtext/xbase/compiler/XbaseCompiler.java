@@ -110,6 +110,7 @@ import com.google.inject.Inject;
  * @author Christian Dientrich - bug#493900
  * @author Karsten Thoms - bug#501975
  * @author Stephane Galland
+ * @author Eva Poell - support for try with resources
  */
 public class XbaseCompiler extends FeatureCallCompiler {
 	
@@ -460,12 +461,55 @@ public class XbaseCompiler extends FeatureCallCompiler {
 		b.append(getVarName(expr, b));
 	}
 
-	protected void _toJavaStatement(XTryCatchFinallyExpression expr, ITreeAppendable outerAppendable, boolean isReferenced) {
+	protected void _toJavaStatement(XTryCatchFinallyExpression expr, ITreeAppendable outerAppendable,
+			boolean isReferenced) {
 		ITreeAppendable b = outerAppendable.trace(expr, false);
+		GeneratorConfig config = b.getGeneratorConfig();
+		boolean java7 = false;  // If Java 7 or better: use Java's try with resources
+		if (config != null && config.getJavaSourceVersion().isAtLeast(JAVA7))
+			java7 = true;
+		EList<XVariableDeclaration> resources = expr.getResources();
+		boolean isTryWithRes = !resources.isEmpty();
+
 		if (isReferenced && !isPrimitiveVoid(expr)) {
 			declareSyntheticVariable(expr, b);
 		}
-		b.newLine().append("try {").increaseIndentation();
+
+		// Resources    defined before try-statement, for java versions < 7
+		if (isTryWithRes && !java7) {
+			for (XVariableDeclaration res : resources) {
+				b.newLine();
+				LightweightTypeReference type = appendVariableTypeAndName(res, b);
+				b.append(" = ");
+				if (res.getRight() instanceof XConstructorCall)
+					constructorCallToJavaExpression((XConstructorCall) res.getRight(), b);
+				else
+					appendDefaultLiteral(b, type);
+				b.append(";");
+			}
+		}
+
+		// Try
+		b.newLine().append("try ");
+		
+		// Resources    for java versions > 7
+		if (isTryWithRes && java7) {
+			int isLast = resources.size();
+			int i = 0;
+			b.append("(");
+			for (XVariableDeclaration res : resources) {
+				LightweightTypeReference type = appendVariableTypeAndName(res, b);
+				b.append(" = ");
+				compileAsJavaExpression(res.getRight(), b, type);
+				if (++i < isLast)
+					b.append("; ");
+			}
+			b.append(") ");
+		}
+
+		b.append("{").increaseIndentation();
+
+		// Expression
 		final boolean canBeReferenced = isReferenced && !isPrimitiveVoid(expr.getExpression());
 		internalToJavaStatement(expr.getExpression(), b, canBeReferenced);
 		if (canBeReferenced) {
@@ -474,11 +518,17 @@ public class XbaseCompiler extends FeatureCallCompiler {
 			b.append(";");
 		}
 		b.decreaseIndentation().newLine().append("}");
-		appendCatchAndFinally(expr, b, isReferenced);
+
+		// Catch and Finally
+		appendCatchAndFinally(expr, b, isReferenced, java7);
 	}
 
-	protected void appendCatchAndFinally(XTryCatchFinallyExpression expr, ITreeAppendable b, boolean isReferenced) {
+	protected void appendCatchAndFinally(XTryCatchFinallyExpression expr, ITreeAppendable b, boolean isReferenced, boolean java7) {
 		final EList<XCatchClause> catchClauses = expr.getCatchClauses();
+		final XExpression finallyExp = expr.getFinallyExpression();
+		boolean isTryWithResources = !expr.getResources().isEmpty();
+		
+		// Catch
 		if (!catchClauses.isEmpty()) {
 			String variable = b.declareSyntheticVariable(Tuples.pair(expr, "_catchedThrowable"), "_t");
 			b.append(" catch (final Throwable ").append(variable).append(") ");
@@ -508,10 +558,15 @@ public class XbaseCompiler extends FeatureCallCompiler {
 			closeBlock(b);
 			closeBlock(b);
 		}
-		final XExpression finallyExp = expr.getFinallyExpression();
-		if (finallyExp != null) {
+
+		// Finally
+		if (finallyExp != null || !java7) {
 			b.append(" finally {").increaseIndentation();
-			internalToJavaStatement(finallyExp, b, false);
+			if (isTryWithResources && !java7) {
+				appendFinallyWithResources(expr.getResources(), b);
+			} else {
+				internalToJavaStatement(finallyExp, b, false);
+			}
 			b.decreaseIndentation().newLine().append("}");
 		}
 	}
@@ -569,6 +624,14 @@ public class XbaseCompiler extends FeatureCallCompiler {
 		LightweightTypeReference lightweight = toLightweight(reference, context);
 		LightweightTypeReference superType = lightweight.getOwner().getServices().getTypeConformanceComputer().getCommonSuperType(lightweight.getMultiTypeComponents(), lightweight.getOwner());
 		return superType.toJavaCompliantTypeReference();
+	}
+	
+	protected void appendFinallyWithResources(EList<XVariableDeclaration> resources, ITreeAppendable b) {
+		for (int i = resources.size() - 1; i >= 0; i--) {
+			XVariableDeclaration res = resources.get(i);
+			String resName = res.getName();
+			b.newLine().append("if (" + resName + " != null) ").append(resName + ".close();");
+		}
 	}
 
 	protected void _toJavaExpression(XTryCatchFinallyExpression expr, ITreeAppendable b) {

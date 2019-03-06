@@ -84,6 +84,7 @@ import com.google.inject.Inject;
  * 
  * @author Sebastian Zarnekow - Initial contribution and API
  * @author Moritz Eysholdt - Support for checked exceptions
+ * @author Eva Poell - support for try with resources
  */
 public class XbaseTypeComputer extends AbstractTypeComputer implements ITypeComputer {
 
@@ -511,6 +512,7 @@ public class XbaseTypeComputer extends AbstractTypeComputer implements ITypeComp
 	protected void _computeTypes(XVariableDeclaration object, ITypeComputationState state) {
 		JvmTypeReference declaredType = object.getType();
 		LightweightTypeReference lightweightTypeReference = declaredType != null ? state.getReferenceOwner().toLightweightTypeReference(declaredType) : null;
+		boolean isTryWithResources = (object.eContainingFeature() == XbasePackage.Literals.XTRY_CATCH_FINALLY_EXPRESSION__RESOURCES);
 		/*
 		 * Allow recursive closure bodies, e.g.
 		 * 
@@ -544,7 +546,17 @@ public class XbaseTypeComputer extends AbstractTypeComputer implements ITypeComp
 			ITypeComputationState initializerState = state.assignType(object, lightweightTypeReference).withExpectation(lightweightTypeReference);
 			initializerState.computeTypes(object.getRight());
 		} else {
-			ITypeComputationState initializerState = lightweightTypeReference != null ? state.withExpectation(lightweightTypeReference) : state.withNonVoidExpectation();
+			ITypeComputationState initializerState;
+			if (isTryWithResources) {
+				initializerState = (lightweightTypeReference != null)
+						? state.withExpectation(lightweightTypeReference)
+						: state.withExpectation(getRawTypeForName(java.lang.AutoCloseable.class, state));
+			}
+			else
+				initializerState = (lightweightTypeReference != null)
+						? state.withExpectation(lightweightTypeReference)
+						: state.withNonVoidExpectation();
+		
 			initializerState.withinScope(object);
 			ITypeComputationResult computedType = initializerState.computeTypes(object.getRight());
 			/* 
@@ -572,6 +584,18 @@ public class XbaseTypeComputer extends AbstractTypeComputer implements ITypeComp
 								"Dead code: The variable " + object.getSimpleName() + " will never be assigned.",
 								object,
 								XbasePackage.Literals.XVARIABLE_DECLARATION__NAME,
+								-1,
+								null);
+						state.addDiagnostic(diagnostic);
+					}
+					if (isTryWithResources && (!variableType.isSubtypeOf(java.lang.AutoCloseable.class)
+							|| object.getRight() instanceof XNullLiteral)) {
+						AbstractDiagnostic diagnostic = new EObjectDiagnosticImpl(Severity.ERROR,
+								IssueCodes.INVALID_TRY_RESOURCE_TYPE,
+								"The resource \'" + object.getSimpleName() + "\' of type "
+										+ variableType.getSimpleName() + " does not implement java.lang.AutoCloseable.",
+								object,
+								XbasePackage.Literals.XVARIABLE_DECLARATION__TYPE,
 								-1,
 								null);
 						state.addDiagnostic(diagnostic);
@@ -1063,10 +1087,23 @@ public class XbaseTypeComputer extends AbstractTypeComputer implements ITypeComp
 	protected void _computeTypes(XTryCatchFinallyExpression object, ITypeComputationState state) {
 		List<LightweightTypeReference> caughtExceptions = Lists.newArrayList();
 		ITypeReferenceOwner referenceOwner = state.getReferenceOwner();
+		List <XVariableDeclaration> resources = object.getResources();
+		
+		// Resources
+		for (XVariableDeclaration resDecl : resources) {
+			ITypeComputationState resourceState = state.withoutExpectation(); // no expectation
+			resourceState.computeTypes(resDecl);
+			addLocalToCurrentScope(resDecl, state);
+		}
+		state.withinScope(object);
+		
+		// Body
 		for (XCatchClause catchClause : object.getCatchClauses())
 			if (catchClause.getDeclaredParam() != null && catchClause.getDeclaredParam().getParameterType() != null)
 				caughtExceptions.add(referenceOwner.toLightweightTypeReference(catchClause.getDeclaredParam().getParameterType()));
 		state.withExpectedExceptions(caughtExceptions).computeTypes(object.getExpression());
+
+		// CatchClause
 		for (XCatchClause catchClause : object.getCatchClauses()) {
 			JvmFormalParameter catchClauseParam = catchClause.getDeclaredParam();
 			JvmTypeReference parameterType = catchClauseParam.getParameterType();
@@ -1080,6 +1117,7 @@ public class XbaseTypeComputer extends AbstractTypeComputer implements ITypeComp
 			catchClauseState.withinScope(catchClause);
 			catchClauseState.computeTypes(catchClause.getExpression());
 		}
+		// FinallyClause
 		// TODO validate / handle return / throw in finally block
 		state.withoutExpectation().computeTypes(object.getFinallyExpression());
 	}
