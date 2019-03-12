@@ -550,7 +550,7 @@ public class XbaseTypeComputer extends AbstractTypeComputer implements ITypeComp
 			if (isTryWithResources) {
 				initializerState = (lightweightTypeReference != null)
 						? state.withExpectation(lightweightTypeReference)
-						: state.withExpectation(getRawTypeForName(java.lang.AutoCloseable.class, state));
+						: state.withExpectation(getRawTypeForName(AutoCloseable.class, state));
 			}
 			else
 				initializerState = (lightweightTypeReference != null)
@@ -588,7 +588,7 @@ public class XbaseTypeComputer extends AbstractTypeComputer implements ITypeComp
 								null);
 						state.addDiagnostic(diagnostic);
 					}
-					if (isTryWithResources && (!variableType.isSubtypeOf(java.lang.AutoCloseable.class)
+					if (isTryWithResources && (!variableType.isSubtypeOf(AutoCloseable.class)
 							|| object.getRight() instanceof XNullLiteral)) {
 						AbstractDiagnostic diagnostic = new EObjectDiagnosticImpl(Severity.ERROR,
 								IssueCodes.INVALID_TRY_RESOURCE_TYPE,

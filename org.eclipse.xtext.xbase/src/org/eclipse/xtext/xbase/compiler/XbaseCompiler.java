@@ -12,6 +12,7 @@ import static org.eclipse.xtext.util.JavaVersion.*;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -464,35 +465,30 @@ public class XbaseCompiler extends FeatureCallCompiler {
 	protected void _toJavaStatement(XTryCatchFinallyExpression expr, ITreeAppendable outerAppendable,
 			boolean isReferenced) {
 		ITreeAppendable b = outerAppendable.trace(expr, false);
-		GeneratorConfig config = b.getGeneratorConfig();
-		boolean java7 = false;  // If Java 7 or better: use Java's try with resources
-		if (config != null && config.getJavaSourceVersion().isAtLeast(JAVA7))
-			java7 = true;
-		EList<XVariableDeclaration> resources = expr.getResources();
+		boolean java7 = isJava7orHigher(b); // If Java 7 or better: use Java's try with resources
+		List<XVariableDeclaration> resources = expr.getResources();
+		Map<String, LightweightTypeReference> resourceMap = new HashMap<String, LightweightTypeReference>();
 		boolean isTryWithRes = !resources.isEmpty();
 
 		if (isReferenced && !isPrimitiveVoid(expr)) {
 			declareSyntheticVariable(expr, b);
 		}
-
-		// Resources    defined before try-statement, for java versions < 7
+		
+		// Resources    declared before the try-statement, for java versions < 7
 		if (isTryWithRes && !java7) {
 			for (XVariableDeclaration res : resources) {
 				b.newLine();
+				res.setWriteable(true);
 				LightweightTypeReference type = appendVariableTypeAndName(res, b);
-				b.append(" = ");
-				if (res.getRight() instanceof XConstructorCall)
-					constructorCallToJavaExpression((XConstructorCall) res.getRight(), b);
-				else
-					appendDefaultLiteral(b, type);
-				b.append(";");
+				resourceMap.put(res.getName(), type);
+				b.append(" = null;");
 			}
 		}
 
 		// Try
 		b.newLine().append("try ");
 		
-		// Resources    for java versions > 7
+		// Resources    for java versions >= 7
 		if (isTryWithRes && java7) {
 			int isLast = resources.size();
 			int i = 0;
@@ -509,6 +505,18 @@ public class XbaseCompiler extends FeatureCallCompiler {
 
 		b.append("{").increaseIndentation();
 
+		// Resources    constructed at the beginning of try-statement, for java versions < 7
+		if (isTryWithRes && !java7) {
+			for (XVariableDeclaration res : resources) {
+				b.newLine();
+				b.append(getVarName(res, b));
+				b.append(" = ");
+				LightweightTypeReference type = resourceMap.get(res.getName());
+				compileAsJavaExpression(res.getRight(), b, type);
+				b.append(";");
+			}
+		}
+
 		// Expression
 		final boolean canBeReferenced = isReferenced && !isPrimitiveVoid(expr.getExpression());
 		internalToJavaStatement(expr.getExpression(), b, canBeReferenced);
@@ -520,10 +528,10 @@ public class XbaseCompiler extends FeatureCallCompiler {
 		b.decreaseIndentation().newLine().append("}");
 
 		// Catch and Finally
-		appendCatchAndFinally(expr, b, isReferenced, java7);
+		appendCatchAndFinally(expr, b, isReferenced);
 	}
 
-	protected void appendCatchAndFinally(XTryCatchFinallyExpression expr, ITreeAppendable b, boolean isReferenced, boolean java7) {
+	protected void appendCatchAndFinally(XTryCatchFinallyExpression expr, ITreeAppendable b, boolean isReferenced) {
 		final EList<XCatchClause> catchClauses = expr.getCatchClauses();
 		final XExpression finallyExp = expr.getFinallyExpression();
 		boolean isTryWithResources = !expr.getResources().isEmpty();
@@ -560,13 +568,13 @@ public class XbaseCompiler extends FeatureCallCompiler {
 		}
 
 		// Finally
-		if (finallyExp != null || !java7) {
+		boolean java7 = isJava7orHigher(b);
+		if (finallyExp != null || (!java7 && isTryWithResources)) {
 			b.append(" finally {").increaseIndentation();
-			if (isTryWithResources && !java7) {
-				appendFinallyWithResources(expr.getResources(), b);
-			} else {
+			if (finallyExp != null)
 				internalToJavaStatement(finallyExp, b, false);
-			}
+			if (!java7 && isTryWithResources)
+				appendFinallyWithResources(expr.getResources(), b);
 			b.decreaseIndentation().newLine().append("}");
 		}
 	}
@@ -626,12 +634,20 @@ public class XbaseCompiler extends FeatureCallCompiler {
 		return superType.toJavaCompliantTypeReference();
 	}
 	
-	protected void appendFinallyWithResources(EList<XVariableDeclaration> resources, ITreeAppendable b) {
+	protected void appendFinallyWithResources(List<XVariableDeclaration> resources, ITreeAppendable b) {
 		for (int i = resources.size() - 1; i >= 0; i--) {
 			XVariableDeclaration res = resources.get(i);
-			String resName = res.getName();
+			String resName = getVarName(res, b);
 			b.newLine().append("if (" + resName + " != null) ").append(resName + ".close();");
 		}
+	}
+
+	protected boolean isJava7orHigher(ITreeAppendable b) {
+		GeneratorConfig config = b.getGeneratorConfig();
+		if (config != null && config.getJavaSourceVersion().isAtLeast(JAVA7))
+			return true;
+		else
+			return false;
 	}
 
 	protected void _toJavaExpression(XTryCatchFinallyExpression expr, ITreeAppendable b) {

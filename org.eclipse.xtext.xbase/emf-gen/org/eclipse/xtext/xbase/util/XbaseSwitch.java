@@ -138,7 +138,7 @@ public class XbaseSwitch<T> extends Switch<T>
 			{
 				XMemberFeatureCall xMemberFeatureCall = (XMemberFeatureCall)theEObject;
 				T result = caseXMemberFeatureCall(xMemberFeatureCall);
-				if (result == null) result = caseXAbstractFeatureCall(xMemberFeatureCall);
+				if (result == null) result = caseXAbstractFeatureCall(xMemberFeatureCall); //TODO hier wird IOEcpetion hinzugefügt mit Override
 				if (result == null) result = caseXExpression(xMemberFeatureCall);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
