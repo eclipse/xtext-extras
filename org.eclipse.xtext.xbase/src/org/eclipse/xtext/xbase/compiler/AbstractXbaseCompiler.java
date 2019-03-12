@@ -34,6 +34,7 @@ import org.eclipse.xtext.common.types.util.Primitives.Primitive;
 import org.eclipse.xtext.util.Strings;
 import org.eclipse.xtext.xbase.XAbstractFeatureCall;
 import org.eclipse.xtext.xbase.XBlockExpression;
+import org.eclipse.xtext.xbase.XClosure;
 import org.eclipse.xtext.xbase.XConstructorCall;
 import org.eclipse.xtext.xbase.XExpression;
 import org.eclipse.xtext.xbase.XFeatureCall;
@@ -346,7 +347,7 @@ public abstract class AbstractXbaseCompiler {
 	protected boolean needsSneakyThrow(XExpression obj, Collection<JvmTypeReference> declaredExceptions) {
 		IResolvedTypes resolvedTypes = getResolvedTypes(obj);
 		List<LightweightTypeReference> thrownExceptions = resolvedTypes.getThrownExceptions(obj);
-		return (hasUnhandledException(thrownExceptions, declaredExceptions) || containsTryWithResourcesBlock(obj));
+		return (hasUnhandledException(thrownExceptions, declaredExceptions) || resourcesImplicitCloseThrowsException(obj));
 	}
 	
 	protected boolean hasUnhandledException(List<LightweightTypeReference> thrownExceptions, Collection<JvmTypeReference> declaredExceptions) {
@@ -370,19 +371,32 @@ public abstract class AbstractXbaseCompiler {
 	}
 	
 	/**
-	 * If obj contains a try with resources block the "close()" method the
-	 * resource has implemented might throw an exception. The "close()" method
-	 * is demanded by the obligatory implementation of the AutoCLosable
-	 * interface
+	 * If obj contains a try with resources block the "close()" method, which
+	 * resource has implemented, might throw an exception. Usually these
+	 * exceptions are already handled, but if a resources is defined or assumed
+	 * to be an AutoClosable the exception is not handled automatically. Thus:
+	 * say that it needs a sneakyThrow, if it is an AutoClosable
 	 */
-	protected boolean containsTryWithResourcesBlock(XExpression obj) {
-		if (obj instanceof XBlockExpression) {
-			for (XExpression expr : ((XBlockExpression) obj).getExpressions()) {
+	protected boolean resourcesImplicitCloseThrowsException(XExpression obj) {
+		// get access to resource
+		if (obj instanceof XBlockExpression)
+			for (XExpression expr : ((XBlockExpression) obj).getExpressions())
 				if (expr instanceof XTryCatchFinallyExpression
 						&& !((XTryCatchFinallyExpression) expr).getResources().isEmpty())
-					return true;
-			}
-		}
+					for (XExpression res : ((XTryCatchFinallyExpression) expr).getResources())
+						if (res instanceof XVariableDeclaration) {
+							XVariableDeclaration resDecl = (XVariableDeclaration) res;
+							// now the relevant part: check if the resource is
+							// an AutoClosable or an XClosure aka lambda expression
+							JvmTypeReference autoCloseable = services.getTypeReferences().getTypeForName(AutoCloseable.class, res);
+							JvmTypeReference type = resDecl.getType();
+							// assume resource is of type AutoClosable for lambda expressions
+							if (type == null && resDecl.getRight() instanceof XClosure)
+								resDecl.setType(autoCloseable);
+								type = autoCloseable;
+							if (type.getQualifiedName().equals(autoCloseable.getQualifiedName()))
+								return true;
+						}
 		return false;
 	}
 
