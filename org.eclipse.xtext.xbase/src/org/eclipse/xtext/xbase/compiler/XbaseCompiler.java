@@ -478,6 +478,9 @@ public class XbaseCompiler extends FeatureCallCompiler {
 		if (isTryWithRes && !java7) {
 			for (XVariableDeclaration res : resources) {
 				b.newLine();
+				// resource has to be declared and initialised with null before try
+				// and with real AutoClosable implementation within try
+				// has to be var not val (final)
 				res.setWriteable(true);
 				LightweightTypeReference type = appendVariableTypeAndName(res, b);
 				resourceMap.put(res.getName(), type);
@@ -489,6 +492,7 @@ public class XbaseCompiler extends FeatureCallCompiler {
 		b.newLine().append("try ");
 		
 		// Resources    for java versions >= 7
+		// constructed with Java's try with resources
 		if (isTryWithRes && java7) {
 			int isLast = resources.size();
 			int i = 0;
@@ -505,7 +509,8 @@ public class XbaseCompiler extends FeatureCallCompiler {
 
 		b.append("{").increaseIndentation();
 
-		// Resources    constructed at the beginning of try-statement, for java versions < 7
+		// Resources    for java versions < 7
+		// constructed at the beginning of try-statement
 		if (isTryWithRes && !java7) {
 			for (XVariableDeclaration res : resources) {
 				b.newLine();
