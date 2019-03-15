@@ -630,9 +630,15 @@ public class XbaseInterpreter implements IExpressionInterpreter {
 			IEvaluationContext context, CancelIndicator indicator) {
 		Object result = null;
 		try {
+			// resources
+			for (XVariableDeclaration res : tryCatchFinally.getResources()) {
+				result = internalEvaluate(res, context, indicator);
+			}
+			// expression body
 			result = internalEvaluate(tryCatchFinally.getExpression(), context, indicator);
 		} catch (EvaluationException evaluationException) {
 			Throwable cause = evaluationException.getCause();
+			// catch clauses
 			for (XCatchClause catchClause : tryCatchFinally.getCatchClauses()) {
 				JvmFormalParameter exception = catchClause.getDeclaredParam();
 				JvmTypeReference catchParameterType = exception.getParameterType();
@@ -645,7 +651,7 @@ public class XbaseInterpreter implements IExpressionInterpreter {
 				break;
 			}
 		}
-
+		// finally expressions
 		if (tryCatchFinally.getFinallyExpression() != null) {
 			try {
 				internalEvaluate(tryCatchFinally.getFinallyExpression(), context, indicator);
