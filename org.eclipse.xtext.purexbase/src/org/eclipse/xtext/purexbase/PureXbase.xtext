@@ -9,6 +9,34 @@ Model:
 SpecialBlockExpression returns xbase::XBlockExpression:
 	{xbase::XBlockExpression}
 	(expressions+=XExpressionOrVarDeclaration ';'?)*;
+	
+
+@Override 
+XTryCatchFinallyExpression returns xbase::XExpression:
+	{xbase::XTryCatchFinallyExpression}
+	'try' (
+		'(' resources+=InitialisedVariableDeclaration (';' resources+=InitialisedVariableDeclaration)* ';'? ')'
+		expression=XExpression
+		->(
+			catchClauses+=XCatchClause+
+			(=>'finally' finallyExpression=XExpression)?
+		|	'finally' finallyExpression=XExpression
+		)?
+	|
+		expression=XExpression
+		(
+			catchClauses+=XCatchClause+
+			(=>'finally' finallyExpression=XExpression)?
+		|	'finally' finallyExpression=XExpression
+		)
+	)
+;
+
+InitialisedVariableDeclaration returns xbase::XVariableDeclaration:
+	{xbase::XVariableDeclaration}
+	(writeable?='var'|'val')
+	(=>(type=JvmTypeReference name=ValidID) | name=ValidID) '=' right=XExpression
+;
 
 @Override
 FeatureCallID:
