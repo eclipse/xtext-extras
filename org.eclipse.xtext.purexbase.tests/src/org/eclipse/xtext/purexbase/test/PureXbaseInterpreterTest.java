@@ -26,7 +26,7 @@ import com.google.inject.Inject;
 
 /**
  * @author Sebastian Zarnekow - Initial contribution and API
- * @author Eva Poell - Tests for Try with Resources
+ * @author Eva Poell - Tests for Try with Resources and ternary if
  */
 @RunWith(XtextRunner.class)
 @InjectWith(RuntimeInjectorProvider.class)
@@ -129,26 +129,24 @@ public class PureXbaseInterpreterTest extends AbstractXbaseEvaluationTest {
 
 	@Test
 	public void testTryWithResources_lambda() {
-		String result = "Proxy for org.eclipse.xtext.xbase.lib.Functions$Function0: [ {\n" + 
-				"  <XMemberFeatureCallImplCustom>.println(<XStringLiteralImpl>)\n" + 
-				"} ]";
-		assertEvaluatesTo(result, "try (val someCloseable = [ System.out.println(\"Closing\") ]) {return someCloseable.toString}"
-				+ " catch (java.io.IOException e) { throw e }");
+		String result = "Proxy for org.eclipse.xtext.xbase.lib.Functions$Function0: [ {\n"
+				+ "  <XMemberFeatureCallImplCustom>.println(<XStringLiteralImpl>)\n" + "} ]";
+		assertEvaluatesTo(result,
+				"try (val someCloseable = [ System.out.println(\"Closing\") ]) {return someCloseable.toString}"
+						+ " catch (java.io.IOException e) { throw e }");
 	}
 
 	@Test
 	public void testTryWithResources_2Resources() {
 		assertEvaluatesTo("Test",
-				"try (val sr = new java.io.StringReader(\"Test\");"
-						+ " val buffy = new java.io.BufferedReader(sr)) {" + " return buffy.readLine"
-						+ "} catch (java.io.IOException e) { throw e }");
+				"try (val sr = new java.io.StringReader(\"Test\");" + " val buffy = new java.io.BufferedReader(sr)) {"
+						+ " return buffy.readLine" + "} catch (java.io.IOException e) { throw e }");
 	}
 
 	@Test
 	public void testTryWithResources_2NestedResources() {
-		assertEvaluatesTo("Test",
-				"try (val buffy = new java.io.BufferedReader(new java.io.StringReader(\"Test\"))) {"
-						+ " return buffy.readLine }" + " catch (java.io.IOException e) { throw e }");
+		assertEvaluatesTo("Test", "try (val buffy = new java.io.BufferedReader(new java.io.StringReader(\"Test\"))) {"
+				+ " return buffy.readLine }" + " catch (java.io.IOException e) { throw e }");
 	}
 
 	@Test
@@ -163,6 +161,49 @@ public class PureXbaseInterpreterTest extends AbstractXbaseEvaluationTest {
 				"try (val a = if (true) new java.io.StringReader(\"Test1\") else new java.io.StringReader(\"Test2\")) {"
 						+ " com.google.common.io.CharStreams.toString(a)"
 						+ "} catch (java.io.IOException e) { throw e }");
+	}
+	// ------------------------------------------------------------------------------------------------------------------
+
+	@Test
+	public void testTernaryIf_1() {
+		assertEvaluatesTo(Integer.valueOf(20),
+				"{ var number = (false)? new Double('-10') : new Integer('20') number.intValue }");
+	}
+
+	@Test
+	public void testTernaryIf_2() {
+		assertEvaluatesTo(Integer.valueOf(10),
+				"{ var number = (true)? new Integer('10') : new Integer('20') number.intValue }");
+	}
+
+	@Test
+	public void testTernaryIf_3() {
+		assertEvaluatesTo(Integer.valueOf(3),
+				"{ var number = (true)? (true)? new Integer('3') : new Integer('4') : new Integer('5') number.intValue }");
+	}
+
+	@Test
+	public void testTernaryIf_4() {
+		assertEvaluatesTo(Integer.valueOf(4),
+				"{ var number = (true)? (!true)? new Integer('3') : new Integer('4') : new Integer('5') number.intValue }");
+	}
+
+	@Test
+	public void testTernaryIf_5() {
+		assertEvaluatesTo(Integer.valueOf(5),
+				"{ var number = (!true)? (true)? new Integer('3') : new Integer('4') : new Integer('5') number.intValue }");
+	}
+
+	@Test
+	public void testTernaryIf_6() {
+		assertEvaluatesTo(Integer.valueOf(6),
+				"{ var number = (!true)? new Integer('3') : (true)? new Integer('6') : new Integer('7') number.intValue }");
+	}
+
+	@Test
+	public void testTernaryIf_7() {
+		assertEvaluatesTo(Integer.valueOf(7),
+				"{ var number = if (true) {(!true)? new Integer('3') : new Integer('7')} else new Integer('5') number.intValue }");
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------
