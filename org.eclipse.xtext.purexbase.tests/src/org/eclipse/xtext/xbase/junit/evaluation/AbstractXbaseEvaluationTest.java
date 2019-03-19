@@ -2913,7 +2913,7 @@ public abstract class AbstractXbaseEvaluationTest extends Assert {
 	 * @since 2.18
 	 */
 	@Test @Ignore public void testTryWithResources_finally() throws Exception {
-		assertEvaluatesTo("[new, body, finally, close]",
+		assertEvaluatesTo("[new, body, close, finally]",
 				"var testdata.ClosableWithList result\n" + 
 				"try (var a = new testdata.ClosableWithList()){\n" + 
 				"	a.add(\"body\")\n" + 
@@ -2928,7 +2928,7 @@ public abstract class AbstractXbaseEvaluationTest extends Assert {
 	 * @since 2.18
 	 */
 	@Test @Ignore public void testTryWithResources_catch() throws Exception {
-		assertEvaluatesTo("[new, catch, close]",
+		assertEvaluatesTo("[new, close, catch]",
 				"val java.util.List<String> result = newArrayList\n" + 
 				"try (val a = new testdata.ClosableWithList(result);\n" + 
 				"		var b = new testdata.ClosableWithListExceptionOnConstr) {\n" + 
@@ -2943,7 +2943,7 @@ public abstract class AbstractXbaseEvaluationTest extends Assert {
 	 * @since 2.18
 	 */
 	@Test @Ignore public void testTryWithResources_catchFinally() throws Exception {
-		assertEvaluatesTo("[new, body, catch b, finally, close]",
+		assertEvaluatesTo("[new, body, close, catch b, finally]",
 				"var testdata.ClosableWithList result\n" + 
 				"try (var a = new testdata.ClosableWithList();\n" + 
 				"		var b = new testdata.ClosableWithListExceptionOnAdd()) {\n" + 
@@ -3000,7 +3000,7 @@ public abstract class AbstractXbaseEvaluationTest extends Assert {
 	 * @since 2.18
 	 */
 	@Test @Ignore public void testTryWithResources_2ResourcesCatch_01() throws Exception {
-		assertEvaluatesTo("[new, catch, close]", //b.add would invoke NullPointerExcpt, but InstExc came first and is caught
+		assertEvaluatesTo("[new, close, catch]", //b.add would invoke NullPointerExcpt, but InstExc came first and is caught
 				"var java.util.List<String> result = newArrayList\n" + 
 				"try (var a = new testdata.ClosableWithList(result);\n" + 
 				"		var b = new testdata.ClosableWithListExceptionOnConstr) {\n" + 

@@ -32,12 +32,12 @@ class OnTheFlyJavaCompiler2Test extends AbstractJvmModelTest {
 	@Inject OnTheFlyJavaCompiler2 javaCompiler
 
 	@Test(expected=IllegalArgumentException)
-	def void testDefaultJavaVersionWithJava7Feature() {
+	def void testJava5JavaVersionWithJava7Feature() {
 		assertJavaCompilation(
 			'''
 			java.util.List<String> list = new java.util.LinkedList<>();
 			''',
-			null
+			JavaVersion.JAVA5
 		)
 	}
 
@@ -56,6 +56,15 @@ class OnTheFlyJavaCompiler2Test extends AbstractJvmModelTest {
 			Runnable r = () -> {};
 			''',
 			JavaVersion.JAVA8
+		)
+	}
+	
+	@Test def void testDefaultJavaVersion() {
+		assertJavaCompilation(
+			'''
+			Runnable r = () -> {};
+			''',
+			null
 		)
 	}
 

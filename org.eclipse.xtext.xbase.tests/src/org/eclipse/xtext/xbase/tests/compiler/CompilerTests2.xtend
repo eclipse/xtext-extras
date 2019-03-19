@@ -243,7 +243,7 @@ class CompilerTests2 extends AbstractOutputComparingCompilerTests {
 			};
 			Thread _thread = new Thread(_function);
 			return _thread;
-		''')
+		''', new GeneratorConfig=>[javaSourceVersion=JavaVersion.JAVA5])
 	}
 	
 	@Test def void testForLoop_01() throws Exception {
@@ -470,7 +470,7 @@ class CompilerTests2 extends AbstractOutputComparingCompilerTests {
 			  }
 			};
 			list.forEach(_function_1);
-		''')
+		''', new GeneratorConfig=>[javaSourceVersion=JavaVersion.JAVA5])
 	}
 
 	@Test def void testSwitchScopes_Bug470586_02() {
@@ -510,7 +510,7 @@ class CompilerTests2 extends AbstractOutputComparingCompilerTests {
 			  }
 			};
 			list.forEach(_function_1);
-		''')
+		''', new GeneratorConfig=>[javaSourceVersion=JavaVersion.JAVA5])
 	}
 	
 		@Test def void testSwitchScopes_Bug470586_03() {
@@ -557,7 +557,7 @@ class CompilerTests2 extends AbstractOutputComparingCompilerTests {
 			  }
 			};
 			list.forEach(_function_1);
-		''')
+		''', new GeneratorConfig=>[javaSourceVersion=JavaVersion.JAVA5])
 	}
 	
 	@Test def void testFallThroughSwitch() {
@@ -616,7 +616,7 @@ class CompilerTests2 extends AbstractOutputComparingCompilerTests {
 			  _switchResult = "lalala";
 			}
 			return _switchResult;
-		'''
+		''', new GeneratorConfig=>[javaSourceVersion=JavaVersion.JAVA5]
 		)
 	}
 	
@@ -676,7 +676,7 @@ class CompilerTests2 extends AbstractOutputComparingCompilerTests {
 			  _switchResult = "lalala";
 			}
 			return _switchResult;
-		'''
+		''', new GeneratorConfig=>[javaSourceVersion=JavaVersion.JAVA5]
 		)
 	}
 	
@@ -1063,7 +1063,7 @@ class CompilerTests2 extends AbstractOutputComparingCompilerTests {
 			  _xblockexpression = _switchResult;
 			}
 			return _xblockexpression;
-		''', new GeneratorConfig=>[javaSourceVersion=JavaVersion.JAVA8]
+		'''
 		)
 	}
 	
@@ -1293,7 +1293,7 @@ class CompilerTests2 extends AbstractOutputComparingCompilerTests {
 			  }
 			};
 			return _function;
-		'''
+		''', new GeneratorConfig=>[javaSourceVersion=JavaVersion.JAVA5]
 		)
 	}
 	
@@ -1337,7 +1337,7 @@ class CompilerTests2 extends AbstractOutputComparingCompilerTests {
 			  }
 			}.apply(); (i < 10);) {
 			}
-		'''
+		''', new GeneratorConfig=>[javaSourceVersion=JavaVersion.JAVA5]
 		)
 	}
 	
@@ -1491,7 +1491,7 @@ class CompilerTests2 extends AbstractOutputComparingCompilerTests {
 			  }
 			};
 			final boolean bug = (boolean) org.eclipse.xtext.xbase.lib.IterableExtensions.<Boolean>reduce(java.util.Collections.<Boolean>unmodifiableList(org.eclipse.xtext.xbase.lib.CollectionLiterals.<Boolean>newArrayList(Boolean.valueOf(true), Boolean.valueOf(false), Boolean.valueOf(true))), _function);
-		''')
+		''', new GeneratorConfig=>[javaSourceVersion=JavaVersion.JAVA5])
 	}
 	
 	@Test def void testBug434224_01() {
@@ -2068,7 +2068,7 @@ class CompilerTests2 extends AbstractOutputComparingCompilerTests {
 			} catch (Throwable _e) {
 			  throw org.eclipse.xtext.xbase.lib.Exceptions.sneakyThrow(_e);
 			}
-		''', false)
+		''', new GeneratorConfig=>[javaSourceVersion=JavaVersion.JAVA5], false)
 	}
 
 	@Test def void test406762_ValidThrowInSingleIfBranch() {
@@ -2148,7 +2148,7 @@ class CompilerTests2 extends AbstractOutputComparingCompilerTests {
 			} catch (Throwable _e) {
 			  throw org.eclipse.xtext.xbase.lib.Exceptions.sneakyThrow(_e);
 			}
-		''')
+		''', new GeneratorConfig=>[javaSourceVersion=JavaVersion.JAVA5])
 	}
 
 	@Test def void test406762_ValidReturnInLambdaContainedInThrow_1() {
@@ -2173,7 +2173,7 @@ class CompilerTests2 extends AbstractOutputComparingCompilerTests {
 			} catch (Throwable _e) {
 			  throw org.eclipse.xtext.xbase.lib.Exceptions.sneakyThrow(_e);
 			}
-		''')
+		''', new GeneratorConfig=>[javaSourceVersion=JavaVersion.JAVA5])
 	}
 
 	@Test def void testObjectEqualNull () {

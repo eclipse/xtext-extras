@@ -283,27 +283,18 @@ class CompilerTest {
 			    String _xblockexpression = null;
 			    {
 			      final String x = "Hello ";
-			      final Function1<String, String> _function = new Function1<String, String>() {
-			        @Override
-			        public String apply(final String e) {
-			          return (x + e);
-			        }
+			      final Function1<String, String> _function = (String e) -> {
+			        return (x + e);
 			      };
 			      final Function1<String, String> f = _function;
 			      f.apply("World!");
 			      final ArrayList<String> list = CollectionLiterals.<String>newArrayList("a", "b", "c");
-			      final Function1<String, String> _function_1 = new Function1<String, String>() {
-			        @Override
-			        public String apply(final String e) {
-			          return e.toUpperCase();
-			        }
+			      final Function1<String, String> _function_1 = (String e) -> {
+			        return e.toUpperCase();
 			      };
 			      /* ListExtensions.<String, String>map(list, _function_1); */
-			      final Function1<String, String> _function_2 = new Function1<String, String>() {
-			        @Override
-			        public String apply(final String e) {
-			          return e.toUpperCase();
-			        }
+			      final Function1<String, String> _function_2 = (String e) -> {
+			        return e.toUpperCase();
 			      };
 			      final Function1<? super String, ? extends String> f2 = _function_2;
 			      _xblockexpression = f2.apply("simsalabim");
@@ -572,7 +563,6 @@ class CompilerTest {
 					})
 			// [a square : size=5, a circle : diameter=4, a rectangle : width=8 height=6] (List<String>)
 		'''.assertCompilesTo('''
-			import com.google.common.base.Objects;
 			import java.util.ArrayList;
 			import java.util.List;
 			import org.eclipse.xtext.purexbase.test.data.Circle;
@@ -590,49 +580,47 @@ class CompilerTest {
 			    {
 			      final ArrayList<String> list = CollectionLiterals.<String>newArrayList("foo", "bar", "baz");
 			      String _head = IterableExtensions.<String>head(list);
-			      boolean _matched = false;
-			      if (Objects.equal(_head, "foo")) {
-			        _matched=true;
-			        /* "it\'s foo" */
-			      }
-			      if (!_matched) {
-			        if (Objects.equal(_head, "bar")) {
-			          _matched=true;
-			          /* "a bar" */
+			      if (_head != null) {
+			        switch (_head) {
+			          case "foo":
+			            /* "it\'s foo" */
+			            break;
+			          case "bar":
+			            /* "a bar" */
+			            break;
+			          default:
+			            /* "don\'t know" */
+			            break;
 			        }
-			      }
-			      if (!_matched) {
+			      } else {
 			        /* "don\'t know" */
 			      }
 			      Rectangle _rectangle = new Rectangle(5, 5);
 			      Circle _circle = new Circle(4);
 			      Rectangle _rectangle_1 = new Rectangle(6, 8);
 			      final ArrayList<Shape> list2 = CollectionLiterals.<Shape>newArrayList(_rectangle, _circle, _rectangle_1);
-			      final Function1<Shape, String> _function = new Function1<Shape, String>() {
-			        @Override
-			        public String apply(final Shape shape) {
-			          String _switchResult = null;
-			          boolean _matched = false;
-			          if (shape instanceof Circle) {
-			            _matched=true;
-			            _switchResult = ("a circle : diameter=" + Integer.valueOf(((Circle)shape).diameter));
-			          }
-			          if (!_matched) {
-			            if (shape instanceof Rectangle) {
-			              if ((((Rectangle)shape).height == ((Rectangle)shape).width)) {
-			                _matched=true;
-			                _switchResult = ("a square : size=" + Integer.valueOf(((Rectangle)shape).width));
-			              }
-			            }
-			          }
-			          if (!_matched) {
-			            if (shape instanceof Rectangle) {
-			              _matched=true;
-			              _switchResult = ((("a rectangle : width=" + Integer.valueOf(((Rectangle)shape).width)) + ", height=") + Integer.valueOf(((Rectangle)shape).height));
-			            }
-			          }
-			          return _switchResult;
+			      final Function1<Shape, String> _function = (Shape shape) -> {
+			        String _switchResult_1 = null;
+			        boolean _matched = false;
+			        if (shape instanceof Circle) {
+			          _matched=true;
+			          _switchResult_1 = ("a circle : diameter=" + Integer.valueOf(((Circle)shape).diameter));
 			        }
+			        if (!_matched) {
+			          if (shape instanceof Rectangle) {
+			            if ((((Rectangle)shape).height == ((Rectangle)shape).width)) {
+			              _matched=true;
+			              _switchResult_1 = ("a square : size=" + Integer.valueOf(((Rectangle)shape).width));
+			            }
+			          }
+			        }
+			        if (!_matched) {
+			          if (shape instanceof Rectangle) {
+			            _matched=true;
+			            _switchResult_1 = ((("a rectangle : width=" + Integer.valueOf(((Rectangle)shape).width)) + ", height=") + Integer.valueOf(((Rectangle)shape).height));
+			          }
+			        }
+			        return _switchResult_1;
 			      };
 			      _xblockexpression = ListExtensions.<Shape, String>map(list2, _function);
 			    }
@@ -703,11 +691,8 @@ class CompilerTest {
 			    "string".toCharArray();
 			    final List<Character> l = (List<Character>)Conversions.doWrapArray("string".toCharArray());
 			    /* "string".toCharArray()[3]; */
-			    final Comparator<String> _function = new Comparator<String>() {
-			      @Override
-			      public int compare(final String a, final String b) {
-			        return Integer.valueOf(a.length()).compareTo(Integer.valueOf(b.length()));
-			      }
+			    final Comparator<String> _function = (String a, String b) -> {
+			      return Integer.valueOf(a.length()).compareTo(Integer.valueOf(b.length()));
 			    };
 			    final Comparator<String> comparator = _function;
 			  }

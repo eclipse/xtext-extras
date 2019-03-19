@@ -479,7 +479,12 @@ public class CompilerTests2 extends AbstractOutputComparingCompilerTests {
     _builder_1.newLine();
     _builder_1.append("return _thread;");
     _builder_1.newLine();
-    this.compilesTo(_builder, _builder_1);
+    GeneratorConfig _generatorConfig = new GeneratorConfig();
+    final Procedure1<GeneratorConfig> _function = (GeneratorConfig it) -> {
+      it.setJavaSourceVersion(JavaVersion.JAVA5);
+    };
+    GeneratorConfig _doubleArrow = ObjectExtensions.<GeneratorConfig>operator_doubleArrow(_generatorConfig, _function);
+    this.compilesTo(_builder, _builder_1, _doubleArrow);
   }
   
   @Test
@@ -896,7 +901,12 @@ public class CompilerTests2 extends AbstractOutputComparingCompilerTests {
       _builder_1.newLine();
       _builder_1.append("list.forEach(_function_1);");
       _builder_1.newLine();
-      this.compilesTo(_builder, _builder_1);
+      GeneratorConfig _generatorConfig = new GeneratorConfig();
+      final Procedure1<GeneratorConfig> _function = (GeneratorConfig it) -> {
+        it.setJavaSourceVersion(JavaVersion.JAVA5);
+      };
+      GeneratorConfig _doubleArrow = ObjectExtensions.<GeneratorConfig>operator_doubleArrow(_generatorConfig, _function);
+      this.compilesTo(_builder, _builder_1, _doubleArrow);
     } catch (Throwable _e) {
       throw Exceptions.sneakyThrow(_e);
     }
@@ -1000,7 +1010,12 @@ public class CompilerTests2 extends AbstractOutputComparingCompilerTests {
       _builder_1.newLine();
       _builder_1.append("list.forEach(_function_1);");
       _builder_1.newLine();
-      this.compilesTo(_builder, _builder_1);
+      GeneratorConfig _generatorConfig = new GeneratorConfig();
+      final Procedure1<GeneratorConfig> _function = (GeneratorConfig it) -> {
+        it.setJavaSourceVersion(JavaVersion.JAVA5);
+      };
+      GeneratorConfig _doubleArrow = ObjectExtensions.<GeneratorConfig>operator_doubleArrow(_generatorConfig, _function);
+      this.compilesTo(_builder, _builder_1, _doubleArrow);
     } catch (Throwable _e) {
       throw Exceptions.sneakyThrow(_e);
     }
@@ -1125,7 +1140,12 @@ public class CompilerTests2 extends AbstractOutputComparingCompilerTests {
       _builder_1.newLine();
       _builder_1.append("list.forEach(_function_1);");
       _builder_1.newLine();
-      this.compilesTo(_builder, _builder_1);
+      GeneratorConfig _generatorConfig = new GeneratorConfig();
+      final Procedure1<GeneratorConfig> _function = (GeneratorConfig it) -> {
+        it.setJavaSourceVersion(JavaVersion.JAVA5);
+      };
+      GeneratorConfig _doubleArrow = ObjectExtensions.<GeneratorConfig>operator_doubleArrow(_generatorConfig, _function);
+      this.compilesTo(_builder, _builder_1, _doubleArrow);
     } catch (Throwable _e) {
       throw Exceptions.sneakyThrow(_e);
     }
@@ -1258,7 +1278,12 @@ public class CompilerTests2 extends AbstractOutputComparingCompilerTests {
       _builder_1.newLine();
       _builder_1.append("return _switchResult;");
       _builder_1.newLine();
-      this.compilesTo(_builder, _builder_1);
+      GeneratorConfig _generatorConfig = new GeneratorConfig();
+      final Procedure1<GeneratorConfig> _function = (GeneratorConfig it) -> {
+        it.setJavaSourceVersion(JavaVersion.JAVA5);
+      };
+      GeneratorConfig _doubleArrow = ObjectExtensions.<GeneratorConfig>operator_doubleArrow(_generatorConfig, _function);
+      this.compilesTo(_builder, _builder_1, _doubleArrow);
     } catch (Throwable _e) {
       throw Exceptions.sneakyThrow(_e);
     }
@@ -1391,7 +1416,12 @@ public class CompilerTests2 extends AbstractOutputComparingCompilerTests {
       _builder_1.newLine();
       _builder_1.append("return _switchResult;");
       _builder_1.newLine();
-      this.compilesTo(_builder, _builder_1);
+      GeneratorConfig _generatorConfig = new GeneratorConfig();
+      final Procedure1<GeneratorConfig> _function = (GeneratorConfig it) -> {
+        it.setJavaSourceVersion(JavaVersion.JAVA5);
+      };
+      GeneratorConfig _doubleArrow = ObjectExtensions.<GeneratorConfig>operator_doubleArrow(_generatorConfig, _function);
+      this.compilesTo(_builder, _builder_1, _doubleArrow);
     } catch (Throwable _e) {
       throw Exceptions.sneakyThrow(_e);
     }
@@ -2225,12 +2255,7 @@ public class CompilerTests2 extends AbstractOutputComparingCompilerTests {
       _builder_1.newLine();
       _builder_1.append("return _xblockexpression;");
       _builder_1.newLine();
-      GeneratorConfig _generatorConfig = new GeneratorConfig();
-      final Procedure1<GeneratorConfig> _function = (GeneratorConfig it) -> {
-        it.setJavaSourceVersion(JavaVersion.JAVA8);
-      };
-      GeneratorConfig _doubleArrow = ObjectExtensions.<GeneratorConfig>operator_doubleArrow(_generatorConfig, _function);
-      this.compilesTo(_builder, _builder_1, _doubleArrow);
+      this.compilesTo(_builder, _builder_1);
     } catch (Throwable _e) {
       throw Exceptions.sneakyThrow(_e);
     }
@@ -2693,7 +2718,12 @@ public class CompilerTests2 extends AbstractOutputComparingCompilerTests {
       _builder_1.newLine();
       _builder_1.append("return _function;");
       _builder_1.newLine();
-      this.compilesTo(_builder, _builder_1);
+      GeneratorConfig _generatorConfig = new GeneratorConfig();
+      final Procedure1<GeneratorConfig> _function = (GeneratorConfig it) -> {
+        it.setJavaSourceVersion(JavaVersion.JAVA5);
+      };
+      GeneratorConfig _doubleArrow = ObjectExtensions.<GeneratorConfig>operator_doubleArrow(_generatorConfig, _function);
+      this.compilesTo(_builder, _builder_1, _doubleArrow);
     } catch (Throwable _e) {
       throw Exceptions.sneakyThrow(_e);
     }
@@ -2787,7 +2817,12 @@ public class CompilerTests2 extends AbstractOutputComparingCompilerTests {
       _builder_1.newLine();
       _builder_1.append("}");
       _builder_1.newLine();
-      this.compilesTo(_builder, _builder_1);
+      GeneratorConfig _generatorConfig = new GeneratorConfig();
+      final Procedure1<GeneratorConfig> _function = (GeneratorConfig it) -> {
+        it.setJavaSourceVersion(JavaVersion.JAVA5);
+      };
+      GeneratorConfig _doubleArrow = ObjectExtensions.<GeneratorConfig>operator_doubleArrow(_generatorConfig, _function);
+      this.compilesTo(_builder, _builder_1, _doubleArrow);
     } catch (Throwable _e) {
       throw Exceptions.sneakyThrow(_e);
     }
@@ -3099,7 +3134,12 @@ public class CompilerTests2 extends AbstractOutputComparingCompilerTests {
     _builder_1.newLine();
     _builder_1.append("final boolean bug = (boolean) org.eclipse.xtext.xbase.lib.IterableExtensions.<Boolean>reduce(java.util.Collections.<Boolean>unmodifiableList(org.eclipse.xtext.xbase.lib.CollectionLiterals.<Boolean>newArrayList(Boolean.valueOf(true), Boolean.valueOf(false), Boolean.valueOf(true))), _function);");
     _builder_1.newLine();
-    this.compilesTo(_builder, _builder_1);
+    GeneratorConfig _generatorConfig = new GeneratorConfig();
+    final Procedure1<GeneratorConfig> _function = (GeneratorConfig it) -> {
+      it.setJavaSourceVersion(JavaVersion.JAVA5);
+    };
+    GeneratorConfig _doubleArrow = ObjectExtensions.<GeneratorConfig>operator_doubleArrow(_generatorConfig, _function);
+    this.compilesTo(_builder, _builder_1, _doubleArrow);
   }
   
   @Test
@@ -4434,7 +4474,12 @@ public class CompilerTests2 extends AbstractOutputComparingCompilerTests {
       _builder_1.newLine();
       _builder_1.append("}");
       _builder_1.newLine();
-      this.compilesTo(_builder, _builder_1, false);
+      GeneratorConfig _generatorConfig = new GeneratorConfig();
+      final Procedure1<GeneratorConfig> _function = (GeneratorConfig it) -> {
+        it.setJavaSourceVersion(JavaVersion.JAVA5);
+      };
+      GeneratorConfig _doubleArrow = ObjectExtensions.<GeneratorConfig>operator_doubleArrow(_generatorConfig, _function);
+      this.compilesTo(_builder, _builder_1, _doubleArrow, false);
     } catch (Throwable _e) {
       throw Exceptions.sneakyThrow(_e);
     }
@@ -4617,7 +4662,12 @@ public class CompilerTests2 extends AbstractOutputComparingCompilerTests {
       _builder_1.newLine();
       _builder_1.append("}");
       _builder_1.newLine();
-      this.compilesTo(_builder, _builder_1);
+      GeneratorConfig _generatorConfig = new GeneratorConfig();
+      final Procedure1<GeneratorConfig> _function = (GeneratorConfig it) -> {
+        it.setJavaSourceVersion(JavaVersion.JAVA5);
+      };
+      GeneratorConfig _doubleArrow = ObjectExtensions.<GeneratorConfig>operator_doubleArrow(_generatorConfig, _function);
+      this.compilesTo(_builder, _builder_1, _doubleArrow);
     } catch (Throwable _e) {
       throw Exceptions.sneakyThrow(_e);
     }
@@ -4680,7 +4730,12 @@ public class CompilerTests2 extends AbstractOutputComparingCompilerTests {
       _builder_1.newLine();
       _builder_1.append("}");
       _builder_1.newLine();
-      this.compilesTo(_builder, _builder_1);
+      GeneratorConfig _generatorConfig = new GeneratorConfig();
+      final Procedure1<GeneratorConfig> _function = (GeneratorConfig it) -> {
+        it.setJavaSourceVersion(JavaVersion.JAVA5);
+      };
+      GeneratorConfig _doubleArrow = ObjectExtensions.<GeneratorConfig>operator_doubleArrow(_generatorConfig, _function);
+      this.compilesTo(_builder, _builder_1, _doubleArrow);
     } catch (Throwable _e) {
       throw Exceptions.sneakyThrow(_e);
     }

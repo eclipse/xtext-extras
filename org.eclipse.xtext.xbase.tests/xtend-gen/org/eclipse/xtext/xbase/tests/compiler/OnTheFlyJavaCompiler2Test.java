@@ -33,12 +33,12 @@ public class OnTheFlyJavaCompiler2Test extends AbstractJvmModelTest {
   private OnTheFlyJavaCompiler2 javaCompiler;
   
   @Test(expected = IllegalArgumentException.class)
-  public void testDefaultJavaVersionWithJava7Feature() {
+  public void testJava5JavaVersionWithJava7Feature() {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("java.util.List<String> list = new java.util.LinkedList<>();");
     _builder.newLine();
     this.assertJavaCompilation(_builder, 
-      null);
+      JavaVersion.JAVA5);
   }
   
   @Test
@@ -57,6 +57,15 @@ public class OnTheFlyJavaCompiler2Test extends AbstractJvmModelTest {
     _builder.newLine();
     this.assertJavaCompilation(_builder, 
       JavaVersion.JAVA8);
+  }
+  
+  @Test
+  public void testDefaultJavaVersion() {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("Runnable r = () -> {};");
+    _builder.newLine();
+    this.assertJavaCompilation(_builder, 
+      null);
   }
   
   private Class<?> assertJavaCompilation(final CharSequence input, final JavaVersion javaVersion) {

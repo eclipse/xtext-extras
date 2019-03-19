@@ -371,7 +371,7 @@ public class OnTheFlyJavaCompiler {
 	}
 
 	protected String getComplianceLevelArg() {
-		JavaVersion javaVersion = JavaVersion.JAVA5;
+		JavaVersion javaVersion = JavaVersion.JAVA8;
 		if (generatorConfigProvider != null) {
 			GeneratorConfig generatorConfig = generatorConfigProvider.get(null);
 			javaVersion = generatorConfig.getJavaSourceVersion();
