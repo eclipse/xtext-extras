@@ -27,7 +27,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * @author Sebastian Zarnekow - Initial contribution and API
  * @author Eva Poell - Tests for Try with Resources and ternary if
  */
 @RunWith(XtextRunner.class)
@@ -68,64 +67,52 @@ public class PureXbaseInterpreterTest extends AbstractXbaseEvaluationTest {
   }
   
   public void assertEvaluatesTo(final Object expectation, final String model, final boolean validate) {
-    XExpression expression = null;
     try {
-      expression = this.expression(model, validate);
-      IEvaluationResult result = this.interpreter.evaluate(expression);
-      Throwable _exception = result.getException();
-      String _plus = ((("Expected no exception. Model was: " + model) + ", Exception was: ") + _exception);
-      Assert.assertNull(_plus, 
-        result.getException());
-      if (((expectation != null) && expectation.getClass().isArray())) {
-        Object _result = result.getResult();
-        Assert.assertArrayEquals(("Model was: " + model), ((Object[]) expectation), ((Object[]) _result));
-      } else {
-        Assert.assertEquals(("Model was: " + model), expectation, result.getResult());
-      }
-    } catch (final Throwable _t) {
-      if (_t instanceof Exception) {
-        final Exception e = (Exception)_t;
-        if ((e instanceof RuntimeException)) {
-          throw ((RuntimeException) e);
+      XExpression expression = null;
+      try {
+        expression = this.expression(model, validate);
+        IEvaluationResult result = this.interpreter.evaluate(expression);
+        Throwable _exception = result.getException();
+        String _plus = ((("Expected no exception. Model was: " + model) + ", Exception was: ") + _exception);
+        Assert.assertNull(_plus, 
+          result.getException());
+        if (((expectation != null) && expectation.getClass().isArray())) {
+          Object _result = result.getResult();
+          Assert.assertArrayEquals(("Model was: " + model), ((Object[]) expectation), ((Object[]) _result));
+        } else {
+          Assert.assertEquals(("Model was: " + model), expectation, result.getResult());
         }
-        throw new RuntimeException(e);
-      } else {
-        throw Exceptions.sneakyThrow(_t);
+      } finally {
+        if ((expression != null)) {
+          this.cache.clear(expression.eResource());
+        }
       }
-    } finally {
-      if ((expression != null)) {
-        this.cache.clear(expression.eResource());
-      }
+    } catch (Throwable _e) {
+      throw Exceptions.sneakyThrow(_e);
     }
   }
   
   @Override
   public void assertEvaluatesWithException(final Class<? extends Throwable> expectatedException, final String model) {
-    XExpression expression = null;
     try {
-      expression = this.expression(model, true);
-      IEvaluationResult result = this.interpreter.evaluate(expression);
-      String _simpleName = expectatedException.getSimpleName();
-      String _plus = ("Expected " + _simpleName);
-      String _plus_1 = (_plus + " but got: ");
-      Throwable _exception = result.getException();
-      String _plus_2 = (_plus_1 + _exception);
-      Assert.assertTrue(_plus_2, 
-        expectatedException.isInstance(result.getException()));
-    } catch (final Throwable _t) {
-      if (_t instanceof Exception) {
-        final Exception e = (Exception)_t;
-        if ((e instanceof RuntimeException)) {
-          throw ((RuntimeException) e);
+      XExpression expression = null;
+      try {
+        expression = this.expression(model, true);
+        IEvaluationResult result = this.interpreter.evaluate(expression);
+        String _simpleName = expectatedException.getSimpleName();
+        String _plus = ("Expected " + _simpleName);
+        String _plus_1 = (_plus + " but got: ");
+        Throwable _exception = result.getException();
+        String _plus_2 = (_plus_1 + _exception);
+        Assert.assertTrue(_plus_2, 
+          expectatedException.isInstance(result.getException()));
+      } finally {
+        if ((expression != null)) {
+          this.cache.clear(expression.eResource());
         }
-        throw new RuntimeException(e);
-      } else {
-        throw Exceptions.sneakyThrow(_t);
       }
-    } finally {
-      if ((expression != null)) {
-        this.cache.clear(expression.eResource());
-      }
+    } catch (Throwable _e) {
+      throw Exceptions.sneakyThrow(_e);
     }
   }
   

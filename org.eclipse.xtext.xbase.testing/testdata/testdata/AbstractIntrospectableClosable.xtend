@@ -2,11 +2,11 @@ package testdata
 
 package abstract class AbstractIntrospectableClosable implements AutoCloseable {
 	package boolean isOpen;
-	
+
 	new() {
 		isOpen = true;
 	}
-	
+
 	def isOpen() {
 		return isOpen
 	}
@@ -36,7 +36,7 @@ class IntrospectableClosable extends AbstractIntrospectableClosable {
 
 	override close() {
 		isOpen = false
-	}	
+	}
 }
 
 class CloseException extends Exception {

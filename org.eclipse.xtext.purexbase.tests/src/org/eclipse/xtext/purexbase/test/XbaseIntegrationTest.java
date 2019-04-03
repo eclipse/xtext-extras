@@ -22,12 +22,12 @@ import org.junit.runner.RunWith;
 
 import com.google.inject.Inject;
 
+
 @RunWith(XtextRunner.class)
 @InjectWith(RuntimeInjectorProvider.class)
 public class XbaseIntegrationTest extends AbstractXbaseEvaluationTest {
-
-	@Inject
-	private CompilationTestHelper helper;
+	
+	@Inject private CompilationTestHelper helper;
 
 	@Override
 	protected Object invokeXbaseExpression(String expression) throws Exception {
@@ -53,46 +53,46 @@ public class XbaseIntegrationTest extends AbstractXbaseEvaluationTest {
 			throw exception[0];
 		return result[0];
 	}
-
+	
 	@Override
 	@Test
 	@Ignore
 	public void testImplicitOneArgClosure_01() throws Exception {
 		super.testImplicitOneArgClosure_01();
 	}
-
+	
 	@Override
-	@Test
+	@Test 
 	@Ignore("Wrong type")
 	public void testReturnExpression_07() throws Exception {
 		assertEvaluatesTo(null, "return if (true) while(false) ('foo'+'bar').length else null");
 		assertEvaluatesTo(null, "return if (false) while(false) ('foo'+'bar').length else null");
 	}
-
+	
 	@Override
-	@Test
+	@Test 
 	@Ignore("Wrong type")
 	public void testReturnExpression_08() throws Exception {
 		assertEvaluatesTo(null, "return if (true) while(false) ('foo'+'bar').length else 'zonk'");
 		assertEvaluatesTo("zonk", "return if (false) while(false) ('foo'+'bar').length else 'zonk'");
 	}
-
+	
 	/**
 	 * @since 2.5
 	 */
 	@Override
-	@Test
-	public void testIfExpression_06() throws Exception {
-		assertEvaluatesTo(0, "if (Boolean.FALSE) return 1");
+	@Test public void testIfExpression_06() throws Exception {
+		assertEvaluatesTo(0, 
+				"if (Boolean.FALSE) return 1");
 	}
-
+	
 	/**
 	 * @since 2.5
 	 */
 	@Override
-	@Test
-	public void testIfExpression_07() throws Exception {
-		assertEvaluatesTo(0l, "if (Boolean.FALSE) return 1L");
+	@Test public void testIfExpression_07() throws Exception {
+		assertEvaluatesTo(0l, 
+				"if (Boolean.FALSE) return 1L");
 	}
 
 	@Test

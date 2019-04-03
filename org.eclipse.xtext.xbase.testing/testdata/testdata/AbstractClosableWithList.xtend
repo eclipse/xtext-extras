@@ -5,34 +5,34 @@ import java.util.ArrayList
 
 abstract class AbstractClosableWithList implements AutoCloseable {
 	List<String> list;
-	
+
 	new() {
 		list = new ArrayList
 		list.add("new")
 	}
-	
-	def void add (String entry) {
+
+	def void add(String entry) {
 		list.add(entry)
 	}
-	
+
 	def List<String> getList() {
 		return list
 	}
-	
+
 	def printList() {
 		return list.toString
 	}
 }
 
 class ClosableWithList extends AbstractClosableWithList {
-	
+
 	override close() {
 		list.add("close")
 	}
 }
 
 class ClosableWithListExceptionOnConstr extends ClosableWithList {
-	
+
 	new() throws InstantiationException{
 		list.add("new")
 		throw new InstantiationException
@@ -40,7 +40,7 @@ class ClosableWithListExceptionOnConstr extends ClosableWithList {
 }
 
 class ClosableWithListExceptionOnClose extends AbstractClosableWithList {
-	
+
 	override close() throws CloseException{
 		list.add("close")
 		throw new CloseException
@@ -48,12 +48,12 @@ class ClosableWithListExceptionOnClose extends AbstractClosableWithList {
 }
 
 class ClosableWithListExceptionOnAdd extends ClosableWithList {
-	
+
 	def void addExc() throws TryBodyException {
 		list.add("exception")
 		throw new TryBodyException
 	}
-	
+
 }
 
 class TryBodyException extends Exception {

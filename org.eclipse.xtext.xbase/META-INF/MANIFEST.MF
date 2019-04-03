@@ -175,6 +175,5 @@ Export-Package: org.eclipse.xtext.xbase,
  org.eclipse.xtext.xtype.util;x-friends:="org.eclipse.xtend.core"
 Import-Package: com.ibm.icu.text;version="4.0.0";resolution:=optional,
  javax.annotation,
- org.apache.log4j;version="1.2.15",
- org.eclipse.xtext.common.types
+ org.apache.log4j;version="1.2.15"
 Automatic-Module-Name: org.eclipse.xtext.xbase

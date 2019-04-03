@@ -24,7 +24,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 /**
- * @author Sebastian Zarnekow - Initial contribution and API
  * @author Eva Poell - Tests for Try with Resources and ternary if
  */
 @RunWith(XtextRunner)
@@ -73,10 +72,6 @@ class PureXbaseInterpreterTest extends AbstractXbaseEvaluationTest {
 				assertArrayEquals("Model was: " + model, (expectation as Object[]), (result.getResult() as Object[]))
 			else
 				assertEquals("Model was: " + model, expectation, result.getResult())
-		} catch (Exception e) {
-			if (e instanceof RuntimeException)
-				throw (e as RuntimeException);
-			throw new RuntimeException(e);
 		} finally {
 			if (expression !== null) {
 				cache.clear(expression.eResource());
@@ -91,10 +86,6 @@ class PureXbaseInterpreterTest extends AbstractXbaseEvaluationTest {
 			var IEvaluationResult result = interpreter.evaluate(expression);
 			assertTrue("Expected " + expectatedException.getSimpleName() + " but got: " + result.getException(),
 				expectatedException.isInstance(result.getException()));
-		} catch (Exception e) {
-			if (e instanceof RuntimeException)
-				throw (e as RuntimeException);
-			throw new RuntimeException(e);
 		} finally {
 			if (expression !== null) {
 				cache.clear(expression.eResource());
@@ -215,7 +206,6 @@ class PureXbaseInterpreterTest extends AbstractXbaseEvaluationTest {
 		super.testTryWithResources_2ResourcesCatch_02
 	}
 
-	// ------------------------------------------------------------------------------------------------------------------
 	@Test
 	override void testTernaryIf_1() {
 		super.testTernaryIf_1
@@ -251,9 +241,6 @@ class PureXbaseInterpreterTest extends AbstractXbaseEvaluationTest {
 		super.testTernaryIf_7
 	}
 
-	// ------------------------------------------------------------------------------------------------------------------
-	// Copied from
-	// /org.eclipse.xtext.xbase.tests/src/org/eclipse/xtext/xbase/tests/interpreter/XbaseInterpreterTest.java
 	@Ignore
 	@Test
 	override void testClosure_31() throws Exception {
