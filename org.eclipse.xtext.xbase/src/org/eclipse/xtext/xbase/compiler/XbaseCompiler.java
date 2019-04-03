@@ -39,6 +39,7 @@ import org.eclipse.xtext.generator.trace.ILocationData;
 import org.eclipse.xtext.nodemodel.ICompositeNode;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
+import org.eclipse.xtext.util.JavaVersion;
 import org.eclipse.xtext.util.Tuples;
 import org.eclipse.xtext.xbase.XAbstractFeatureCall;
 import org.eclipse.xtext.xbase.XAssignment;
@@ -462,20 +463,19 @@ public class XbaseCompiler extends FeatureCallCompiler {
 		b.append(getVarName(expr, b));
 	}
 
-	protected void _toJavaStatement(XTryCatchFinallyExpression expr, ITreeAppendable outerAppendable,
-			boolean isReferenced) {
+	protected void _toJavaStatement(XTryCatchFinallyExpression expr, ITreeAppendable outerAppendable, boolean isReferenced) {
 		ITreeAppendable b = outerAppendable.trace(expr, false);
-		boolean java7 = isJava7orHigher(b); // If Java 7 or better: use Java's try with resources
+		boolean nativeTryWithResources = isJava7orHigher(b, JAVA7); // If Java 7 or better: use Java's try with resources
 		List<XVariableDeclaration> resources = expr.getResources();
 		Map<String, LightweightTypeReference> resourceMap = new HashMap<String, LightweightTypeReference>();
-		boolean isTryWithRes = !resources.isEmpty();
+		boolean isTryWithResources = !resources.isEmpty();
 
 		if (isReferenced && !isPrimitiveVoid(expr)) {
 			declareSyntheticVariable(expr, b);
 		}
 		
 		// Resources    declared before the try-statement, for java versions < 7
-		if (isTryWithRes && !java7) {
+		if (isTryWithResources && !nativeTryWithResources) {
 			for (XVariableDeclaration res : resources) {
 				b.newLine();
 				// resource has to be declared and initialised with null before try
@@ -493,7 +493,7 @@ public class XbaseCompiler extends FeatureCallCompiler {
 		
 		// Resources    for java versions >= 7
 		// constructed with Java's try with resources
-		if (isTryWithRes && java7) {
+		if (isTryWithResources && nativeTryWithResources) {
 			int isLast = resources.size();
 			int i = 0;
 			b.append("(");
@@ -511,7 +511,7 @@ public class XbaseCompiler extends FeatureCallCompiler {
 
 		// Resources    for java versions < 7
 		// constructed at the beginning of try-statement
-		if (isTryWithRes && !java7) {
+		if (isTryWithResources && !nativeTryWithResources) {
 			for (XVariableDeclaration res : resources) {
 				b.newLine();
 				b.append(getVarName(res, b));
@@ -573,12 +573,12 @@ public class XbaseCompiler extends FeatureCallCompiler {
 		}
 
 		// Finally
-		boolean java7 = isJava7orHigher(b);
-		if (finallyExp != null || (!java7 && isTryWithResources)) {
+		boolean nativeTryWithResources = isJava7orHigher(b, JAVA7);
+		if (finallyExp != null || (!nativeTryWithResources && isTryWithResources)) {
 			b.append(" finally {").increaseIndentation();
 			if (finallyExp != null)
 				internalToJavaStatement(finallyExp, b, false);
-			if (!java7 && isTryWithResources)
+			if (!nativeTryWithResources && isTryWithResources)
 				appendFinallyWithResources(expr.getResources(), b);
 			b.decreaseIndentation().newLine().append("}");
 		}
@@ -639,6 +639,9 @@ public class XbaseCompiler extends FeatureCallCompiler {
 		return superType.toJavaCompliantTypeReference();
 	}
 	
+	/**
+	 * @since 2.18
+	 */
 	protected void appendFinallyWithResources(List<XVariableDeclaration> resources, ITreeAppendable b) {
 		for (int i = resources.size() - 1; i >= 0; i--) {
 			XVariableDeclaration res = resources.get(i);
@@ -647,9 +650,13 @@ public class XbaseCompiler extends FeatureCallCompiler {
 		}
 	}
 
-	protected boolean isJava7orHigher(ITreeAppendable b) {
+	/**
+	 * @param version TODO
+	 * @since 2.18
+	 */
+	protected boolean isJava7orHigher(ITreeAppendable b, JavaVersion version) {
 		GeneratorConfig config = b.getGeneratorConfig();
-		if (config != null && config.getJavaSourceVersion().isAtLeast(JAVA7))
+		if (config != null && config.getJavaSourceVersion().isAtLeast(version))
 			return true;
 		else
 			return false;

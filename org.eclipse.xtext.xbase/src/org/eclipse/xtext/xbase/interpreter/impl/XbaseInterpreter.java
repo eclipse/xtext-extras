@@ -630,7 +630,8 @@ public class XbaseInterpreter implements IExpressionInterpreter {
 		return false;
 	}
 	
-	protected Object _doEvaluate(XTryCatchFinallyExpression tryCatchFinally, IEvaluationContext context,
+	protected Object _doEvaluate(XTryCatchFinallyExpression tryCatchFinally, 
+			IEvaluationContext context,
 			CancelIndicator indicator) {
 		Object result = null;
 		ReturnValue returnValue = null;
@@ -690,22 +691,7 @@ public class XbaseInterpreter implements IExpressionInterpreter {
 					// NullPOinterException)
 					if (resIsInit.get(resource.getName())) {
 						// Find close method for resource
-						JvmOperation close = null;
-						LightweightTypeReference resourceType = typeResolver.resolveTypes(resource)
-								.getActualType((JvmIdentifiableElement) resource);
-						for (JvmType rawType : resourceType.getRawTypes()) {
-							if (rawType instanceof JvmDeclaredType) {
-								Iterable<JvmFeature> closeCandidates = ((JvmDeclaredType) rawType)
-										.findAllFeaturesByName("close");
-								for (JvmFeature candidate : closeCandidates) {
-									if (candidate instanceof JvmOperation
-											&& ((JvmOperation) candidate).getParameters().isEmpty()) {
-										close = (JvmOperation) candidate;
-										break;
-									}
-								}
-							}
-						}
+						JvmOperation close = findCloseMethod(resource);
 						// Invoke close on resource
 						if (close != null)
 							invokeOperation(close, context.getValue(QualifiedName.create(resource.getSimpleName())),
@@ -721,6 +707,27 @@ public class XbaseInterpreter implements IExpressionInterpreter {
 			throw returnValue;
 
 		return result;
+	}
+
+	/**
+	 * @since 2.18
+	 */
+	protected JvmOperation findCloseMethod(XVariableDeclaration resource) {
+		LightweightTypeReference resourceType = typeResolver.resolveTypes(resource)
+				.getActualType((JvmIdentifiableElement) resource);
+		for (JvmType rawType : resourceType.getRawTypes()) {
+			if (rawType instanceof JvmDeclaredType) {
+				Iterable<JvmFeature> closeCandidates = ((JvmDeclaredType) rawType)
+						.findAllFeaturesByName("close");
+				for (JvmFeature candidate : closeCandidates) {
+					if (candidate instanceof JvmOperation
+							&& ((JvmOperation) candidate).getParameters().isEmpty()) {
+						return (JvmOperation) candidate;
+					}
+				}
+			}
+		}
+		return null;
 	}
 
 	protected boolean eq(Object a, Object b) {

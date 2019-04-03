@@ -138,8 +138,10 @@ public class ThrownExceptionSwitch extends XbaseSwitch<Boolean> {
 	 * 
 	 * @param resources the resources of the try statement
 	 * @param thrownExceptionDelegate the (filtered) delegate holding the utilities
+	 * 
+	 * @since 2.18
 	 */
-	private void processExceptionsFromAutoclosable(List<XVariableDeclaration> resources,
+	protected void processExceptionsFromAutoclosable(List<XVariableDeclaration> resources,
 			IThrownExceptionDelegate thrownExceptionDelegate) {
 		
 		// If no resources are give, no exceptions are thrown
@@ -150,23 +152,7 @@ public class ThrownExceptionSwitch extends XbaseSwitch<Boolean> {
 		// Check for each resource which exceptions are thrown
 		for (XVariableDeclaration resource : resources) {
 			LightweightTypeReference autoClosableType = thrownExceptionDelegate.getActualType((JvmIdentifiableElement) resource);
-			JvmOperation closeMethod = null;
-			
-			// Find the real close method,
-			// which is an operation without arguments.
-			// There can only be one real close method.
-			for(JvmType rawType: autoClosableType.getRawTypes()) {
-				if (rawType instanceof JvmDeclaredType) {
-					Iterable<JvmFeature> candidates = ((JvmDeclaredType) rawType).findAllFeaturesByName("close");
-					for(JvmFeature candidate: candidates) {
-						if (candidate instanceof JvmOperation
-								&& ((JvmOperation) candidate).getParameters().isEmpty()) {
-							closeMethod = (JvmOperation) candidate;
-							break;
-						}
-					}
-				}
-			}
+			JvmOperation closeMethod = findCloseMethod(autoClosableType);
 			// Collect all exceptions
 			if (autoClosableType != null && closeMethod != null) {
 				IResolvedExecutable resolvedCloseMethod = thrownExceptionDelegate.getResolvedFeature(closeMethod, autoClosableType);
@@ -176,6 +162,27 @@ public class ThrownExceptionSwitch extends XbaseSwitch<Boolean> {
 				}
 			}
 		}
+	}
+
+	/**
+	 * @since 2.18
+	 */
+	protected JvmOperation findCloseMethod(LightweightTypeReference resourceType) {
+		// Find the real close method,
+		// which is an operation without arguments.
+		// There can only be one real close method.
+		for(JvmType rawType: resourceType.getRawTypes()) {
+			if (rawType instanceof JvmDeclaredType) {
+				Iterable<JvmFeature> candidates = ((JvmDeclaredType) rawType).findAllFeaturesByName("close");
+				for(JvmFeature candidate: candidates) {
+					if (candidate instanceof JvmOperation
+							&& ((JvmOperation) candidate).getParameters().isEmpty()) {
+						return (JvmOperation) candidate;
+					}
+				}
+			}
+		}
+		return null;
 	}
 	
 	@Override

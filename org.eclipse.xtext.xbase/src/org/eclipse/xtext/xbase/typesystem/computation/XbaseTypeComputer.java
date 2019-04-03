@@ -614,22 +614,7 @@ public class XbaseTypeComputer extends AbstractTypeComputer implements ITypeComp
 						// Check if resource throws exception in close method
 						// and if user (instead of compiler) should handle it
 							if (!state.isIgnored(IssueCodes.UNHANDLED_EXCEPTION)) {
-								JvmOperation closeMethod = null;
-								// Find the real close method,
-								// which is an operation without arguments.
-								// There can only be one real close method.
-								for(JvmType rawType: variableType.getRawTypes()) {
-									if (rawType instanceof JvmDeclaredType) {
-										Iterable<JvmFeature> candidates = ((JvmDeclaredType) rawType).findAllFeaturesByName("close");
-										for(JvmFeature candidate: candidates) {
-											if (candidate instanceof JvmOperation
-													&& ((JvmOperation) candidate).getParameters().isEmpty()) {
-												closeMethod = (JvmOperation) candidate;
-												break;
-											}
-										}
-									}
-								}
+								JvmOperation closeMethod = findCloseMethod(variableType);
 								// Process all exceptions
 								if (closeMethod != null) {
 									IResolvedExecutable resolvedCloseMethod = new BottomResolvedOperation(closeMethod, variableType, overrideTester);
@@ -650,6 +635,27 @@ public class XbaseTypeComputer extends AbstractTypeComputer implements ITypeComp
 		}
 		LightweightTypeReference primitiveVoid = getPrimitiveVoid(state);
 		state.acceptActualType(primitiveVoid);
+	}
+
+	/**
+	 * @since 2.18
+	 */
+	protected JvmOperation findCloseMethod(LightweightTypeReference resourceType) {
+		// Find the real close method,
+		// which is an operation without arguments.
+		// There can only be one close method with that signature.
+		for(JvmType rawType: resourceType.getRawTypes()) {
+			if (rawType instanceof JvmDeclaredType) {
+				Iterable<JvmFeature> candidates = ((JvmDeclaredType) rawType).findAllFeaturesByName("close");
+				for(JvmFeature candidate: candidates) {
+					if (candidate instanceof JvmOperation
+							&& ((JvmOperation) candidate).getParameters().isEmpty()) {
+						return (JvmOperation) candidate;
+					}
+				}
+			}
+		}
+		return null;
 	}
 
 	protected void _computeTypes(final XConstructorCall constructorCall, ITypeComputationState state) {
@@ -1042,7 +1048,7 @@ public class XbaseTypeComputer extends AbstractTypeComputer implements ITypeComp
 	}
 
 	/**
-	 * Checks if the given thrownexcpetion is handled (incl taken care of by compiler)
+	 * Checks if the given thrownexcpetion is handled (as in "taken care of by compiler").
 	 * 
 	 * @param thrownException the exception to validate
 	 * @param object the object in which context the exception should be validated
@@ -1050,10 +1056,14 @@ public class XbaseTypeComputer extends AbstractTypeComputer implements ITypeComp
 	 * @param state bearing the expected exceptions
 	 * @param message function to specify the exception message
 	 * 
-	 * @return void, results in an Diagnostic/Error on feature, if exception is unhandled
+	 * @since 2.18
 	 */
-	protected void validateUnhandledException(LightweightTypeReference thrownException, XExpression object,
-			EStructuralFeature feature, ITypeComputationState state, Function<? super JvmType, ? extends String> message) {
+	protected void validateUnhandledException(
+			LightweightTypeReference thrownException,
+			XExpression object,
+			EStructuralFeature feature,
+			ITypeComputationState state,
+			Function<? super JvmType, ? extends String> message) {
 		if (!state.isIgnored(IssueCodes.UNHANDLED_EXCEPTION) && thrownException.isSubtypeOf(Throwable.class)
 				&& !thrownException.isSubtypeOf(RuntimeException.class) && !thrownException.isSubtypeOf(Error.class)) {
 			boolean declarationFound = false;
