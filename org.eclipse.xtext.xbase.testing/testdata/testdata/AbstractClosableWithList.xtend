@@ -33,7 +33,7 @@ class ClosableWithList extends AbstractClosableWithList {
 
 class ClosableWithListExceptionOnConstr extends ClosableWithList {
 
-	new() throws InstantiationException{
+	new() throws InstantiationException {
 		list.add("new")
 		throw new InstantiationException
 	}
@@ -41,7 +41,7 @@ class ClosableWithListExceptionOnConstr extends ClosableWithList {
 
 class ClosableWithListExceptionOnClose extends AbstractClosableWithList {
 
-	override close() throws CloseException{
+	override close() throws CloseException {
 		list.add("close")
 		throw new CloseException
 	}

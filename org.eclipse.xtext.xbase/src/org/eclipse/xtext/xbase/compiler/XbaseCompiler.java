@@ -465,7 +465,7 @@ public class XbaseCompiler extends FeatureCallCompiler {
 
 	protected void _toJavaStatement(XTryCatchFinallyExpression expr, ITreeAppendable outerAppendable, boolean isReferenced) {
 		ITreeAppendable b = outerAppendable.trace(expr, false);
-		boolean nativeTryWithResources = isJava7orHigher(b, JAVA7); // If Java 7 or better: use Java's try with resources
+		boolean nativeTryWithResources = isAtLeast(b, JAVA7); // If Java 7 or better: use Java's try with resources
 		List<XVariableDeclaration> resources = expr.getResources();
 		Map<String, LightweightTypeReference> resourceMap = new HashMap<String, LightweightTypeReference>();
 		boolean isTryWithResources = !resources.isEmpty();
@@ -474,6 +474,7 @@ public class XbaseCompiler extends FeatureCallCompiler {
 			declareSyntheticVariable(expr, b);
 		}
 		
+		b.openPseudoScope();
 		// Resources    declared before the try-statement, for java versions < 7
 		if (isTryWithResources && !nativeTryWithResources) {
 			for (XVariableDeclaration res : resources) {
@@ -534,6 +535,7 @@ public class XbaseCompiler extends FeatureCallCompiler {
 
 		// Catch and Finally
 		appendCatchAndFinally(expr, b, isReferenced);
+		b.closeScope();
 	}
 
 	protected void appendCatchAndFinally(XTryCatchFinallyExpression expr, ITreeAppendable b, boolean isReferenced) {
@@ -573,7 +575,7 @@ public class XbaseCompiler extends FeatureCallCompiler {
 		}
 
 		// Finally
-		boolean nativeTryWithResources = isJava7orHigher(b, JAVA7);
+		boolean nativeTryWithResources = isAtLeast(b, JAVA7);
 		if (finallyExp != null || (!nativeTryWithResources && isTryWithResources)) {
 			b.append(" finally {").increaseIndentation();
 			if (finallyExp != null)
@@ -651,10 +653,9 @@ public class XbaseCompiler extends FeatureCallCompiler {
 	}
 
 	/**
-	 * @param version TODO
 	 * @since 2.18
 	 */
-	protected boolean isJava7orHigher(ITreeAppendable b, JavaVersion version) {
+	protected boolean isAtLeast(ITreeAppendable b, JavaVersion version) {
 		GeneratorConfig config = b.getGeneratorConfig();
 		if (config != null && config.getJavaSourceVersion().isAtLeast(version))
 			return true;
