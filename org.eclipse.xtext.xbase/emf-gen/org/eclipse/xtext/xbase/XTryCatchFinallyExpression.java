@@ -110,7 +110,7 @@ public interface XTryCatchFinallyExpression extends XExpression
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * @since 2.17
+	 * @since 2.18
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Resources</em>' containment reference list.
 	 * @see org.eclipse.xtext.xbase.XbasePackage#getXTryCatchFinallyExpression_Resources()
