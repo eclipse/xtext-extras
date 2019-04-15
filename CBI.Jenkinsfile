@@ -13,7 +13,7 @@ pipeline {
   }
   
   // https://jenkins.io/doc/book/pipeline/syntax/#triggers
-  triggers {
+  triggers {    upstream(upstreamProjects: 'xtext-core', threshold: hudson.model.Result.SUCCESS) 
     pollSCM('H/5 * * * *')
   }
   
