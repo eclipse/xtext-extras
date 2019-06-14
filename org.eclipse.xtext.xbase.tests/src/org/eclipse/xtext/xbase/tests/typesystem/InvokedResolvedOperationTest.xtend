@@ -96,9 +96,21 @@ class InvokedResolvedOperationTest extends AbstractXbaseTestCase {
 	@Test
 	def void testTypeArguments_02() {
 		val operation = 'newArrayList(1, 1d)'.toOperation
-		assertEquals('ArrayList<Number & Comparable<?>>', operation.resolvedReturnType.simpleName)
-		assertEquals('Number & Comparable<?>', operation.resolvedTypeArguments.join(', ') [simpleName])
-		assertEquals('newArrayList(Number & Comparable<?>[])', operation.simpleSignature)
+		try {
+			assertEquals('ArrayList<Number & Comparable<?>>', operation.resolvedReturnType.simpleName)
+		} catch (AssertionError e) {
+			assertEquals('ArrayList<Number & Comparable<?> & Constable & ConstantDesc>', operation.resolvedReturnType.simpleName)
+		}
+		try {
+			assertEquals('Number & Comparable<?>', operation.resolvedTypeArguments.join(', ') [simpleName])
+		} catch (AssertionError e) {
+			assertEquals('Number & Comparable<?> & Constable & ConstantDesc', operation.resolvedTypeArguments.join(', ') [simpleName])
+		}
+		try {
+			assertEquals('newArrayList(Number & Comparable<?>[])', operation.simpleSignature)
+		} catch (AssertionError e) {
+			assertEquals('newArrayList(Number & Comparable<?> & Constable & ConstantDesc[])', operation.simpleSignature)
+		}
 	}
 	
 	@Test

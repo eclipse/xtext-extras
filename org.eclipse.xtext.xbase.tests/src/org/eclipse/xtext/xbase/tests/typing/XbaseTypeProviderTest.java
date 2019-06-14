@@ -302,7 +302,11 @@ public class XbaseTypeProviderTest extends AbstractXbaseTestCase {
 	}
 
 	@Test public void testListLiteral_5() throws Exception {
-		assertResolvedType("java.util.List<? extends java.lang.Number & java.lang.Comparable<? extends java.lang.Object>>", "#[1,2.0,3]");
+		try {
+			assertResolvedType("java.util.List<? extends java.lang.Number & java.lang.Comparable<? extends java.lang.Object>>", "#[1,2.0,3]");
+		} catch (AssertionError e) {
+			assertResolvedType("java.util.List<? extends java.lang.Number & java.lang.Comparable<? extends java.lang.Object> & java.lang.constant.Constable & java.lang.constant.ConstantDesc>", "#[1,2.0,3]");
+		}
 	}
 	
 	@Test public void testSetLiteral_0() throws Exception {
@@ -326,7 +330,11 @@ public class XbaseTypeProviderTest extends AbstractXbaseTestCase {
 	}
 
 	@Test public void testSetLiteral_5() throws Exception {
-		assertResolvedType("java.util.Set<? extends java.lang.Number & java.lang.Comparable<? extends java.lang.Object>>", "#{1,2.0,3}");
+		try {
+			assertResolvedType("java.util.Set<? extends java.lang.Number & java.lang.Comparable<? extends java.lang.Object>>", "#{1,2.0,3}");
+		} catch (AssertionError e) {
+			assertResolvedType("java.util.Set<? extends java.lang.Number & java.lang.Comparable<? extends java.lang.Object> & java.lang.constant.Constable & java.lang.constant.ConstantDesc>", "#{1,2.0,3}");
+		}
 	}
 
 	@Test public void testCastExpression() throws Exception {
@@ -366,7 +374,11 @@ public class XbaseTypeProviderTest extends AbstractXbaseTestCase {
 	}
 	
 	@Test public void testFeatureCall_04() throws Exception {
-		assertResolvedType("java.util.List<java.lang.Comparable<? extends java.lang.Object> & java.io.Serializable>", "new testdata.ClassWithVarArgs().toList('', 1)");
+		try {
+			assertResolvedType("java.util.List<java.lang.Comparable<? extends java.lang.Object> & java.io.Serializable>", "new testdata.ClassWithVarArgs().toList('', 1)");
+		} catch (AssertionError e) {
+			assertResolvedType("java.util.List<java.lang.Comparable<? extends java.lang.Object> & java.lang.constant.Constable & java.lang.constant.ConstantDesc & java.io.Serializable>", "new testdata.ClassWithVarArgs().toList('', 1)");
+		}
 	}
 	
 	@Test public void testFeatureCall_05() throws Exception {
@@ -374,7 +386,11 @@ public class XbaseTypeProviderTest extends AbstractXbaseTestCase {
 		assertResolvedType("java.util.List<java.lang.Number>", "new testdata.ClassWithVarArgs().toNumberList()");
 		assertResolvedType("java.util.List<java.lang.Integer>", "new testdata.ClassWithVarArgs().toNumberList(0)");
 		assertResolvedType("java.util.List<java.lang.Integer>", "new testdata.ClassWithVarArgs().toNumberList(0, 1)");
-		assertResolvedType("java.util.List<java.lang.Number & java.lang.Comparable<? extends java.lang.Object>>", "new testdata.ClassWithVarArgs().toNumberList(new Integer(0), new Integer(0).doubleValue)");
+		try {
+			assertResolvedType("java.util.List<java.lang.Number & java.lang.Comparable<? extends java.lang.Object>>", "new testdata.ClassWithVarArgs().toNumberList(new Integer(0), new Integer(0).doubleValue)");
+		} catch (AssertionError e) {
+			assertResolvedType("java.util.List<java.lang.Number & java.lang.Comparable<? extends java.lang.Object> & java.lang.constant.Constable & java.lang.constant.ConstantDesc>", "new testdata.ClassWithVarArgs().toNumberList(new Integer(0), new Integer(0).doubleValue)");
+		}
 	}
 	
 	@Test public void testFeatureCall_06() throws Exception {
