@@ -17,8 +17,10 @@ import org.eclipse.xtext.common.types.JvmAnnotationValue;
 import org.eclipse.xtext.common.types.JvmArrayType;
 import org.eclipse.xtext.common.types.JvmDeclaredType;
 import org.eclipse.xtext.common.types.JvmField;
+import org.eclipse.xtext.common.types.JvmFormalParameter;
 import org.eclipse.xtext.common.types.JvmGenericType;
 import org.eclipse.xtext.common.types.JvmMember;
+import org.eclipse.xtext.common.types.JvmOperation;
 import org.eclipse.xtext.common.types.JvmType;
 import org.eclipse.xtext.common.types.JvmTypeAnnotationValue;
 import org.eclipse.xtext.common.types.TypesFactory;
@@ -43,6 +45,7 @@ import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 
 /**
@@ -448,5 +451,17 @@ public class ReflectionTypeProviderTest extends AbstractTypeProviderTest {
 		for(JvmMember member: type.getMembers()) {
 			assertFalse(member.isSetDeprecated());
 		}
+	}
+
+	@Override
+	@Test
+	public void testFindTypeByName_AbstractMultimap_02() {
+		String typeName = "com.google.common.collect.AbstractMultimap";
+		JvmGenericType type = (JvmGenericType) getTypeProvider().findTypeByName(typeName);
+		JvmOperation containsValue = (JvmOperation) Iterables
+				.getOnlyElement(type.findAllFeaturesByName("containsValue"));
+		assertNotNull(containsValue);
+		JvmFormalParameter firstParam = containsValue.getParameters().get(0);
+		assertEquals(0, firstParam.getAnnotations().size());
 	}
 }

@@ -3561,7 +3561,8 @@ public abstract class AbstractTypeProviderTest extends Assert {
 		String typeName = "com.google.common.collect.AbstractMultimap";
 		JvmGenericType type = (JvmGenericType) getTypeProvider().findTypeByName(typeName);
 		assertNotNull(type);
-		diagnose(type, "java:/Objects/javax.annotation.Nullable#javax.annotation.Nullable");
+		diagnose(type, "java:/Objects/javax.annotation.Nullable#javax.annotation.Nullable",
+				"java:/Objects/com.google.errorprone.annotations.CanIgnoreReturnValue#com.google.errorprone.annotations.CanIgnoreReturnValue");
 		Resource resource = type.eResource();
 		getAndResolveAllFragments(resource);
 		recomputeAndCheckIdentifiers(resource);
