@@ -7,6 +7,7 @@
  */
 package org.eclipse.xtext.xbase.tests.typesystem;
 
+import org.eclipse.xtext.xbase.tests.AbstractXbaseTestCase;
 import org.eclipse.xtext.xbase.tests.typesystem.AbstractTypeResolverTest;
 import org.junit.Test;
 
@@ -72,7 +73,12 @@ public abstract class AbstractReturnTypeTest<Reference extends Object> extends A
   @Test
   @Override
   public void testIfExpression_04() throws Exception {
-    this.resolvesTo("if (true) return \'\' else new StringBuilder", "Serializable & CharSequence");
+    boolean _isJava11OrLater = AbstractXbaseTestCase.isJava11OrLater();
+    if (_isJava11OrLater) {
+      this.resolvesTo("if (true) return \'\' else new StringBuilder", "Serializable & Comparable<?> & CharSequence");
+    } else {
+      this.resolvesTo("if (true) return \'\' else new StringBuilder", "Serializable & CharSequence");
+    }
   }
   
   @Test
@@ -108,7 +114,12 @@ public abstract class AbstractReturnTypeTest<Reference extends Object> extends A
   @Test
   @Override
   public void testIfExpression_28() throws Exception {
-    this.resolvesTo("if (true) return \'\' else 1", "Comparable<?> & Serializable");
+    boolean _isJava12OrLater = AbstractXbaseTestCase.isJava12OrLater();
+    if (_isJava12OrLater) {
+      this.resolvesTo("if (true) return \'\' else 1", "Comparable<?> & Constable & ConstantDesc & Serializable");
+    } else {
+      this.resolvesTo("if (true) return \'\' else 1", "Comparable<?> & Serializable");
+    }
   }
   
   @Test
