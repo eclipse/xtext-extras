@@ -1,14 +1,12 @@
 /**
- * Copyright (c) 2011-2013 itemis AG (http://www.itemis.eu) and others.
+ * Copyright (c) 2011-2020 itemis AG (http://www.itemis.eu) and others.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
  */
 package org.eclipse.xtext.common.types.impl;
-
-import java.lang.Iterable;
 
 import java.util.Collection;
 
@@ -195,6 +193,7 @@ public abstract class JvmDeclaredTypeImpl extends JvmMemberImplCustom implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public JvmArrayType getArrayType()
 	{
 		return arrayType;
@@ -222,6 +221,7 @@ public abstract class JvmDeclaredTypeImpl extends JvmMemberImplCustom implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setArrayType(JvmArrayType newArrayType)
 	{
 		if (newArrayType != arrayType)
@@ -243,6 +243,7 @@ public abstract class JvmDeclaredTypeImpl extends JvmMemberImplCustom implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<JvmTypeReference> getSuperTypes()
 	{
 		if (superTypes == null)
@@ -257,6 +258,7 @@ public abstract class JvmDeclaredTypeImpl extends JvmMemberImplCustom implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<JvmMember> getMembers()
 	{
 		if (members == null)
@@ -271,6 +273,7 @@ public abstract class JvmDeclaredTypeImpl extends JvmMemberImplCustom implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isAbstract()
 	{
 		return abstract_;
@@ -281,6 +284,7 @@ public abstract class JvmDeclaredTypeImpl extends JvmMemberImplCustom implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setAbstract(boolean newAbstract)
 	{
 		boolean oldAbstract = abstract_;
@@ -294,6 +298,7 @@ public abstract class JvmDeclaredTypeImpl extends JvmMemberImplCustom implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isStatic()
 	{
 		return static_;
@@ -304,6 +309,7 @@ public abstract class JvmDeclaredTypeImpl extends JvmMemberImplCustom implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setStatic(boolean newStatic)
 	{
 		boolean oldStatic = static_;
@@ -317,6 +323,7 @@ public abstract class JvmDeclaredTypeImpl extends JvmMemberImplCustom implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isFinal()
 	{
 		return final_;
@@ -327,6 +334,7 @@ public abstract class JvmDeclaredTypeImpl extends JvmMemberImplCustom implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFinal(boolean newFinal)
 	{
 		boolean oldFinal = final_;
@@ -340,6 +348,7 @@ public abstract class JvmDeclaredTypeImpl extends JvmMemberImplCustom implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getPackageName()
 	{
 		return packageName;
@@ -350,6 +359,7 @@ public abstract class JvmDeclaredTypeImpl extends JvmMemberImplCustom implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPackageName(String newPackageName)
 	{
 		String oldPackageName = packageName;
@@ -363,6 +373,7 @@ public abstract class JvmDeclaredTypeImpl extends JvmMemberImplCustom implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Iterable<JvmOperation> getDeclaredOperations()
 	{
 		// TODO: implement this method
@@ -375,6 +386,7 @@ public abstract class JvmDeclaredTypeImpl extends JvmMemberImplCustom implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Iterable<JvmField> getDeclaredFields()
 	{
 		// TODO: implement this method
@@ -387,6 +399,7 @@ public abstract class JvmDeclaredTypeImpl extends JvmMemberImplCustom implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Iterable<JvmFeature> findAllFeaturesByName(String simpleName)
 	{
 		// TODO: implement this method
@@ -399,6 +412,7 @@ public abstract class JvmDeclaredTypeImpl extends JvmMemberImplCustom implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Iterable<JvmFeature> getAllFeatures()
 	{
 		// TODO: implement this method
@@ -411,6 +425,7 @@ public abstract class JvmDeclaredTypeImpl extends JvmMemberImplCustom implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Iterable<JvmTypeReference> getExtendedInterfaces()
 	{
 		// TODO: implement this method
@@ -423,6 +438,7 @@ public abstract class JvmDeclaredTypeImpl extends JvmMemberImplCustom implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public JvmTypeReference getExtendedClass()
 	{
 		// TODO: implement this method
@@ -435,6 +451,7 @@ public abstract class JvmDeclaredTypeImpl extends JvmMemberImplCustom implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isInstantiateable()
 	{
 		// TODO: implement this method
@@ -447,6 +464,7 @@ public abstract class JvmDeclaredTypeImpl extends JvmMemberImplCustom implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Iterable<JvmDeclaredType> findAllNestedTypesByName(String simpleName)
 	{
 		// TODO: implement this method
@@ -459,6 +477,7 @@ public abstract class JvmDeclaredTypeImpl extends JvmMemberImplCustom implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isLocal()
 	{
 		// TODO: implement this method
@@ -471,6 +490,7 @@ public abstract class JvmDeclaredTypeImpl extends JvmMemberImplCustom implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Iterable<JvmConstructor> getDeclaredConstructors()
 	{
 		// TODO: implement this method
@@ -483,6 +503,7 @@ public abstract class JvmDeclaredTypeImpl extends JvmMemberImplCustom implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Iterable<JvmDeclaredType> getAllNestedTypes()
 	{
 		// TODO: implement this method
@@ -722,7 +743,7 @@ public abstract class JvmDeclaredTypeImpl extends JvmMemberImplCustom implements
 	{
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (abstract: ");
 		result.append(abstract_);
 		result.append(", static: ");

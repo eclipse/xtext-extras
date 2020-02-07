@@ -1,9 +1,9 @@
 /**
- * Copyright (c) 2011-2013 itemis AG (http://www.itemis.eu) and others.
+ * Copyright (c) 2011-2020 itemis AG (http://www.itemis.eu) and others.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
  */
 package org.eclipse.xtext.common.types.impl;
@@ -70,6 +70,7 @@ public class JvmByteAnnotationValueImpl extends JvmAnnotationValueImplCustom imp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Byte> getValues()
 	{
 		if (values == null)
@@ -157,7 +158,7 @@ public class JvmByteAnnotationValueImpl extends JvmAnnotationValueImplCustom imp
 	{
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (values: ");
 		result.append(values);
 		result.append(')');

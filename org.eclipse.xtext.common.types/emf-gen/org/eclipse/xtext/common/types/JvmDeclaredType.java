@@ -1,14 +1,12 @@
 /**
- * Copyright (c) 2011-2013 itemis AG (http://www.itemis.eu) and others.
+ * Copyright (c) 2011-2020 itemis AG (http://www.itemis.eu) and others.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
  */
 package org.eclipse.xtext.common.types;
-
-import java.lang.Iterable;
 
 import org.eclipse.emf.common.util.EList;
 
@@ -39,10 +37,6 @@ public interface JvmDeclaredType extends JvmMember, JvmComponentType
 	 * Returns the value of the '<em><b>Super Types</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipse.xtext.common.types.JvmTypeReference}.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Super Types</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Super Types</em>' containment reference list.
 	 * @see org.eclipse.xtext.common.types.TypesPackage#getJvmDeclaredType_SuperTypes()
@@ -56,10 +50,6 @@ public interface JvmDeclaredType extends JvmMember, JvmComponentType
 	 * The list contents are of type {@link org.eclipse.xtext.common.types.JvmMember}.
 	 * It is bidirectional and its opposite is '{@link org.eclipse.xtext.common.types.JvmMember#getDeclaringType <em>Declaring Type</em>}'.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Members</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Members</em>' containment reference list.
 	 * @see org.eclipse.xtext.common.types.TypesPackage#getJvmDeclaredType_Members()
@@ -72,10 +62,6 @@ public interface JvmDeclaredType extends JvmMember, JvmComponentType
 	/**
 	 * Returns the value of the '<em><b>Abstract</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Abstract</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Abstract</em>' attribute.
 	 * @see #setAbstract(boolean)
@@ -98,10 +84,6 @@ public interface JvmDeclaredType extends JvmMember, JvmComponentType
 	/**
 	 * Returns the value of the '<em><b>Static</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Static</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Static</em>' attribute.
 	 * @see #setStatic(boolean)
@@ -124,10 +106,6 @@ public interface JvmDeclaredType extends JvmMember, JvmComponentType
 	/**
 	 * Returns the value of the '<em><b>Final</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Final</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Final</em>' attribute.
 	 * @see #setFinal(boolean)
@@ -150,10 +128,6 @@ public interface JvmDeclaredType extends JvmMember, JvmComponentType
 	/**
 	 * Returns the value of the '<em><b>Package Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Package Name</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Package Name</em>' attribute.
 	 * @see #setPackageName(String)
@@ -176,7 +150,7 @@ public interface JvmDeclaredType extends JvmMember, JvmComponentType
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="org.eclipse.xtext.common.types.Iterable<org.eclipse.xtext.common.types.JvmOperation>" required="true"
+	 * @model kind="operation" dataType="org.eclipse.xtext.common.types.Iterable&lt;org.eclipse.xtext.common.types.JvmOperation&gt;" required="true"
 	 * @generated
 	 */
 	Iterable<JvmOperation> getDeclaredOperations();
@@ -184,7 +158,7 @@ public interface JvmDeclaredType extends JvmMember, JvmComponentType
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="org.eclipse.xtext.common.types.Iterable<org.eclipse.xtext.common.types.JvmField>" required="true"
+	 * @model kind="operation" dataType="org.eclipse.xtext.common.types.Iterable&lt;org.eclipse.xtext.common.types.JvmField&gt;" required="true"
 	 * @generated
 	 */
 	Iterable<JvmField> getDeclaredFields();
@@ -196,7 +170,7 @@ public interface JvmDeclaredType extends JvmMember, JvmComponentType
 	 * <p>Returns all the fields and operations with the given simple name.</p>
 	 * <p>Inherited features will be returend, but overridden features are not contained in the result.</p>
 	 * <!-- end-model-doc -->
-	 * @model dataType="org.eclipse.xtext.common.types.Iterable<org.eclipse.xtext.common.types.JvmFeature>" required="true"
+	 * @model dataType="org.eclipse.xtext.common.types.Iterable&lt;org.eclipse.xtext.common.types.JvmFeature&gt;" required="true"
 	 * @generated
 	 */
 	Iterable<JvmFeature> findAllFeaturesByName(String simpleName);
@@ -208,7 +182,7 @@ public interface JvmDeclaredType extends JvmMember, JvmComponentType
 	 * <p>Returns all the fields and operations of this type.</p>
 	 * <p>Inherited features are included, but overridden features will not be returned.</p>
 	 * <!-- end-model-doc -->
-	 * @model kind="operation" dataType="org.eclipse.xtext.common.types.Iterable<org.eclipse.xtext.common.types.JvmFeature>" required="true"
+	 * @model kind="operation" dataType="org.eclipse.xtext.common.types.Iterable&lt;org.eclipse.xtext.common.types.JvmFeature&gt;" required="true"
 	 * @generated
 	 */
 	Iterable<JvmFeature> getAllFeatures();
@@ -216,7 +190,7 @@ public interface JvmDeclaredType extends JvmMember, JvmComponentType
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="org.eclipse.xtext.common.types.Iterable<org.eclipse.xtext.common.types.JvmTypeReference>"
+	 * @model kind="operation" dataType="org.eclipse.xtext.common.types.Iterable&lt;org.eclipse.xtext.common.types.JvmTypeReference&gt;"
 	 * @generated
 	 */
 	Iterable<JvmTypeReference> getExtendedInterfaces();
@@ -244,7 +218,7 @@ public interface JvmDeclaredType extends JvmMember, JvmComponentType
 	 * <p>Returns all the nested types with the given simple name.</p>
 	 * <p>Inherited types will be returned, too.</p>
 	 * <!-- end-model-doc -->
-	 * @model dataType="org.eclipse.xtext.common.types.Iterable<org.eclipse.xtext.common.types.JvmDeclaredType>"
+	 * @model dataType="org.eclipse.xtext.common.types.Iterable&lt;org.eclipse.xtext.common.types.JvmDeclaredType&gt;"
 	 * @generated
 	 */
 	Iterable<JvmDeclaredType> findAllNestedTypesByName(String simpleName);
@@ -260,7 +234,7 @@ public interface JvmDeclaredType extends JvmMember, JvmComponentType
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="org.eclipse.xtext.common.types.Iterable<org.eclipse.xtext.common.types.JvmConstructor>" required="true"
+	 * @model kind="operation" dataType="org.eclipse.xtext.common.types.Iterable&lt;org.eclipse.xtext.common.types.JvmConstructor&gt;" required="true"
 	 * @generated
 	 */
 	Iterable<JvmConstructor> getDeclaredConstructors();
@@ -272,7 +246,7 @@ public interface JvmDeclaredType extends JvmMember, JvmComponentType
 	 * <p>Returns all the nested types of this type.</p>
 	 * <p>Inherited types will also be returned.</p>
 	 * <!-- end-model-doc -->
-	 * @model kind="operation" dataType="org.eclipse.xtext.common.types.Iterable<org.eclipse.xtext.common.types.JvmDeclaredType>" required="true"
+	 * @model kind="operation" dataType="org.eclipse.xtext.common.types.Iterable&lt;org.eclipse.xtext.common.types.JvmDeclaredType&gt;" required="true"
 	 * @generated
 	 */
 	Iterable<JvmDeclaredType> getAllNestedTypes();

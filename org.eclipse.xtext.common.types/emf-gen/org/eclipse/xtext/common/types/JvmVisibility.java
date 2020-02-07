@@ -1,9 +1,9 @@
 /**
- * Copyright (c) 2011-2013 itemis AG (http://www.itemis.eu) and others.
+ * Copyright (c) 2011-2020 itemis AG (http://www.itemis.eu) and others.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
  */
 package org.eclipse.xtext.common.types;
@@ -68,10 +68,6 @@ public enum JvmVisibility implements Enumerator
 	/**
 	 * The '<em><b>DEFAULT</b></em>' literal value.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of '<em><b>DEFAULT</b></em>' literal object isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @see #DEFAULT
 	 * @model
@@ -83,10 +79,6 @@ public enum JvmVisibility implements Enumerator
 	/**
 	 * The '<em><b>PRIVATE</b></em>' literal value.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of '<em><b>PRIVATE</b></em>' literal object isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @see #PRIVATE
 	 * @model
@@ -98,10 +90,6 @@ public enum JvmVisibility implements Enumerator
 	/**
 	 * The '<em><b>PROTECTED</b></em>' literal value.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of '<em><b>PROTECTED</b></em>' literal object isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @see #PROTECTED
 	 * @model
@@ -113,10 +101,6 @@ public enum JvmVisibility implements Enumerator
 	/**
 	 * The '<em><b>PUBLIC</b></em>' literal value.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of '<em><b>PUBLIC</b></em>' literal object isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @see #PUBLIC
 	 * @model
@@ -249,6 +233,7 @@ public enum JvmVisibility implements Enumerator
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getValue()
 	{
 	  return value;
@@ -259,6 +244,7 @@ public enum JvmVisibility implements Enumerator
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName()
 	{
 	  return name;
@@ -269,6 +255,7 @@ public enum JvmVisibility implements Enumerator
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getLiteral()
 	{
 	  return literal;

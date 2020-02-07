@@ -1,9 +1,9 @@
 /**
- * Copyright (c) 2011-2013 itemis AG (http://www.itemis.eu) and others.
+ * Copyright (c) 2011-2020 itemis AG (http://www.itemis.eu) and others.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
  */
 package org.eclipse.xtext.common.types.impl;
@@ -76,6 +76,7 @@ public abstract class JvmTypeConstraintImpl extends MinimalEObjectImpl.Container
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public JvmTypeReference getTypeReference()
 	{
 		return typeReference;
@@ -103,6 +104,7 @@ public abstract class JvmTypeConstraintImpl extends MinimalEObjectImpl.Container
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTypeReference(JvmTypeReference newTypeReference)
 	{
 		if (newTypeReference != typeReference)
@@ -124,6 +126,7 @@ public abstract class JvmTypeConstraintImpl extends MinimalEObjectImpl.Container
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public JvmConstraintOwner getOwner()
 	{
 		if (eContainerFeatureID() != TypesPackage.JVM_TYPE_CONSTRAINT__OWNER) return null;
@@ -146,6 +149,7 @@ public abstract class JvmTypeConstraintImpl extends MinimalEObjectImpl.Container
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setOwner(JvmConstraintOwner newOwner)
 	{
 		if (newOwner != eInternalContainer() || (eContainerFeatureID() != TypesPackage.JVM_TYPE_CONSTRAINT__OWNER && newOwner != null))
@@ -169,6 +173,7 @@ public abstract class JvmTypeConstraintImpl extends MinimalEObjectImpl.Container
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getIdentifier()
 	{
 		// TODO: implement this method
@@ -181,6 +186,7 @@ public abstract class JvmTypeConstraintImpl extends MinimalEObjectImpl.Container
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getSimpleName()
 	{
 		// TODO: implement this method
@@ -193,6 +199,7 @@ public abstract class JvmTypeConstraintImpl extends MinimalEObjectImpl.Container
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getQualifiedName()
 	{
 		// TODO: implement this method
@@ -205,6 +212,7 @@ public abstract class JvmTypeConstraintImpl extends MinimalEObjectImpl.Container
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getQualifiedName(char innerClassDelimiter)
 	{
 		// TODO: implement this method
