@@ -8,12 +8,15 @@
  *******************************************************************************/
 package org.eclipse.xtext.xbase.parser;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.nodemodel.impl.AbstractNode;
 import org.eclipse.xtext.nodemodel.impl.CompositeNode;
 import org.eclipse.xtext.nodemodel.impl.NodeModelBuilder;
+
+import com.google.common.collect.Lists;
 
 /**
  * This is required together with the {@link TokenSequencePreservingPartialParsingHelper}.
@@ -37,10 +40,11 @@ public class LookAheadPreservingNodeModelBuilder extends NodeModelBuilder {
 		while(oldNodes.hasNext()) {
 			AbstractNode nextOld = oldNodes.next();
 			AbstractNode nextNew = newNodes.next();
-			if (nextOld instanceof CompositeNode) {
+			if (nextOld instanceof CompositeNode && nextNew instanceof CompositeNode) {
 				setLookAhead((CompositeNode) nextNew, ((CompositeNode) nextOld).getLookAhead());
 			}
 		}
+		
 		if (newNodes.hasNext()) {
 			throw new RuntimeException();
 		}
