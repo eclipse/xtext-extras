@@ -19,9 +19,7 @@ import org.eclipse.xtext.testing.InjectWith;
 import org.eclipse.xtext.testing.XtextRunner;
 import org.eclipse.xtext.xbase.XbaseQualifiedNameConverter;
 import org.junit.Assert;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
 import com.google.common.collect.Lists;
@@ -34,9 +32,6 @@ import com.google.common.collect.Lists;
 public class XbaseQualifiedNameConverterTest {
 	@Inject
 	private XbaseQualifiedNameConverter converter;
-
-	@Rule
-	public ExpectedException thrown = ExpectedException.none();
 
 	@Test
 	public void test_toQualifiedName() {
@@ -53,15 +48,11 @@ public class XbaseQualifiedNameConverterTest {
 
 	@Test
 	public void test_toQualifiedName_null() {
-		thrown.expect(IllegalArgumentException.class);
-		thrown.expectMessage("Qualified name cannot be null");
-		converter.toQualifiedName(null);
+		Assert.assertThrows("Qualified name cannot be null", IllegalArgumentException.class, ()->converter.toQualifiedName(null));
 	}
 
 	@Test
 	public void test_toQualifiedName_empty() {
-		thrown.expect(IllegalArgumentException.class);
-		thrown.expectMessage("Qualified name cannot be empty");
-		converter.toQualifiedName("");
+		Assert.assertThrows("Qualified name cannot be empty", IllegalArgumentException.class, () -> converter.toQualifiedName(""));
 	}
 }
