@@ -68,7 +68,9 @@ protected class ThisRootNode extends RootToken {
  *
  **/
 
-// 'grammar' name=ID ';' options=Options? rules+=Rule*
+// 'grammar' name=ID ';'
+// options=Options?
+// rules+=Rule*
 protected class AntlrGrammar_Group extends GroupToken {
 	
 	public AntlrGrammar_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -284,7 +286,10 @@ protected class AntlrGrammar_RulesAssignment_4 extends AssignmentToken  {
  *
  **/
 
-// {Options} 'options' '{' optionValues+=OptionValue+ '}'
+// {Options}
+// 'options' '{'
+// optionValues+=OptionValue+
+// '}'
 protected class Options_Group extends GroupToken {
 	
 	public Options_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -617,7 +622,9 @@ protected class OptionValue_SemicolonKeyword_3 extends KeywordToken  {
  *
  **/
 
-// ^fragment?='fragment'? name=ID ('[' parameters+=Parameter (',' parameters+=Parameter)* ']')? ':' body=Alternatives ';'
+// ^fragment?='fragment'? name=ID ('[' parameters+=Parameter (',' parameters+=Parameter)* ']')? ':'
+// body=Alternatives
+// ';'
 protected class Rule_Group extends GroupToken {
 	
 	public Rule_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -1124,7 +1131,7 @@ protected class Parameter_NameAssignment_1 extends AssignmentToken  {
 /************ begin Rule Alternatives ****************
  *
  * Alternatives RuleElement:
- * 	Group ({Alternatives.groups+=current} ('|' groups+=Group)+)?
+ * 	Group ({Alternatives.groups+=current} ('|' groups+=Group)+)?;
  *
  **/
 
@@ -1361,7 +1368,7 @@ protected class Alternatives_GroupsAssignment_1_1_1 extends AssignmentToken  {
 /************ begin Rule Group ****************
  *
  * Group RuleElement:
- * 	Guarded | Atom ({Group.elements+=current} elements+=Atom+)?
+ * 	Guarded | Atom ({Group.elements+=current} elements+=Atom+)?;
  *
  **/
 
@@ -1613,7 +1620,7 @@ protected class Group_ElementsAssignment_1_1_1 extends AssignmentToken  {
 /************ begin Rule Atom ****************
  *
  * Atom RuleElement:
- * 	OtherElement ({ElementWithCardinality.element=current} cardinality=('+' | '*' | '?'))? | RuleOptions
+ * 	OtherElement ({ElementWithCardinality.element=current} cardinality=('+' | '*' | '?'))? | RuleOptions;
  *
  **/
 
@@ -1865,12 +1872,13 @@ protected class Atom_RuleOptionsParserRuleCall_1 extends RuleCallToken {
  * OtherElement RuleElement:
  * 	{NegatedElement} '~' element=(Parenthesized | Literal) | Predicated
  * 	| Parenthesized
- * 	| Literal ({UntilElement.left=current} '..' right=Literal)?
+ * 	| Literal ({UntilElement.left=current} '..' right=Literal)?;
  *
  **/
 
-// {NegatedElement} '~' element=(Parenthesized | Literal) | Predicated | Parenthesized | Literal
-// ({UntilElement.left=current} '..' right=Literal)?
+// {NegatedElement} '~' element=(Parenthesized | Literal) | Predicated
+// | Parenthesized
+// | Literal ({UntilElement.left=current} '..' right=Literal)?
 protected class OtherElement_Alternatives extends AlternativesToken {
 
 	public OtherElement_Alternatives(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -2323,7 +2331,7 @@ protected class OtherElement_RightAssignment_3_1_2 extends AssignmentToken  {
 /************ begin Rule Guarded ****************
  *
  * Guarded RuleElement:
- * 	'{' guard=OrExpression '}' '?' '=>' guarded=Parenthesized
+ * 	'{' guard=OrExpression '}' '?' '=>' guarded=Parenthesized;
  *
  **/
 
@@ -2542,7 +2550,7 @@ protected class Guarded_GuardedAssignment_5 extends AssignmentToken  {
 /************ begin Rule OrExpression ****************
  *
  * OrExpression Expression:
- * 	AndExpression ({OrExpression.left=current} '||' right=AndExpression)*
+ * 	AndExpression ({OrExpression.left=current} '||' right=AndExpression)*;
  *
  **/
 
@@ -2748,7 +2756,7 @@ protected class OrExpression_RightAssignment_1_2 extends AssignmentToken  {
 /************ begin Rule AndExpression ****************
  *
  * AndExpression Expression:
- * 	NotExpression ({AndExpression.left=current} '&&' right=NotExpression)*
+ * 	NotExpression ({AndExpression.left=current} '&&' right=NotExpression)*;
  *
  **/
 
@@ -2954,7 +2962,7 @@ protected class AndExpression_RightAssignment_1_2 extends AssignmentToken  {
 /************ begin Rule NotExpression ****************
  *
  * NotExpression Expression:
- * 	PrimaryExpression | {NotExpression} '!' value=NotExpression
+ * 	PrimaryExpression | {NotExpression} '!' value=NotExpression;
  *
  **/
 
@@ -3156,7 +3164,7 @@ protected class NotExpression_ValueAssignment_1_2 extends AssignmentToken  {
 /************ begin Rule PrimaryExpression ****************
  *
  * PrimaryExpression Expression:
- * 	ParenthesizedExpression | ReferenceOrLiteral
+ * 	ParenthesizedExpression | ReferenceOrLiteral;
  *
  **/
 
@@ -3270,7 +3278,7 @@ protected class PrimaryExpression_ReferenceOrLiteralParserRuleCall_1 extends Rul
 /************ begin Rule ParenthesizedExpression ****************
  *
  * ParenthesizedExpression Expression:
- * 	OPEN OrExpression ')'
+ * 	OPEN OrExpression ')';
  *
  **/
 
@@ -3436,7 +3444,7 @@ protected class ReferenceOrLiteral_NameAssignment extends AssignmentToken  {
 /************ begin Rule Parenthesized ****************
  *
  * Parenthesized RuleElement:
- * 	OPEN Alternatives ')'
+ * 	OPEN Alternatives ')';
  *
  **/
 
@@ -3811,7 +3819,8 @@ protected class Predicated_RightParenthesisKeyword_6 extends KeywordToken  {
  *
  **/
 
-// options=Options ':' element=Atom | {Skip} '{' 'skip();' '}'
+// options=Options ':' element=Atom
+// | {Skip} '{' 'skip();' '}'
 protected class RuleOptions_Alternatives extends AlternativesToken {
 
 	public RuleOptions_Alternatives(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -4116,11 +4125,13 @@ protected class RuleOptions_RightCurlyBracketKeyword_1_3 extends KeywordToken  {
  * Literal RuleElement:
  * 	RuleCall
  * 	| Keyword
- * 	| Wildcard
+ * 	| Wildcard;
  *
  **/
 
-// RuleCall | Keyword | Wildcard
+// RuleCall
+// | Keyword
+// | Wildcard
 protected class Literal_Alternatives extends AlternativesToken {
 
 	public Literal_Alternatives(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {

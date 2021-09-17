@@ -26,10 +26,6 @@ public interface RuleCall extends RuleElement
   /**
    * Returns the value of the '<em><b>Rule</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Rule</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Rule</em>' attribute.
    * @see #setRule(String)
@@ -53,10 +49,6 @@ public interface RuleCall extends RuleElement
    * Returns the value of the '<em><b>Arguments</b></em>' containment reference list.
    * The list contents are of type {@link org.eclipse.xtext.generator.parser.antlr.debug.simpleAntlr.Expression}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Arguments</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Arguments</em>' containment reference list.
    * @see org.eclipse.xtext.generator.parser.antlr.debug.simpleAntlr.SimpleAntlrPackage#getRuleCall_Arguments()

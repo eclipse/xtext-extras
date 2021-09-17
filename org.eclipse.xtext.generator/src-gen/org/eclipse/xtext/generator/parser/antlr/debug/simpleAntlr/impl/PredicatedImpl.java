@@ -76,6 +76,7 @@ public class PredicatedImpl extends RuleElementImpl implements Predicated
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public RuleElement getPredicate()
   {
     return predicate;
@@ -103,6 +104,7 @@ public class PredicatedImpl extends RuleElementImpl implements Predicated
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setPredicate(RuleElement newPredicate)
   {
     if (newPredicate != predicate)
@@ -124,6 +126,7 @@ public class PredicatedImpl extends RuleElementImpl implements Predicated
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public RuleElement getElement()
   {
     return element;
@@ -151,6 +154,7 @@ public class PredicatedImpl extends RuleElementImpl implements Predicated
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setElement(RuleElement newElement)
   {
     if (newElement != element)

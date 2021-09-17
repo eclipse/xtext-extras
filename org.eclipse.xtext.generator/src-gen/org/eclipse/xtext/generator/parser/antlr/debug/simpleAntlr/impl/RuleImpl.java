@@ -127,6 +127,7 @@ public class RuleImpl extends MinimalEObjectImpl.Container implements Rule
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public boolean isFragment()
   {
     return fragment;
@@ -137,6 +138,7 @@ public class RuleImpl extends MinimalEObjectImpl.Container implements Rule
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setFragment(boolean newFragment)
   {
     boolean oldFragment = fragment;
@@ -150,6 +152,7 @@ public class RuleImpl extends MinimalEObjectImpl.Container implements Rule
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -160,6 +163,7 @@ public class RuleImpl extends MinimalEObjectImpl.Container implements Rule
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -173,6 +177,7 @@ public class RuleImpl extends MinimalEObjectImpl.Container implements Rule
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Parameter> getParameters()
   {
     if (parameters == null)
@@ -187,6 +192,7 @@ public class RuleImpl extends MinimalEObjectImpl.Container implements Rule
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public RuleElement getBody()
   {
     return body;
@@ -214,6 +220,7 @@ public class RuleImpl extends MinimalEObjectImpl.Container implements Rule
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setBody(RuleElement newBody)
   {
     if (newBody != body)
@@ -356,7 +363,7 @@ public class RuleImpl extends MinimalEObjectImpl.Container implements Rule
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (fragment: ");
     result.append(fragment);
     result.append(", name: ");

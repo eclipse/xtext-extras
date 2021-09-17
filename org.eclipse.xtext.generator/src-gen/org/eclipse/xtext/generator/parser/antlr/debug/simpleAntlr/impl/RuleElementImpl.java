@@ -77,6 +77,7 @@ public class RuleElementImpl extends MinimalEObjectImpl.Container implements Rul
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression getGuard()
   {
     return guard;
@@ -104,6 +105,7 @@ public class RuleElementImpl extends MinimalEObjectImpl.Container implements Rul
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setGuard(Expression newGuard)
   {
     if (newGuard != guard)
@@ -125,6 +127,7 @@ public class RuleElementImpl extends MinimalEObjectImpl.Container implements Rul
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public RuleElement getGuarded()
   {
     return guarded;
@@ -152,6 +155,7 @@ public class RuleElementImpl extends MinimalEObjectImpl.Container implements Rul
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setGuarded(RuleElement newGuarded)
   {
     if (newGuarded != guarded)

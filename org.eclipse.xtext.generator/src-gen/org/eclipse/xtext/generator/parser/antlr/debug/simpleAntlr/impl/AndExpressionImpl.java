@@ -76,6 +76,7 @@ public class AndExpressionImpl extends ExpressionImpl implements AndExpression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression getLeft()
   {
     return left;
@@ -103,6 +104,7 @@ public class AndExpressionImpl extends ExpressionImpl implements AndExpression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setLeft(Expression newLeft)
   {
     if (newLeft != left)
@@ -124,6 +126,7 @@ public class AndExpressionImpl extends ExpressionImpl implements AndExpression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression getRight()
   {
     return right;
@@ -151,6 +154,7 @@ public class AndExpressionImpl extends ExpressionImpl implements AndExpression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setRight(Expression newRight)
   {
     if (newRight != right)

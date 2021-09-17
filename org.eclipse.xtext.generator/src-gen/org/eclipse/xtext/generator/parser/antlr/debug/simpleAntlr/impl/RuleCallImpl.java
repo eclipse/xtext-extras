@@ -93,6 +93,7 @@ public class RuleCallImpl extends RuleElementImpl implements RuleCall
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getRule()
   {
     return rule;
@@ -103,6 +104,7 @@ public class RuleCallImpl extends RuleElementImpl implements RuleCall
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setRule(String newRule)
   {
     String oldRule = rule;
@@ -116,6 +118,7 @@ public class RuleCallImpl extends RuleElementImpl implements RuleCall
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Expression> getArguments()
   {
     if (arguments == null)
@@ -229,7 +232,7 @@ public class RuleCallImpl extends RuleElementImpl implements RuleCall
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (rule: ");
     result.append(rule);
     result.append(')');

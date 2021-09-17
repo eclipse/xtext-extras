@@ -76,6 +76,7 @@ public class UntilElementImpl extends RuleElementImpl implements UntilElement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public RuleElement getLeft()
   {
     return left;
@@ -103,6 +104,7 @@ public class UntilElementImpl extends RuleElementImpl implements UntilElement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setLeft(RuleElement newLeft)
   {
     if (newLeft != left)
@@ -124,6 +126,7 @@ public class UntilElementImpl extends RuleElementImpl implements UntilElement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public RuleElement getRight()
   {
     return right;
@@ -151,6 +154,7 @@ public class UntilElementImpl extends RuleElementImpl implements UntilElement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setRight(RuleElement newRight)
   {
     if (newRight != right)

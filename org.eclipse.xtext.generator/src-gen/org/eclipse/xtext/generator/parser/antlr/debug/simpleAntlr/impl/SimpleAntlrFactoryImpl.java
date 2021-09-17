@@ -96,6 +96,7 @@ public class SimpleAntlrFactoryImpl extends EFactoryImpl implements SimpleAntlrF
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public AntlrGrammar createAntlrGrammar()
   {
     AntlrGrammarImpl antlrGrammar = new AntlrGrammarImpl();
@@ -107,6 +108,7 @@ public class SimpleAntlrFactoryImpl extends EFactoryImpl implements SimpleAntlrF
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Options createOptions()
   {
     OptionsImpl options = new OptionsImpl();
@@ -118,6 +120,7 @@ public class SimpleAntlrFactoryImpl extends EFactoryImpl implements SimpleAntlrF
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public OptionValue createOptionValue()
   {
     OptionValueImpl optionValue = new OptionValueImpl();
@@ -129,6 +132,7 @@ public class SimpleAntlrFactoryImpl extends EFactoryImpl implements SimpleAntlrF
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Rule createRule()
   {
     RuleImpl rule = new RuleImpl();
@@ -140,6 +144,7 @@ public class SimpleAntlrFactoryImpl extends EFactoryImpl implements SimpleAntlrF
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Parameter createParameter()
   {
     ParameterImpl parameter = new ParameterImpl();
@@ -151,6 +156,7 @@ public class SimpleAntlrFactoryImpl extends EFactoryImpl implements SimpleAntlrF
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public RuleElement createRuleElement()
   {
     RuleElementImpl ruleElement = new RuleElementImpl();
@@ -162,6 +168,7 @@ public class SimpleAntlrFactoryImpl extends EFactoryImpl implements SimpleAntlrF
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression createExpression()
   {
     ExpressionImpl expression = new ExpressionImpl();
@@ -173,6 +180,7 @@ public class SimpleAntlrFactoryImpl extends EFactoryImpl implements SimpleAntlrF
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ReferenceOrLiteral createReferenceOrLiteral()
   {
     ReferenceOrLiteralImpl referenceOrLiteral = new ReferenceOrLiteralImpl();
@@ -184,6 +192,7 @@ public class SimpleAntlrFactoryImpl extends EFactoryImpl implements SimpleAntlrF
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Predicated createPredicated()
   {
     PredicatedImpl predicated = new PredicatedImpl();
@@ -195,6 +204,7 @@ public class SimpleAntlrFactoryImpl extends EFactoryImpl implements SimpleAntlrF
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public RuleOptions createRuleOptions()
   {
     RuleOptionsImpl ruleOptions = new RuleOptionsImpl();
@@ -206,6 +216,7 @@ public class SimpleAntlrFactoryImpl extends EFactoryImpl implements SimpleAntlrF
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public RuleCall createRuleCall()
   {
     RuleCallImpl ruleCall = new RuleCallImpl();
@@ -217,6 +228,7 @@ public class SimpleAntlrFactoryImpl extends EFactoryImpl implements SimpleAntlrF
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Keyword createKeyword()
   {
     KeywordImpl keyword = new KeywordImpl();
@@ -228,6 +240,7 @@ public class SimpleAntlrFactoryImpl extends EFactoryImpl implements SimpleAntlrF
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Wildcard createWildcard()
   {
     WildcardImpl wildcard = new WildcardImpl();
@@ -239,6 +252,7 @@ public class SimpleAntlrFactoryImpl extends EFactoryImpl implements SimpleAntlrF
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Alternatives createAlternatives()
   {
     AlternativesImpl alternatives = new AlternativesImpl();
@@ -250,6 +264,7 @@ public class SimpleAntlrFactoryImpl extends EFactoryImpl implements SimpleAntlrF
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Group createGroup()
   {
     GroupImpl group = new GroupImpl();
@@ -261,6 +276,7 @@ public class SimpleAntlrFactoryImpl extends EFactoryImpl implements SimpleAntlrF
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ElementWithCardinality createElementWithCardinality()
   {
     ElementWithCardinalityImpl elementWithCardinality = new ElementWithCardinalityImpl();
@@ -272,6 +288,7 @@ public class SimpleAntlrFactoryImpl extends EFactoryImpl implements SimpleAntlrF
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public NegatedElement createNegatedElement()
   {
     NegatedElementImpl negatedElement = new NegatedElementImpl();
@@ -283,6 +300,7 @@ public class SimpleAntlrFactoryImpl extends EFactoryImpl implements SimpleAntlrF
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public UntilElement createUntilElement()
   {
     UntilElementImpl untilElement = new UntilElementImpl();
@@ -294,6 +312,7 @@ public class SimpleAntlrFactoryImpl extends EFactoryImpl implements SimpleAntlrF
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public OrExpression createOrExpression()
   {
     OrExpressionImpl orExpression = new OrExpressionImpl();
@@ -305,6 +324,7 @@ public class SimpleAntlrFactoryImpl extends EFactoryImpl implements SimpleAntlrF
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public AndExpression createAndExpression()
   {
     AndExpressionImpl andExpression = new AndExpressionImpl();
@@ -316,6 +336,7 @@ public class SimpleAntlrFactoryImpl extends EFactoryImpl implements SimpleAntlrF
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public NotExpression createNotExpression()
   {
     NotExpressionImpl notExpression = new NotExpressionImpl();
@@ -327,6 +348,7 @@ public class SimpleAntlrFactoryImpl extends EFactoryImpl implements SimpleAntlrF
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Skip createSkip()
   {
     SkipImpl skip = new SkipImpl();
@@ -338,6 +360,7 @@ public class SimpleAntlrFactoryImpl extends EFactoryImpl implements SimpleAntlrF
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SimpleAntlrPackage getSimpleAntlrPackage()
   {
     return (SimpleAntlrPackage)getEPackage();

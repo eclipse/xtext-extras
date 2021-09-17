@@ -86,6 +86,7 @@ public class ElementWithCardinalityImpl extends RuleElementImpl implements Eleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public RuleElement getElement()
   {
     return element;
@@ -113,6 +114,7 @@ public class ElementWithCardinalityImpl extends RuleElementImpl implements Eleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setElement(RuleElement newElement)
   {
     if (newElement != element)
@@ -134,6 +136,7 @@ public class ElementWithCardinalityImpl extends RuleElementImpl implements Eleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getCardinality()
   {
     return cardinality;
@@ -144,6 +147,7 @@ public class ElementWithCardinalityImpl extends RuleElementImpl implements Eleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setCardinality(String newCardinality)
   {
     String oldCardinality = cardinality;
@@ -254,7 +258,7 @@ public class ElementWithCardinalityImpl extends RuleElementImpl implements Eleme
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (cardinality: ");
     result.append(cardinality);
     result.append(')');

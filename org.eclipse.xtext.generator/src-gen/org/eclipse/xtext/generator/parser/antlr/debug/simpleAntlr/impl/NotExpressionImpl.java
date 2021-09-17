@@ -65,6 +65,7 @@ public class NotExpressionImpl extends ExpressionImpl implements NotExpression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression getValue()
   {
     return value;
@@ -92,6 +93,7 @@ public class NotExpressionImpl extends ExpressionImpl implements NotExpression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setValue(Expression newValue)
   {
     if (newValue != value)

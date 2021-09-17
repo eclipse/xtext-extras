@@ -106,6 +106,7 @@ public class AntlrGrammarImpl extends MinimalEObjectImpl.Container implements An
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -116,6 +117,7 @@ public class AntlrGrammarImpl extends MinimalEObjectImpl.Container implements An
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -129,6 +131,7 @@ public class AntlrGrammarImpl extends MinimalEObjectImpl.Container implements An
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Options getOptions()
   {
     return options;
@@ -156,6 +159,7 @@ public class AntlrGrammarImpl extends MinimalEObjectImpl.Container implements An
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setOptions(Options newOptions)
   {
     if (newOptions != options)
@@ -177,6 +181,7 @@ public class AntlrGrammarImpl extends MinimalEObjectImpl.Container implements An
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Rule> getRules()
   {
     if (rules == null)
@@ -302,7 +307,7 @@ public class AntlrGrammarImpl extends MinimalEObjectImpl.Container implements An
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (name: ");
     result.append(name);
     result.append(')');

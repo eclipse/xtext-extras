@@ -29,10 +29,6 @@ public interface AntlrGrammar extends EObject
   /**
    * Returns the value of the '<em><b>Name</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Name</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Name</em>' attribute.
    * @see #setName(String)
@@ -55,10 +51,6 @@ public interface AntlrGrammar extends EObject
   /**
    * Returns the value of the '<em><b>Options</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Options</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Options</em>' containment reference.
    * @see #setOptions(Options)
@@ -82,10 +74,6 @@ public interface AntlrGrammar extends EObject
    * Returns the value of the '<em><b>Rules</b></em>' containment reference list.
    * The list contents are of type {@link org.eclipse.xtext.generator.parser.antlr.debug.simpleAntlr.Rule}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Rules</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Rules</em>' containment reference list.
    * @see org.eclipse.xtext.generator.parser.antlr.debug.simpleAntlr.SimpleAntlrPackage#getAntlrGrammar_Rules()
