@@ -60,7 +60,7 @@ public class XImportSectionNamespaceScopeProvider extends AbstractGlobalScopeDel
 	public static final QualifiedName JAVA_LANG = QualifiedName.create("java","lang");
 	public static final QualifiedName XBASE_LIB = QualifiedName.create("org","eclipse","xtext","xbase","lib");
 
-	@Inject private IJvmModelAssociations associations;
+	@Inject private Provider<IJvmModelAssociations> associations;
 	@Inject private IResourceScopeCache cache;
 	@Inject private IQualifiedNameProvider qualifiedNameProvider;
 	@Inject private IQualifiedNameConverter qualifiedNameConverter;
@@ -125,7 +125,7 @@ public class XImportSectionNamespaceScopeProvider extends AbstractGlobalScopeDel
 		}
 		
 		// scope for jvm elements
-		Set<EObject> elements = associations.getJvmElements(context);
+		Set<EObject> elements = associations.get().getJvmElements(context);
 		for (EObject derivedJvmElement : elements) {
 			// scope for JvmDeclaredTypes
 			if (derivedJvmElement instanceof JvmDeclaredType) {
@@ -293,6 +293,6 @@ public class XImportSectionNamespaceScopeProvider extends AbstractGlobalScopeDel
 	}
 	
 	protected IJvmModelAssociations getAssociations() {
-		return associations;
+		return associations.get();
 	}
 }

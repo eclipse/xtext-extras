@@ -25,6 +25,7 @@ import org.eclipse.xtext.xbase.typesystem.references.StandardTypeReferenceOwner;
 import org.eclipse.xtext.xbase.typesystem.util.CommonTypeComputationServices;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 /**
  * @author Sebastian Zarnekow - Initial contribution and API
@@ -35,7 +36,7 @@ public abstract class AbstractBatchTypeResolver implements IBatchTypeResolver {
 	private static Logger LOG = Logger.getLogger(AbstractBatchTypeResolver.class);
 	
 	@Inject
-	private IBatchScopeProvider scopeProvider;
+	private Provider<IBatchScopeProvider> scopeProvider;
 	@Inject
 	private FeatureScopes featureScopes;
 	@Inject
@@ -85,7 +86,7 @@ public abstract class AbstractBatchTypeResolver implements IBatchTypeResolver {
 		validateResourceState(resource);
 		List<EObject> resourceContents = resource.getContents();
 		if (resourceContents.isEmpty()) {
-			IFeatureScopeSession session = scopeProvider.newSession(resource);
+			IFeatureScopeSession session = scopeProvider.get().newSession(resource);
 			return new EmptyResolvedTypes(session, featureScopes, new StandardTypeReferenceOwner(services, resource));
 		} else {
 			return resolveTypes(resourceContents.get(0), monitor);

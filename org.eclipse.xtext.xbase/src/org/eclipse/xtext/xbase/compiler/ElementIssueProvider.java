@@ -36,6 +36,7 @@ import org.eclipse.xtext.xbase.typesystem.computation.ILinkingCandidate;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 /**
  * @author Jan Koehnlein - Initial contribution and API
@@ -67,7 +68,7 @@ public class ElementIssueProvider implements IElementIssueProvider {
 	
 	public static class Factory implements IElementIssueProvider.Factory {
 		
-		@Inject IJvmModelAssociations associations;
+		@Inject Provider<IJvmModelAssociations> associations;
 		
 		@Inject IResourceValidator resourceValidator;
 		
@@ -84,7 +85,7 @@ public class ElementIssueProvider implements IElementIssueProvider {
 				if (uriToProblem != null && uriToProblem.trimFragment().equals(resource.getURI())) {
 					EObject erroneousElement = resource.getEObject(uriToProblem.fragment());
 					adapter.addIssue(erroneousElement, issue);
-					for(EObject jvmElement: associations.getJvmElements(erroneousElement)) {
+					for(EObject jvmElement: associations.get().getJvmElements(erroneousElement)) {
 						adapter.addIssue(jvmElement, issue);
 					}
 				}

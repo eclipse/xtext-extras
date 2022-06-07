@@ -22,6 +22,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 /**
  * @noextend This class is not intended to be subclassed by clients.
@@ -31,7 +32,7 @@ import com.google.inject.Inject;
  */
 public class JvmTypeExtensions {
 	@Inject
-	private ILogicalContainerProvider logicalContainerProvider;
+	private Provider<ILogicalContainerProvider> logicalContainerProvider;
 
 	public Procedure1<? super ITreeAppendable> getCompilationStrategy(JvmIdentifiableElement it) {
 		CompilationStrategyAdapter adapter = Iterables
@@ -52,7 +53,7 @@ public class JvmTypeExtensions {
 	}
 
 	public boolean isSingleSyntheticDefaultConstructor(JvmConstructor it) {
-		return it.getParameters().isEmpty() && logicalContainerProvider.getAssociatedExpression(it) == null
+		return it.getParameters().isEmpty() && logicalContainerProvider.get().getAssociatedExpression(it) == null
 				&& getCompilationStrategy(it) == null && getCompilationTemplate(it) == null && IterableExtensions
 						.size(Iterables.filter(it.getDeclaringType().getMembers(), JvmConstructor.class)) == 1;
 	}

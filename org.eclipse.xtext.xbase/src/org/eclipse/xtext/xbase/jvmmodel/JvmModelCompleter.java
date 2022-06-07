@@ -41,6 +41,7 @@ import org.eclipse.xtext.xbase.compiler.JvmModelGenerator;
 
 import com.google.common.base.Strings;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 /**
  * Adds expected default values to a created JvmModel.
@@ -71,10 +72,10 @@ public class JvmModelCompleter {
 	private JvmTypeExtensions typeExtensions;  
 	
 	@Inject
-	private IJvmModelAssociations associations;
+	private Provider<IJvmModelAssociations> associations;
 	
 	@Inject
-	private IJvmModelAssociator associator;
+	private Provider<IJvmModelAssociator> associator;
 
 	@Inject
 	private JvmAnnotationReferenceBuilder.Factory annotationRefBuilderFactory;
@@ -87,7 +88,7 @@ public class JvmModelCompleter {
 	
 	/** The generator is used to fill information of the <code>@Generated</code> annotation. */
 	@Inject
-	private JvmModelGenerator generator;
+	private Provider<JvmModelGenerator> generator;
 	
 	private DateFormat dateFormat;
 	
@@ -127,7 +128,7 @@ public class JvmModelCompleter {
 				element.getSuperTypes().add(objectType);
 		}
 		addAnnotations(element);
-		EObject primarySourceElement = associations.getPrimarySourceElement(element);
+		EObject primarySourceElement = associations.get().getPrimarySourceElement(element);
 		JvmOperation values = typesFactory.createJvmOperation();
 		values.setVisibility(JvmVisibility.PUBLIC);
 		values.setStatic(true);
@@ -135,7 +136,7 @@ public class JvmModelCompleter {
 		values.setReturnType(references.createArrayType(references.createTypeRef(element)));
 		typeExtensions.setSynthetic(values, true);
 		if (primarySourceElement != null) {
-			associator.associate(primarySourceElement, values);
+			associator.get().associate(primarySourceElement, values);
 		}
 		element.getMembers().add(values);
 		
@@ -150,7 +151,7 @@ public class JvmModelCompleter {
 		valueOf.getParameters().add(param);
 		typeExtensions.setSynthetic(valueOf, true);
 		if (primarySourceElement != null) {
-			associator.associate(primarySourceElement, valueOf);
+			associator.get().associate(primarySourceElement, valueOf);
 		}
 		element.getMembers().add(valueOf);
 	}
@@ -194,9 +195,9 @@ public class JvmModelCompleter {
 				constructor.setSimpleName(element.getSimpleName());
 				constructor.setVisibility(JvmVisibility.PUBLIC);
 				typeExtensions.setSynthetic(constructor, true);
-				EObject primarySourceElement = associations.getPrimarySourceElement(element);
+				EObject primarySourceElement = associations.get().getPrimarySourceElement(element);
 				if (primarySourceElement != null) {
-					associator.associate(primarySourceElement, constructor);
+					associator.get().associate(primarySourceElement, constructor);
 				}
 				element.getMembers().add(constructor);
 			}
@@ -234,7 +235,7 @@ public class JvmModelCompleter {
 					JvmAnnotationType generatedAnnotationType = (JvmAnnotationType) generatedJvmType;
 					JvmAnnotationReference annotationRef = annotationRefBuilder.annotationRef(JAVAX_ANNOTATION_GENERATED);
 					JvmStringAnnotationValue annotationValue = typesFactory.createJvmStringAnnotationValue();
-					annotationValue.getValues().add(generator.getClass().getName());
+					annotationValue.getValues().add(generator.get().getClass().getName());
 					annotationRef.getExplicitValues().add(annotationValue);
 					if (generatorConfig.isIncludeDateInGeneratedAnnotation()) {
 						if (dateFormat == null) {

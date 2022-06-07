@@ -32,6 +32,7 @@ import org.eclipse.xtext.xtype.XImportDeclaration;
 import org.eclipse.xtext.xtype.XImportSection;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.name.Named;
 
 /**
@@ -53,6 +54,8 @@ public class XbaseBatchScopeProvider implements IBatchScopeProvider, IDelegating
 	
 	@Inject
 	@Named(AbstractDeclarativeScopeProvider.NAMED_DELEGATE)
+	private Provider<IScopeProvider> delegateProvider;
+	
 	private IScopeProvider delegate;
 	
 	@Inject
@@ -71,6 +74,9 @@ public class XbaseBatchScopeProvider implements IBatchScopeProvider, IDelegating
 
 	@Override
 	public IScopeProvider getDelegate() {
+		if (delegate == null) {
+			delegate = delegateProvider.get();
+		}
 		return delegate;
 	}
 	

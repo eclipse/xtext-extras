@@ -21,6 +21,7 @@ import org.eclipse.xtext.xbase.typesystem.references.LightweightTypeReference;
 import org.eclipse.xtext.xbase.typesystem.util.IVisibilityHelper;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 /**
  * The root session. It is save to be used by various child sessions
@@ -43,7 +44,7 @@ public class RootFeatureScopeSession extends AbstractFeatureScopeSession {
 	private TypeScopes typeScopes;
 	
 	@Inject
-	private IScopeProvider scopeProvider;
+	private Provider<IScopeProvider> scopeProviderProvider;
 	
 	@Inject
 	private IVisibilityHelper visibilityHelper;
@@ -70,7 +71,7 @@ public class RootFeatureScopeSession extends AbstractFeatureScopeSession {
 	
 	@Override
 	protected IScopeProvider getDefaultScopeProvider() {
-		return scopeProvider;
+		return scopeProviderProvider.get();
 	}
 
 	/* @Nullable */

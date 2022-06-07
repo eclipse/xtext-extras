@@ -45,6 +45,7 @@ import org.eclipse.xtext.xtype.XImportSection;
 import org.eclipse.xtext.xtype.XtypePackage;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 /**
  * Language dependent configuration for the 'import' related things.
@@ -55,13 +56,13 @@ import com.google.inject.Inject;
 public class DefaultImportsConfiguration implements IImportsConfiguration {
 
 	@Inject
-	private IJvmModelAssociations associations;
+	private Provider<IJvmModelAssociations> associations;
 
 	@Inject
 	private IGrammarAccess grammarAccess;
 	
 	@Inject
-	private ILogicalContainerProvider logicalContainerProvider;
+	private Provider<ILogicalContainerProvider> logicalContainerProvider;
 
 	@Override
 	public XImportSection getImportSection(XtextResource resource) {
@@ -103,12 +104,12 @@ public class DefaultImportsConfiguration implements IImportsConfiguration {
 	@Override
 	public JvmDeclaredType getContextJvmDeclaredType(EObject model) {
 		if(model != null) {
-			JvmIdentifiableElement logicalContainer = logicalContainerProvider.getNearestLogicalContainer(model);
+			JvmIdentifiableElement logicalContainer = logicalContainerProvider.get().getNearestLogicalContainer(model);
 			if(logicalContainer != null) 
 				return EcoreUtil2.getContainerOfType(logicalContainer, JvmDeclaredType.class);
 			EObject currentElement = model;
 			do {
-				for(EObject jvmElement: associations.getJvmElements(currentElement)) {
+				for(EObject jvmElement: associations.get().getJvmElements(currentElement)) {
 					if(jvmElement instanceof JvmDeclaredType) 
 						return (JvmDeclaredType) jvmElement;
 				}

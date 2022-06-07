@@ -56,7 +56,7 @@ public class XbaseQualifiedNameValueConverter extends QualifiedNameValueConverte
 				if(getWildcardLiteral().equals(segment)) {
 					buffer.append(getWildcardLiteral());
 				} else {
-					buffer.append((String) valueConverterService.toValue(segment, getDelegateRuleName(), null));
+					buffer.append((String) valueConverterService.get().toValue(segment, getDelegateRuleName(), null));
 				}
 			}
 		}

@@ -12,6 +12,7 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collections;
@@ -146,7 +147,7 @@ public class JvmModelGenerator implements IGenerator {
   private CommonTypeComputationServices commonServices;
 
   @Inject
-  private XbaseCompiler compiler;
+  private Provider<XbaseCompiler> compilerProvider;
 
   @Inject
   private ILocationInFileProvider locationProvider;
@@ -452,7 +453,7 @@ public class JvmModelGenerator implements IGenerator {
               appendable.append("/* skipped default expression with errors */");
             } else {
               appendable.append(" default ");
-              this.compiler.compileAsJavaExpression(body, appendable, it.getReturnType());
+              this.compilerProvider.get().compileAsJavaExpression(body, appendable, it.getReturnType());
             }
           } else {
             JvmAnnotationValue _defaultValue = it.getDefaultValue();
@@ -853,7 +854,7 @@ public class JvmModelGenerator implements IGenerator {
             appendable.append(" /* Skipped initializer because of errors */");
           } else {
             appendable.append(" = ");
-            this.compiler.compileAsJavaExpression(expression, appendable, it.getType());
+            this.compilerProvider.get().compileAsJavaExpression(expression, appendable, it.getType());
           }
         }
       }
@@ -1046,7 +1047,7 @@ public class JvmModelGenerator implements IGenerator {
   }
 
   public ITreeAppendable compile(final JvmExecutable executable, final XExpression expression, final JvmTypeReference returnType, final ITreeAppendable appendable, final GeneratorConfig config) {
-    return this.compiler.compile(expression, appendable, returnType, IterableExtensions.<JvmTypeReference>toSet(executable.getExceptions()));
+    return this.compilerProvider.get().compile(expression, appendable, returnType, IterableExtensions.<JvmTypeReference>toSet(executable.getExceptions()));
   }
 
   public void assignThisAndSuper(final ITreeAppendable b, final JvmDeclaredType declaredType, final GeneratorConfig config) {
@@ -1477,7 +1478,7 @@ public class JvmModelGenerator implements IGenerator {
       appendable.append("{}");
     } else {
       final Procedure1<XExpression> _function = (XExpression it_1) -> {
-        this.compiler.toJavaExpression(it_1, appendable);
+        this.compilerProvider.get().toJavaExpression(it_1, appendable);
       };
       this._loopExtensions.<XExpression>forEachWithShortcut(appendable, Iterables.<XExpression>filter(it.getValues(), XExpression.class), _function);
     }

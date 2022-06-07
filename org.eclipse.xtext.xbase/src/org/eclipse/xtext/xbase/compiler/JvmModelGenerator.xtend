@@ -9,6 +9,7 @@
 package org.eclipse.xtext.xbase.compiler
 
 import com.google.inject.Inject
+import com.google.inject.Provider
 import java.util.List
 import java.util.Map
 import org.eclipse.emf.common.util.URI
@@ -104,7 +105,7 @@ class JvmModelGenerator implements IGenerator {
 	@Inject protected extension ErrorSafeExtensions
 	
 	@Inject CommonTypeComputationServices commonServices
-	@Inject XbaseCompiler compiler
+	@Inject Provider<XbaseCompiler> compilerProvider
 	@Inject ILocationInFileProvider locationProvider
 	@Inject IEObjectDocumentationProvider documentationProvider
 	@Inject IFileHeaderProvider fileHeaderProvider
@@ -305,7 +306,7 @@ class JvmModelGenerator implements IGenerator {
 					appendable.append("/* skipped default expression with errors */")
 				} else {
 					appendable.append(" default ")
-					compiler.compileAsJavaExpression(body, appendable, returnType)
+					compilerProvider.get.compileAsJavaExpression(body, appendable, returnType)
 				}
 			} else if (defaultValue !== null) {
 				if(defaultValue.hasErrors()) {
@@ -558,7 +559,7 @@ class JvmModelGenerator implements IGenerator {
 					appendable.append(" /* Skipped initializer because of errors */")
 				} else {
 					appendable.append(" = ")
-					compiler.compileAsJavaExpression(expression, appendable, type)
+					compilerProvider.get.compileAsJavaExpression(expression, appendable, type)
 				}
 			}
 		}
@@ -696,7 +697,7 @@ class JvmModelGenerator implements IGenerator {
 	}
 	
 	def compile(JvmExecutable executable, XExpression expression, JvmTypeReference returnType, ITreeAppendable appendable, GeneratorConfig config) {
-		compiler.compile(expression, appendable, returnType, executable.exceptions.toSet)
+		compilerProvider.get.compile(expression, appendable, returnType, executable.exceptions.toSet)
 	}
 
 	def void assignThisAndSuper(ITreeAppendable b, JvmDeclaredType declaredType, GeneratorConfig config) {
@@ -981,7 +982,7 @@ class JvmModelGenerator implements IGenerator {
 			appendable.append('{}')
 		else 
 			appendable.forEachWithShortcut(values.filter(XExpression), [
-				compiler.toJavaExpression(it, appendable)
+				compilerProvider.get.toJavaExpression(it, appendable)
 			])
 	}
 		

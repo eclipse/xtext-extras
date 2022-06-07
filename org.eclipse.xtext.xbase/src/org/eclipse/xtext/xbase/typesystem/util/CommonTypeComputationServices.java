@@ -22,6 +22,7 @@ import org.eclipse.xtext.xbase.util.XExpressionHelper;
 import org.eclipse.xtext.xtype.XtypeFactory;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.Singleton;
 
 /**
@@ -60,6 +61,8 @@ public class CommonTypeComputationServices {
 	private SynonymTypesProvider synonymTypesProvider;
 
 	@Inject
+	private Provider<IJvmModelAssociations> jvmModelAssociationsProvider;
+	
 	private IJvmModelAssociations jvmModelAssociations;
 
 	@Inject
@@ -155,6 +158,9 @@ public class CommonTypeComputationServices {
 	}
 
 	public IJvmModelAssociations getJvmModelAssociations() {
+		if (jvmModelAssociations == null) {
+			jvmModelAssociations = jvmModelAssociationsProvider.get();
+		}
 		return jvmModelAssociations;
 	}
 

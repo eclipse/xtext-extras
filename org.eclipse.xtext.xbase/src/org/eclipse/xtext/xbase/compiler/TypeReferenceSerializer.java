@@ -42,6 +42,7 @@ import org.eclipse.xtext.xbase.typesystem.references.StandardTypeReferenceOwner;
 import org.eclipse.xtext.xbase.typesystem.util.CommonTypeComputationServices;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 /**
  * @author Sven Efftinge - Initial contribution and API
@@ -52,7 +53,7 @@ public class TypeReferenceSerializer {
 	private Primitives primitives;
 	
 	@Inject 
-	private ILogicalContainerProvider contextProvider;
+	private Provider<ILogicalContainerProvider> contextProvider;
 	
 	@Inject
 	private ILocationInFileProvider locationProvider;
@@ -67,7 +68,7 @@ public class TypeReferenceSerializer {
 			return false;
 		if (context instanceof JvmDeclaredType && ((JvmDeclaredType) context).isStatic())
 			return false;
-		JvmIdentifiableElement jvmElement = contextProvider.getNearestLogicalContainer(context);
+		JvmIdentifiableElement jvmElement = contextProvider.get().getNearestLogicalContainer(context);
 		if (jvmElement != null) {
 			return isLocalTypeParameter(jvmElement, parameter);
 		}
