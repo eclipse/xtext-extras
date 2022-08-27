@@ -1,0 +1,74 @@
+/*******************************************************************************
+ * Copyright (c) 2022 Sebastian Zarnekow and others.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *******************************************************************************/
+package org.eclipse.xtext.builder.standalone.incremental;
+
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.eclipse.core.runtime.IPath;
+
+import com.google.common.hash.Funnels;
+import com.google.common.hash.HashCode;
+import com.google.common.hash.Hasher;
+import com.google.common.io.ByteStreams;
+import com.google.common.io.Files;
+import com.google.inject.Singleton;
+
+/**
+ * @author Sebastian Zarnekow - Initial contribution and API
+ */
+@Singleton
+public class ClasspathInfos {
+	
+	private ConcurrentHashMap<IPath, HashCode> hashes = new ConcurrentHashMap<>();
+	
+	public byte[] hashClassesOrJar(IPath path) {
+		return hashes.computeIfAbsent(path, any->{
+			if ("jar".equalsIgnoreCase(path.getFileExtension())) {
+				List<String> segments = Arrays.asList(path.segments());
+				if (segments.contains(".gradle")) {
+					String maybeHash = segments.get(segments.size() - 2);
+					if (maybeHash.length() >= 36) {
+						return BinaryFileHashing.hashFunction().hashString(maybeHash, StandardCharsets.ISO_8859_1);
+					}
+				}
+				// TODO mvn sha1
+				System.out.println(path);
+			} 
+			Hasher hasher = BinaryFileHashing.hashFunction().newHasher();
+			try (OutputStream hasherAsStream = Funnels.asOutputStream(hasher)) {
+				Files.fileTraverser().breadthFirst(path.toFile()).forEach(file -> {
+					if (file.isFile()) {
+						String fileName = file.getName().toLowerCase();
+						if (fileName.endsWith(".class") || fileName.endsWith(".jar")) {
+							try (InputStream in = new BufferedInputStream(new FileInputStream(file), 16384)) {
+								ByteStreams.copy(in, hasherAsStream);
+							} catch (IOException e) {
+								hasher.putBoolean(false);
+							}
+						}
+					}
+				});
+			} catch(IOException e) {
+				throw new RuntimeException(e);
+			}
+			return hasher.hash();
+			
+			
+		}).asBytes();
+	}
+	
+}
