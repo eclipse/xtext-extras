@@ -9,6 +9,7 @@
 package org.eclipse.xtext.builder.standalone.incremental;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IPath;
 
 import com.google.common.hash.Funnels;
@@ -33,6 +35,8 @@ import com.google.inject.Singleton;
 @Singleton
 public class ClasspathInfos {
 	
+	private static final Logger logger = Logger.getLogger(ClasspathInfos.class);
+	
 	private ConcurrentHashMap<IPath, HashCode> hashes = new ConcurrentHashMap<>();
 	
 	public byte[] hashClassesOrJar(IPath path) {
@@ -45,8 +49,15 @@ public class ClasspathInfos {
 						return BinaryFileHashing.hashFunction().hashString(maybeHash, StandardCharsets.ISO_8859_1);
 					}
 				}
-				// TODO mvn sha1
-				System.out.println(path);
+				File mavenSha1 = path.addFileExtension("sha1").toFile();
+				if (mavenSha1.isFile()) {
+					try {
+						byte[] bytes = java.nio.file.Files.readAllBytes(mavenSha1.toPath());
+						return BinaryFileHashing.hashFunction().hashBytes(bytes);
+					} catch (IOException e) {
+						logger.debug(e.getMessage(), e);
+					}
+				}
 			} 
 			Hasher hasher = BinaryFileHashing.hashFunction().newHasher();
 			try (OutputStream hasherAsStream = Funnels.asOutputStream(hasher)) {
