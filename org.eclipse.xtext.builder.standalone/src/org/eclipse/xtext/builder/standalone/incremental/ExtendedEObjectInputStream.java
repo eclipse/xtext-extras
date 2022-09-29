@@ -28,6 +28,7 @@ import com.google.common.hash.HashCode;
 
 /**
  * @author Sebastian Zarnekow - Initial contribution and API
+ * @since 2.29
  */
 public class ExtendedEObjectInputStream extends EObjectInputStream {
 
@@ -92,7 +93,7 @@ public class ExtendedEObjectInputStream extends EObjectInputStream {
 		return result;
 	}
 
-	private List<SerializableEObjectDescription> readEObjectDescriptions()
+	protected List<SerializableEObjectDescription> readEObjectDescriptions()
 			throws IOException {
 		int size = readCompressedInt();
 		if (size == 0) {
@@ -118,7 +119,7 @@ public class ExtendedEObjectInputStream extends EObjectInputStream {
 		return result;
 	}
 	
-	private List<SerializableReferenceDescription> readReferenceDescriptions()
+	protected List<SerializableReferenceDescription> readReferenceDescriptions()
 			throws IOException {
 		int size = readCompressedInt();
 		if (size == 0) {
@@ -138,7 +139,7 @@ public class ExtendedEObjectInputStream extends EObjectInputStream {
 		return result;
 	}
 	
-	private List<QualifiedName> readImportedNames() throws IOException {
+	protected List<QualifiedName> readImportedNames() throws IOException {
 		int size = readCompressedInt();
 		if (size == 0) {
 			return Collections.emptyList();

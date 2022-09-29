@@ -29,6 +29,7 @@ import com.google.common.hash.HashCode;
 
 /**
  * @author Sebastian Zarnekow - Initial contribution and API
+ * @since 2.29
  */
 public class ExtendedEObjectOutputStream extends EObjectOutputStream {
 
@@ -92,7 +93,7 @@ public class ExtendedEObjectOutputStream extends EObjectOutputStream {
 		writeImportedNames(description);
 	}
 
-	private void writeEObjectDescriptions(SerializableResourceDescription resourceDescription) throws IOException {
+	protected void writeEObjectDescriptions(SerializableResourceDescription resourceDescription) throws IOException {
 		List<SerializableEObjectDescription> objects = resourceDescription.getDescriptions();
 		writeCompressedInt(objects.size());
 		for (SerializableEObjectDescription object : objects) {
@@ -112,7 +113,7 @@ public class ExtendedEObjectOutputStream extends EObjectOutputStream {
 		}
 	}
 
-	private void writeReferenceDescriptions(SerializableResourceDescription resourceDescription) throws IOException {
+	protected void writeReferenceDescriptions(SerializableResourceDescription resourceDescription) throws IOException {
 		List<SerializableReferenceDescription> references = resourceDescription.getReferences();
 		writeCompressedInt(references.size());
 		for (SerializableReferenceDescription reference : references) {
@@ -124,7 +125,7 @@ public class ExtendedEObjectOutputStream extends EObjectOutputStream {
 		}
 	}
 
-	private void writeImportedNames(SerializableResourceDescription resourceDescription) throws IOException {
+	protected void writeImportedNames(SerializableResourceDescription resourceDescription) throws IOException {
 		List<QualifiedName> importedNames = Lists.newArrayList(resourceDescription.getImportedNames());
 		writeCompressedInt(importedNames.size());
 		for (QualifiedName importedName : importedNames) {
