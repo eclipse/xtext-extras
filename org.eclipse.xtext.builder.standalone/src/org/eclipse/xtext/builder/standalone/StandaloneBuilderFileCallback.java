@@ -48,7 +48,6 @@ public class StandaloneBuilderFileCallback implements IFileCallback {
 
 	protected void done() {
 		IPath[] prev = inputToGenFiles.remove(resourceURI);
-		
 		if (!generatedFiles.isEmpty()) {
 			inputToGenFiles.put(resourceURI, generatedFiles.toArray(new IPath[0]));
 			for(IPath generatedFile: generatedFiles) {
@@ -59,9 +58,11 @@ public class StandaloneBuilderFileCallback implements IFileCallback {
 		if (prev != null) {
 			for(IPath prevPath: prev) {
 				if (!generatedFiles.contains(prevPath)) {
-					prevPath.toFile().delete();
-					genFileToInput.remove(prevPath);
-					genFiles.remove(prevPath);
+					if (resourceURI.equals(genFileToInput.get(prevPath))) {
+						prevPath.toFile().delete();
+						genFileToInput.remove(prevPath);
+						genFiles.remove(prevPath);
+					}
 				}
 			}
 		}

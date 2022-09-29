@@ -9,7 +9,6 @@
 package org.eclipse.xtext.builder.standalone.incremental;
 
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
-import static java.nio.file.StandardOpenOption.CREATE_NEW;
 import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -94,21 +93,23 @@ public class IncrementalStandaloneBuilderTest {
 
 	@Test
 	public void testSingleLanguageCleanBuild() {
-		initBuilder(new ContentAssistFragmentTestLangConfiguration());
+		initBuilder(new TestLanguageConfiguration());
 		assertTrue(testBuilder.launch());
 		
 		assertEquals(1, testBuilder.getGenerateCalled());
 		assertEquals(2, testBuilder.getGenerateResources());
 
-		File javaFile = getFile("src-gen/my/test/First.java");
-		assertTrue(javaFile.exists());
-		javaFile = getFile("src-gen/my/test/Second.java");
-		assertTrue(javaFile.exists());
+		File out = getFile("src-gen/FirstObject.txt");
+		assertTrue(out.exists());
+		out = getFile("src-gen/SecondObjectA.txt");
+		assertTrue(out.exists());
+		out = getFile("src-gen/SecondObjectB.txt");
+		assertTrue(out.exists());
 	}
 	
 	@Test
 	public void testRelaunchWithoutChanges() {
-		initBuilder(new ContentAssistFragmentTestLangConfiguration());
+		initBuilder(new TestLanguageConfiguration());
 		assertTrue(testBuilder.launch());
 		
 		assertTrue(testBuilder.launch());
@@ -117,206 +118,79 @@ public class IncrementalStandaloneBuilderTest {
 
 	@Test
 	public void testRelaunchAfterDeleteOutputFile() {
-		initBuilder(new ContentAssistFragmentTestLangConfiguration());
+		initBuilder(new TestLanguageConfiguration());
 		assertTrue(testBuilder.launch());
 		
-		File javaFile = getFile("src-gen/my/test/First.java");
-		assertTrue(javaFile.exists());
-		javaFile.delete();
+		File out = getFile("src-gen/SecondObjectA.txt");
+		assertTrue(out.exists());
+		out.delete();
 
 		assertTrue(testBuilder.launch());
 		assertEquals(1, testBuilder.getGenerateResources());
-		assertTrue(javaFile.exists());
+		assertTrue(out.exists());
 	}
 	
-	@Test
-	public void testRelaunchAfterDeleteTraceFile() {
-		initBuilder(new ContentAssistFragmentTestLangConfiguration());
-		assertTrue(testBuilder.launch());
-		
-		File traceFile = getFile("src-gen/my/test/.First.java._trace");
-		assertTrue(traceFile.exists());
-		traceFile.delete();
-
-		assertTrue(testBuilder.launch());
-		assertEquals(1, testBuilder.getGenerateResources());
-		assertTrue(traceFile.exists());
-	}
-
 	@Test
 	public void testRelaunchAfterTinkeringWithOutputFile() throws IOException {
-		initBuilder(new ContentAssistFragmentTestLangConfiguration());
+		initBuilder(new TestLanguageConfiguration());
 		assertTrue(testBuilder.launch());
 		
-		File javaFile = getFile("src-gen/my/test/First.java");
-		assertTrue(javaFile.exists());
-		byte[] bytes = java.nio.file.Files.readAllBytes(javaFile.toPath());
-		java.nio.file.Files.write(javaFile.toPath(), Arrays.asList(""), ISO_8859_1, TRUNCATE_EXISTING);
+		File out = getFile("src-gen/SecondObjectB.txt");
+		assertTrue(out.exists());
+		byte[] bytes = java.nio.file.Files.readAllBytes(out.toPath());
+		java.nio.file.Files.write(out.toPath(), Arrays.asList(""), ISO_8859_1, TRUNCATE_EXISTING);
 
 		assertTrue(testBuilder.launch());
 		assertEquals(1, testBuilder.getGenerateResources());
-		assertTrue(javaFile.exists());
-		Assert.assertArrayEquals(bytes, java.nio.file.Files.readAllBytes(javaFile.toPath()));
-	}
-	
-	@Test
-	public void testRelaunchAfterTinkeringWithTraceFile() throws IOException {
-		initBuilder(new ContentAssistFragmentTestLangConfiguration());
-		assertTrue(testBuilder.launch());
-		
-		File traceFile = getFile("src-gen/my/test/.First.java._trace");
-		assertTrue(traceFile.exists());
-		byte[] bytes = java.nio.file.Files.readAllBytes(traceFile.toPath());
-		java.nio.file.Files.write(traceFile.toPath(), new byte[0], TRUNCATE_EXISTING);
-
-		assertTrue(testBuilder.launch());
-		assertEquals(1, testBuilder.getGenerateResources());
-		assertTrue(traceFile.exists());
-		Assert.assertArrayEquals(bytes, java.nio.file.Files.readAllBytes(traceFile.toPath()));
-	}
-	
-	@Test
-	public void testRelaunchAfterDeleteStubFile() throws IOException {
-		initBuilder(new ContentAssistFragmentTestLangConfiguration());
-		assertTrue(testBuilder.launch());
-		
-		File stubJavafile = getFile("tmp/stubs/my/test/Second.java");
-		assertTrue(stubJavafile.exists());
-		stubJavafile.delete();
-
-		assertTrue(testBuilder.launch());
-		assertEquals(1, testBuilder.getGenerateResources());
-		assertTrue(stubJavafile.exists());
-	}
-	
-	@Test
-	public void testRelaunchAfterDeleteStubClassFile() throws IOException {
-		initBuilder(new ContentAssistFragmentTestLangConfiguration());
-		assertTrue(testBuilder.launch());
-		
-		File stubClassFile = getFile("tmp/stub-classes/my/test/Second.class");
-		assertTrue(stubClassFile.exists());
-		stubClassFile.delete();
-
-		assertTrue(testBuilder.launch());
-		assertEquals(0, testBuilder.getGenerateResources());
-		assertTrue(stubClassFile.exists());
-		
-		stubClassFile = getFile("tmp/stub-classes/com/acme/BugsBunny.class");
-		assertTrue(stubClassFile.exists());
-		stubClassFile.delete();
-
-		assertTrue(testBuilder.launch());
-		assertEquals(0, testBuilder.getGenerateResources());
-		assertTrue(stubClassFile.exists());
-	}
-	
-	@Test
-	public void testRelaunchAfterChangeToReferencedJavaFile() throws IOException {
-		initBuilder(new ContentAssistFragmentTestLangConfiguration());
-		assertTrue(testBuilder.launch());
-		
-		File javaFile = getFile("src/com/acme/BugsBunny.java");
-		List<String> content = com.google.common.io.Files.readLines(javaFile, ISO_8859_1);
-		content.removeIf(s->s.contains("class Carrot {}"));
-		java.nio.file.Files.write(javaFile.toPath(), content, ISO_8859_1, TRUNCATE_EXISTING);
-
-		assertTrue(testBuilder.launch());
-		assertEquals(1, testBuilder.getGenerateResources());
-	}
-	
-	@Test
-	public void testRelaunchAfterChangeToIndirectlyReferencedJavaFile() throws IOException {
-		File modelFile = getFile("src/com/acme/First.contentassistfragmenttestlang");
-		java.nio.file.Files.write(modelFile.toPath(), Arrays.asList(
-				"{",
-				"  new com.acme.BugsBunny().singSomeSong()",
-				"  return null",
-				"}"), ISO_8859_1, TRUNCATE_EXISTING);
-		
-		initBuilder(new ContentAssistFragmentTestLangConfiguration());
-		assertTrue(testBuilder.launch());
-		
-		File javaFile = getFile("src/com/acme/LoonyToon.java");
-		List<String> content = com.google.common.io.Files.readLines(javaFile, ISO_8859_1);
-		content.replaceAll(s->{
-			if (s.contains("singSomeSong")) {
-				return s.replace("singSomeSong", "_singSomeSong");
-			}
-			return s;
-		});
-		java.nio.file.Files.write(javaFile.toPath(), content,ISO_8859_1,  TRUNCATE_EXISTING);
-
-		assertFalse(testBuilder.launch());
-		assertEquals(1, testBuilder.getGenerateResources());
-		
-		content.replaceAll(s->{
-			if (s.contains("_singSomeSong")) {
-				return s.replace("_singSomeSong", "singSomeSong");
-			}
-			return s;
-		});
-		java.nio.file.Files.write(javaFile.toPath(), content,ISO_8859_1,  TRUNCATE_EXISTING);
-		
-		assertTrue(testBuilder.launch());
-		assertEquals(1, testBuilder.getGenerateResources());
-	}
-	
-	@Test
-	public void testRelaunchAfterChangeToIndependentJavaFile() throws IOException {
-		initBuilder(new ContentAssistFragmentTestLangConfiguration());
-		assertTrue(testBuilder.launch());
-		
-		File javaFile = getFile("src/com/acme/Tweety.java");
-		List<String> content = com.google.common.io.Files.readLines(javaFile, ISO_8859_1);
-		content.removeIf(s->s.contains("chirp"));
-		java.nio.file.Files.write(javaFile.toPath(), content, ISO_8859_1, TRUNCATE_EXISTING);
-
-		assertTrue(testBuilder.launch());
-		assertEquals(0, testBuilder.getGenerateResources());
+		assertTrue(out.exists());
+		Assert.assertArrayEquals(bytes, java.nio.file.Files.readAllBytes(out.toPath()));
 	}
 	
 	@Test
 	public void testRelaunchAfterDeleteModelFile() throws IOException {
-		initBuilder(new ContentAssistFragmentTestLangConfiguration());
+		initBuilder(new TestLanguageConfiguration());
 		assertTrue(testBuilder.launch());
 		
-		File modelFile = getFile("src/com/acme/Second.contentassistfragmenttestlang");
+		File modelFile = getFile("src/Second.buildertestlanguage");
 		assertTrue(modelFile.delete());
 
 		assertTrue(testBuilder.launch());
 		assertEquals(0, testBuilder.getGenerateResources());
 		
-		File stubClassFile = getFile("tmp/stub-classes/my/test/Second.class");
-		assertFalse(stubClassFile.exists());
-		File genJavaFile = getFile("src-gen/my/test/Second.java");
-		assertFalse(genJavaFile.exists());
+		File out = getFile("src-gen/SecondObjectA.txt");
+		assertFalse(out.exists());
+		out = getFile("src-gen/SecondObjectB.txt");
+		assertFalse(out.exists());
 	}
 	
 	@Test
-	public void testRelaunchAfterDeleteReferencedModelFile() throws IOException {
-		initBuilder(new ContentAssistFragmentTestLangConfiguration());
+	public void testRelaunchAfterMoveModelElement() throws IOException {
+		initBuilder(new TestLanguageConfiguration());
 		assertTrue(testBuilder.launch());
 		
-		File modelFile = getFile("src/com/acme/First.contentassistfragmenttestlang");
-		assertTrue(modelFile.delete());
+		File firstModel = getFile("src/First.buildertestlanguage");
+		File secondModel = getFile("src/Second.buildertestlanguage");
+		
+		File firstOut = getFile("src-gen/FirstObject.txt");
+		List<String> outputContent = com.google.common.io.Files.readLines(firstOut, ISO_8859_1);
+		
+		java.nio.file.Files.write(firstModel.toPath(), Arrays.asList("object NewObject"), ISO_8859_1,  TRUNCATE_EXISTING);
 
-		File genJavaFile = getFile("src-gen/my/test/Second.java");
-		List<String> genContent = com.google.common.io.Files.readLines(genJavaFile, ISO_8859_1);
-		assertFalse(genContent.stream().filter(s->s.contains("new Object()")).findFirst().isPresent());
+		List<String> secondContent = com.google.common.io.Files.readLines(secondModel, ISO_8859_1);
+		secondContent.replaceAll(s->{
+			if (s.contains("object SecondObjectB references Namespace.SecondObjectA")) {
+				return s.replace("SecondObjectB", "FirstObject");
+			}
+			return s;
+		});
+		java.nio.file.Files.write(secondModel.toPath(), secondContent, ISO_8859_1,  TRUNCATE_EXISTING);
 		
-		assertFalse(testBuilder.launch());
-		assertEquals(1, testBuilder.getGenerateResources());
-		
-		genContent = com.google.common.io.Files.readLines(genJavaFile, ISO_8859_1);
-		assertTrue(genContent.stream().filter(s->s.contains("new Object()")).findFirst().isPresent());
-		
-		java.nio.file.Files.write(modelFile.toPath(), Arrays.asList("{}"),ISO_8859_1,  CREATE_NEW);
 		assertTrue(testBuilder.launch());
 		assertEquals(2, testBuilder.getGenerateResources());
 		
-		genContent = com.google.common.io.Files.readLines(genJavaFile, ISO_8859_1);
-		assertFalse(genContent.stream().filter(s->s.contains("new Object()")).findFirst().isPresent());
+		assertTrue(firstOut.exists());
+		List<String> newOutputContent = com.google.common.io.Files.readLines(firstOut, ISO_8859_1);
+		assertFalse(outputContent.equals(newOutputContent));
 	}
 
 	private File getFile(String projectRelativePath) {
@@ -349,14 +223,12 @@ public class IncrementalStandaloneBuilderTest {
 		return testBuilder;
 	}
 
-	public static class ContentAssistFragmentTestLangConfiguration implements ILanguageConfiguration {
+	public static class TestLanguageConfiguration implements ILanguageConfiguration {
 
-		public ContentAssistFragmentTestLangConfiguration() {
-		}
-
+		/* @NonNull */
 		@Override
 		public String getSetup() {
-			return "org.eclipse.xtext.xbase.testlanguages.ContentAssistFragmentTestLangStandaloneSetup";
+			return "org.eclipse.xtext.builder.tests.BuilderTestLanguageStandaloneSetup";
 		}
 
 		@Override
@@ -368,7 +240,7 @@ public class IncrementalStandaloneBuilderTest {
 
 		@Override
 		public boolean isJavaSupport() {
-			return true;
+			return false;
 		}
 	}
 }

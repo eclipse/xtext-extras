@@ -193,22 +193,8 @@ class StandaloneBuilderState {
 				index.removeDescription(removed);
 			}
 			issues.removeAll(removed);
-			IPath[] outputFiles = inputToOutputFiles.remove(removed);
-			if (outputFiles != null) {
-				for (IPath outputFile : outputFiles) {
-					outputFile.toFile().delete();
-					outputToInputFile.remove(outputFile);
-					this.outputFiles.remove(outputFile);
-				}
-			}
-			IPath[] stubFiles = inputToStubFiles.remove(removed);
-			if (stubFiles != null) {
-				for (IPath stubFile : stubFiles) {
-					stubFile.toFile().delete();
-					stubToInputFile.remove(stubFile);
-					this.stubFiles.remove(stubFile);
-				}
-			}
+			processRemovedFiles(removed, inputToOutputFiles, outputToInputFile, outputFiles);
+			processRemovedFiles(removed, inputToStubFiles, stubToInputFile, stubFiles);
 		}
 		accumulator.addAll(difference.entriesOnlyOnRight().keySet());
 		accumulator.addAll(difference.entriesDiffering().keySet());
@@ -216,6 +202,18 @@ class StandaloneBuilderState {
 		originalFiles.clear();
 		originalFiles.putAll(newFiles);
 		return new ResourceDescriptionChangeEvent(deltas);
+	}
+
+	private void processRemovedFiles(URI removed, Map<URI, IPath[]> inputToOutput, Map<IPath, URI> outputToInput,
+			Map<IPath, HashCode> outputHashes) {
+		IPath[] outputFiles = inputToOutput.remove(removed);
+		if (outputFiles != null) {
+			for (IPath outputFile : outputFiles) {
+				outputFile.toFile().delete();
+				outputToInput.remove(outputFile);
+				outputHashes.remove(outputFile);
+			}
+		}
 	}
 
 	private HashCode hash(URI resource) {
