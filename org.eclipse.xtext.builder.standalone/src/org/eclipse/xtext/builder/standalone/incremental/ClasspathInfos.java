@@ -37,6 +37,8 @@ public class ClasspathInfos {
 	
 	private static final Logger logger = Logger.getLogger(ClasspathInfos.class);
 	
+	private static final int _16_KB = 16384;
+	
 	private ConcurrentHashMap<IPath, HashCode> hashes = new ConcurrentHashMap<>();
 	
 	public byte[] hashClassesOrJar(IPath path) {
@@ -65,7 +67,7 @@ public class ClasspathInfos {
 					if (file.isFile()) {
 						String fileName = file.getName().toLowerCase();
 						if (fileName.endsWith(".class") || fileName.endsWith(".jar")) {
-							try (InputStream in = new BufferedInputStream(new FileInputStream(file), 16384)) {
+							try (InputStream in = new BufferedInputStream(new FileInputStream(file), _16_KB)) {
 								ByteStreams.copy(in, hasherAsStream);
 							} catch (IOException e) {
 								hasher.putBoolean(false);
