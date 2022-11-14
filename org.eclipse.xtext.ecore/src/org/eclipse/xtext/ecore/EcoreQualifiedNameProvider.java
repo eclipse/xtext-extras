@@ -8,18 +8,17 @@
  *******************************************************************************/
 package org.eclipse.xtext.ecore;
 
-import java.util.Collections;
-
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EEnumLiteral;
+import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.util.EcoreSwitch;
 import org.eclipse.xtext.naming.IQualifiedNameProvider;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.util.IResourceScopeCache;
-import org.eclipse.xtext.util.PolymorphicDispatcher;
 import org.eclipse.xtext.util.Strings;
 import org.eclipse.xtext.util.Tuples;
 
@@ -31,14 +30,6 @@ import com.google.inject.Provider;
  */
 public class EcoreQualifiedNameProvider extends IQualifiedNameProvider.AbstractImpl {
 
-	private PolymorphicDispatcher<String> nameDispatcher = new PolymorphicDispatcher<String>("name", 1, 1,
-			Collections.singletonList(this), PolymorphicDispatcher.NullErrorHandler.<String> get()) {
-		@Override
-		protected String handleNoSuchMethod(Object... params) {
-			return null;
-		}
-	};
-
 	@Inject
 	private IResourceScopeCache cache = IResourceScopeCache.NullImpl.INSTANCE;
 
@@ -49,7 +40,28 @@ public class EcoreQualifiedNameProvider extends IQualifiedNameProvider.AbstractI
 			@Override
 			public QualifiedName get() {
 				EObject temp = obj;
-				String name = nameDispatcher.invoke(temp);
+				String name = new EcoreSwitch<String>() {
+					@Override
+					public String caseEPackage(EPackage object) {
+						return name(object);
+					}
+					@Override
+					public String caseEClassifier(EClassifier object) {
+						return name(object);
+					}
+					@Override
+					public String caseEStructuralFeature(EStructuralFeature object) {
+						return name(object);
+					}
+					@Override
+					public String caseEEnumLiteral(EEnumLiteral object) {
+						return name(object);
+					}
+					@Override
+					public String caseEOperation(EOperation object) {
+						return name(object);
+					}
+				}.doSwitch(temp);
 				if (Strings.isEmpty(name))
 					return null;
 				QualifiedName qualifiedName = QualifiedName.create(name);
@@ -74,22 +86,31 @@ public class EcoreQualifiedNameProvider extends IQualifiedNameProvider.AbstractI
 	}
 
 	protected String name(EPackage ePackage) {
-		return ePackage.getName();
+		return defaultName(ePackage);
 	}
 
 	protected String name(EClassifier eClassifier) {
-		return eClassifier.getName();
+		return defaultName(eClassifier);
 	}
 
 	protected String name(EStructuralFeature eStructuralFeature) {
-		return eStructuralFeature.getName();
+		return defaultName(eStructuralFeature);
 	}
 
 	protected String name(EEnumLiteral enumLiteral) {
-		return enumLiteral.getName();
+		return defaultName(enumLiteral);
 	}
 
 	protected String name(EOperation eOperation) {
-		return eOperation.getName();
+		return defaultName(eOperation);
+	}
+
+	/**
+	 * Default implementation: simply returns {@link ENamedElement#getName()}.
+	 * 
+	 * @since 2.29
+	 */
+	protected String defaultName(ENamedElement element) {
+		return element.getName();
 	}
 }
