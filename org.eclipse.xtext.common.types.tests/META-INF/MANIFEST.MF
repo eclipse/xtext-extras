@@ -18,7 +18,8 @@ Require-Bundle: org.eclipse.xtext.testing,
  org.eclipse.emf.common;bundle-version="2.24.0",
  org.eclipse.xtext.xbase.testdata,
  org.hamcrest.core;bundle-version="1.3.0",
- org.eclipse.xtext.xtext.generator;bundle-version="2.30.0"
+ org.eclipse.xtext.xtext.generator;bundle-version="2.30.0",
+ com.google.errorprone.error_prone_annotations;bundle-version="2.3.4"
 Export-Package: org.eclipse.xtext.common.types,
  org.eclipse.xtext.common.types.access,
  org.eclipse.xtext.common.types.access.impl,
