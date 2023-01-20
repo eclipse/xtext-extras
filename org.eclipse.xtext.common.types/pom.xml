@@ -7,8 +7,10 @@
 	</parent>
 	<artifactId>org.eclipse.xtext.common.types</artifactId>
 	<packaging>eclipse-plugin</packaging>
+
 	<name>Common Types Runtime Library</name>
 	<description>JVM type model used by Xbase and other languages.</description>
+
 	<dependencies>
 		<!--
 		TODO: update it
