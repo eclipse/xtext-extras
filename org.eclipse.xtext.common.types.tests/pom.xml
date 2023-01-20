@@ -114,9 +114,6 @@
 						<configuration>
 							<resources>
 								<resource>
-									<directory>src</directory>
-								</resource>
-								<resource>
 									<directory>src-gen</directory>
 								</resource>
 								<resource>
