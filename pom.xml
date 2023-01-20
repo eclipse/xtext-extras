@@ -179,6 +179,7 @@
 		<module>org.eclipse.xtext.common.types.tests</module>
 		<module>org.eclipse.xtext.ecore</module>
 		<module>org.eclipse.xtext.xbase</module>
+		<module>org.eclipse.xtext.builder.standalone</module>
 		<module>org.eclipse.xtext.xbase.testdata</module>
 	</modules>
 
