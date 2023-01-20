@@ -182,6 +182,7 @@
 		<module>org.eclipse.xtext.xbase.testlanguages</module>
 		<module>org.eclipse.xtext.builder.standalone</module>
 		<module>org.eclipse.xtext.xbase.testdata</module>
+		<module>org.eclipse.xtext.builder.standalone.tests</module>
 		<module>org.eclipse.xtext.common.types.tests</module>
 	</modules>
 
