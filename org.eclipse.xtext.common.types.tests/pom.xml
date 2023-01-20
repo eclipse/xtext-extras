@@ -11,6 +11,12 @@
 	<name>Common Types Runtime Library Tests</name>
 	<description>JVM type model used by Xbase and other languages.</description>
 
+	<!--
+	This should be a pure Maven project (packaging "jar", not "eclipse-plugin",
+	so that it behaves as in Eclipse and classpaths and classloaders work
+	correctly.
+	-->
+
 	<dependencies>
 		<!--
 		TODO: update it
@@ -105,7 +111,14 @@
 							and to Xtext files like .xtendbin
 							to be on the classpath; but they are not automatically copied in the target
 							folder by default by the maven-compiler-plugin:
-							we must specify them as resources so that maven-resources-plugin will copy them -->
+							we must specify them as resources so that maven-resources-plugin will copy them.
+							Otherwise, there will be failure errors, e.g., in JarReflectionTypeProviderTest
+							of the shape:
+							"1) [Guice/ErrorInjectingConstructor]:
+							WrappedException: ClasspathUriResolutionException:
+							FileNotFoundOnClasspathException:
+							Couldn't find resource on classpath.
+							URI was 'classpath:/org/eclipse/xtext/common/types/xtext/ui/RefactoringTestLanguage.xmi'" -->
 						<id>add-test-resources</id>
 						<phase>initialize</phase>
 						<goals>
