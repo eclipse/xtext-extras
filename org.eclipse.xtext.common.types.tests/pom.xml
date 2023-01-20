@@ -102,6 +102,7 @@
 								<source>src-gen</source>
 								<source>testdata</source>
 								<source>tests</source>
+								<source>longrunning/src</source>
 							</sources>
 						</configuration>
 					</execution>
