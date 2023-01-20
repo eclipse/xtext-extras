@@ -175,6 +175,7 @@
 
 	<modules>
 		<module>org.eclipse.xtext.common.types</module>
+		<module>org.eclipse.xtext.ecore</module>
 	</modules>
 
 	<profiles>
