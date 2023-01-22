@@ -6,21 +6,8 @@
 		<version>2.30.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>org.eclipse.xtext.purexbase.tests</artifactId>
-	<packaging>eclipse-plugin</packaging>
+	<packaging>eclipse-test-plugin</packaging>
 
 	<name>Pure Xbase Runtime Tests</name>
 
-	<!--
-	This is an "eclipse-plugin" project so the tests are executed
-	with maven-surefire-plugin, NOT tycho-surefire-plugin
-	-->
-
-	<dependencies>
-		<!-- required to let maven-surefire-plugin select
-			the JUnit4Provider -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-		</dependency>
-	</dependencies>
 </project>
