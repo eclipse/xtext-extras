@@ -17,7 +17,8 @@ Require-Bundle: org.eclipse.xtext.xbase,
  org.eclipse.xtext.xbase.testlanguages,
  org.eclipse.core.runtime;bundle-version="3.24.100",
  org.eclipse.xtext.xbase.testdata,
- org.eclipse.xtext.xbase.ide
+ org.eclipse.xtext.xbase.ide,
+ org.junit;bundle-version="4.13.2"
 Bundle-Vendor: Eclipse Xtext
 Export-Package: org.eclipse.xtext.xbase.tests,
  org.eclipse.xtext.xbase.tests.interpreter
