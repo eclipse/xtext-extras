@@ -175,6 +175,7 @@
 	</dependencyManagement>
 
 	<modules>
+		<module>org.eclipse.xtext.smap</module>
 		<module>org.eclipse.xtext.common.types</module>
 		<module>org.eclipse.xtext.ecore</module>
 		<module>org.eclipse.xtext.xbase</module>
