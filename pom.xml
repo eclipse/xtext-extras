@@ -195,6 +195,7 @@
 		<module>org.eclipse.xtext.extras.tests</module>
 		<module>org.eclipse.xtext.builder.standalone.tests</module>
 		<module>org.eclipse.xtext.common.types.tests</module>
+		<module>org.eclipse.xtext.extras.p2repository</module>
 	</modules>
 
 	<profiles>
