@@ -178,6 +178,7 @@
 		<module>org.eclipse.xtext.common.types</module>
 		<module>org.eclipse.xtext.ecore</module>
 		<module>org.eclipse.xtext.xbase</module>
+		<module>org.eclipse.xtext.xbase.ide</module>
 		<module>org.eclipse.xtext.xbase.testing</module>
 		<module>org.eclipse.xtext.xbase.testlanguages</module>
 		<module>org.eclipse.xtext.builder.standalone</module>
