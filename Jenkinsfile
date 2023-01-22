@@ -45,23 +45,11 @@ pipeline {
       }
     }
 
-    stage('Gradle Build') {
-      steps {
-        sh './1-gradle-build.sh'
-      }
-    }
-    
     stage('Maven Build & Test') {
       stages {
         stage('Maven Build') {
           steps {
             sh './2-maven-build.sh'
-          }
-        }
-        
-        stage('Long Running Tests') {
-          steps {
-            sh './3-gradle-longrunning-tests.sh'
           }
         }
       }
@@ -70,7 +58,7 @@ pipeline {
 
   post {
     always {
-      junit testResults: '**/build/test-results/test/*.xml, **/build/test-results/longrunningTest/*.xml'
+      junit testResults: '**/target/surefire-reports/*.xml'
     }
     success {
       archiveArtifacts artifacts: 'build/**'
