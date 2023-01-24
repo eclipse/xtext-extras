@@ -66,5 +66,11 @@
 	<bundle id="org.eclipse.xtext.xbase.testing.source" version="0.0.0">
 		<category name="xtext-extras"/>
 	</bundle>
-   <category-def name="xtext-extras" label="Xtext-extras"/>
+	<bundle id="org.eclipse.xtext.xbase.testlanguages" version="0.0.0">
+		<category name="xtext-extras"/>
+	</bundle>
+	<bundle id="org.eclipse.xtext.xbase.testlanguages.source" version="0.0.0">
+		<category name="xtext-extras"/>
+	</bundle>
+	<category-def name="xtext-extras" label="Xtext-extras"/>
 </site>
