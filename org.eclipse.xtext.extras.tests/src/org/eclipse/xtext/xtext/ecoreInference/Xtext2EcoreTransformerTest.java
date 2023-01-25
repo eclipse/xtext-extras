@@ -88,15 +88,6 @@ public class Xtext2EcoreTransformerTest extends AbstractXtextTests {
 	@Override
 	public XtextResource doGetResource(InputStream in, URI uri) throws Exception {
 		XtextResourceSet rs = get(XtextResourceSet.class);
-		Map<URI, URI> uriMap = rs.getURIConverter().getURIMap();
-		uriMap.put(URI.createPlatformPluginURI("org.eclipse.xtext/", false), URI.createURI("classpath:/"));
-		uriMap.put(URI.createPlatformPluginURI("org.eclipse.xtext.xbase/", false), URI.createURI("classpath:/"));
-		uriMap.put(URI.createPlatformPluginURI("org.eclipse.xtext.common.types/", false), URI.createURI("classpath:/"));
-		uriMap.put(URI.createPlatformPluginURI("org.eclipse.emf.ecore/", false), URI.createURI("classpath:/"));
-		uriMap.put(URI.createPlatformResourceURI("org.eclipse.xtext.xbase/", false), URI.createURI("classpath:/"));
-		uriMap.put(URI.createPlatformResourceURI("org.eclipse.emf.ecore/", false), URI.createURI("classpath:/"));
-		uriMap.put(URI.createPlatformResourceURI("org.eclipse.xtext.common.types/", false),
-				URI.createURI("classpath:/"));
 		rs.setClasspathURIContext(getClass());
 		XtextResource resource = ((XtextResource) getResourceFactory().createResource(uri));
 		rs.getResources().add(resource);
@@ -222,7 +213,6 @@ public class Xtext2EcoreTransformerTest extends AbstractXtextTests {
 		uriMap.put(URI.createPlatformPluginURI("org.eclipse.xtext/", false), URI.createURI("classpath:/"));
 		uriMap.put(URI.createPlatformPluginURI("org.eclipse.xtext.xbase/", false), URI.createURI("classpath:/"));
 		uriMap.put(URI.createPlatformPluginURI("org.eclipse.xtext.common.types/", false), URI.createURI("classpath:/"));
-		uriMap.put(URI.createPlatformPluginURI("org.eclipse.emf.ecore/", false), URI.createURI("classpath:/"));
 		uriMap.put(URI.createPlatformPluginURI("org.eclipse.xtext.tests/src/", false), URI.createURI("classpath:/"));
 		uriMap.put(URI.createPlatformResourceURI("org.eclipse.xtext.xbase/", false), URI.createURI("classpath:/"));
 		uriMap.put(URI.createPlatformResourceURI("org.eclipse.emf.ecore/", false), URI.createURI("classpath:/"));
