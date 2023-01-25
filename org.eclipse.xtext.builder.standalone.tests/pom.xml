@@ -6,7 +6,7 @@
 		<version>2.30.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>org.eclipse.xtext.builder.standalone.tests</artifactId>
-	<packaging>eclipse-plugin</packaging>
+	<packaging>eclipse-test-plugin</packaging>
 
 	<name>Xtext Standalone Builder Tests</name>
 	<description>Builder infrastructure for Xtext Tests.</description>
