@@ -97,9 +97,6 @@ public class Xtext2EcoreTransformerTest extends AbstractXtextTests {
 		uriMap.put(URI.createPlatformResourceURI("org.eclipse.emf.ecore/", false), URI.createURI("classpath:/"));
 		uriMap.put(URI.createPlatformResourceURI("org.eclipse.xtext.common.types/", false),
 				URI.createURI("classpath:/"));
-		// this is required to let testBug346035_01 resolve the platform:/resource uri
-		uriMap.put(URI.createPlatformResourceURI("org.xtext.example.myhellotestdsl/", false),
-				URI.createURI("classpath:/"));
 		rs.setClasspathURIContext(getClass());
 		XtextResource resource = ((XtextResource) getResourceFactory().createResource(uri));
 		rs.getResources().add(resource);
@@ -210,10 +207,10 @@ public class Xtext2EcoreTransformerTest extends AbstractXtextTests {
 		// @formatter:off
 		String grammarAsString = 
 			"grammar test with org.eclipse.xtext.common.Terminals\n" +
-			"import 'platform:/resource/org.xtext.example.myhellotestdsl/model/MyHelloTestDsl.ecore' as myecore\n" +
-			"generate myDsl 'uri'\n" +
-			"Model: greetings+=Greeting*;\n" +
-			"Greeting returns myecore::MyGreeting : 'Hello' myTestName=ID '!';\n";
+			"import 'platform:/resource/org.eclipse.xtext.xbase/model/Xbase.ecore' as xbase\n" +
+			"generate myDsl 'uri'\n" + "Model: elements+=Element*;\n" +
+			"Element returns xbase::XExpression : {Element} 'Hello';\n" +
+			"terminal ID : '^'?('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'0'..'9')*;\n";
 		// @formatter:on
 		getResourceFromString(grammarAsString);
 	}
