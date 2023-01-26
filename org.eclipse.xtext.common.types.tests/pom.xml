@@ -109,7 +109,7 @@
 					<execution>
 						<!-- Tests need files like
 							/org.eclipse.xtext.common.types.tests/tests/org/eclipse/xtext/common/types/testSetups/testData.jar
-							and to Xtext files like .xtendbin
+							and to Xtext files like .xtextbin
 							to be on the classpath; but they are not automatically copied in the target
 							folder by default by the maven-compiler-plugin:
 							we must specify them as resources so that maven-resources-plugin will copy them.
