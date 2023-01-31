@@ -12,14 +12,10 @@
 	<description>JVM type model used by Xbase and other languages.</description>
 
 	<dependencies>
-		<!--
-		TODO: update it
-		This should be in the same Git repository of this one
-		-->
 		<dependency>
 			<groupId>org.eclipse.xtext</groupId>
 			<artifactId>org.eclipse.xtext</artifactId>
-			<version>${xtext-current-release-version}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.ow2.asm</groupId>
