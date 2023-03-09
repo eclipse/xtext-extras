@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012 itemis AG (http://www.itemis.eu) and others.
+ * Copyright (c) 2012, 2023 itemis AG (http://www.itemis.eu) and others.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -8,6 +8,7 @@
  *******************************************************************************/
 package org.eclipse.xtext.xbase.typesystem.internal;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
@@ -54,12 +55,14 @@ import org.eclipse.xtext.xbase.validation.IssueCodes;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import com.google.common.hash.HashCode;
+import com.google.common.hash.Hashing;
 
 /**
- * @author Sebastian Zarnekow - Initial contribution and API
- * @author Moritz Eysholdt
+ * Base implementation of {@link ITypeComputationState}.
  * 
- * TODO JavaDoc
+ * @author Sebastian Zarnekow - Initial contribution and API
+ * @author Moritz Eysholdt - Validation for checked exceptions
  */
 public abstract class AbstractTypeComputationState implements ITypeComputationState {
 	protected final ResolvedTypes resolvedTypes;
@@ -67,7 +70,6 @@ public abstract class AbstractTypeComputationState implements ITypeComputationSt
 	private final DefaultReentrantTypeResolver reentrantTypeResolver;
 	private List<AbstractTypeExpectation> expectations;
 	
-	// is this field actually used?
 	private List<AbstractTypeExpectation> returnExpectations;
 	
 	protected AbstractTypeComputationState(ResolvedTypes resolvedTypes,
@@ -137,10 +139,6 @@ public abstract class AbstractTypeComputationState implements ITypeComputationSt
 		return new ExpressionTypeComputationState(typeResolution, featureScopeSession, this, expression);
 	}
 	
-	/*
-	 * Clients who override this method have to be careful with AbstractPendingLinkingCandidate#computeArgumentTypes where
-	 * a subtype of TypeComputationStateWithExpectation is used.
-	 */
 	@Override
 	public TypeComputationStateWithExpectation withExpectation(/* @Nullable */ LightweightTypeReference expectation) {
 		return new TypeComputationStateWithExpectation(resolvedTypes, featureScopeSession, this, expectation);
@@ -326,7 +324,6 @@ public abstract class AbstractTypeComputationState implements ITypeComputationSt
 		return expectations;
 	}
 	
-	//TODO not referenced
 	protected final List<? extends ITypeExpectation> getReturnExpectations() {
 		if (returnExpectations == null)
 			returnExpectations = getReturnExpectations(this, false);
@@ -407,18 +404,78 @@ public abstract class AbstractTypeComputationState implements ITypeComputationSt
 				return type;
 			}
 		};
-		Iterable<IEObjectDescription> descriptions = reentrantTypeResolver.getScopeProviderAccess().getCandidateDescriptions(
-				featureCall, XbasePackage.Literals.XABSTRACT_FEATURE_CALL__FEATURE, proxyOrResolved, featureScopeSession, demandResolvedTypes);
+		List<IIdentifiableElementDescription> descriptions = getDescriptions(featureCall, proxyOrResolved, demandResolvedTypes);
+		HashCode allDescriptionsHash = Hashing.murmur3_128().hashUnencodedChars(descriptions.toString());
 		List<IFeatureLinkingCandidate> resultList = Lists.newArrayList();
-		for(IEObjectDescription description: descriptions) {
-			resultList.add(createCandidate(featureCall, demandComputedTypes, toIdentifiableDescription(description)));
+		AbstractPendingLinkingCandidate<?> previouslyResolved = resolvedTypes.forwardLinking(featureCall);
+		for(IIdentifiableElementDescription description: descriptions) {
+			IFeatureLinkingCandidate candidate = createCandidate(featureCall, demandComputedTypes, description);
+			if (candidate instanceof AbstractPendingLinkingCandidate<?>) {
+				AbstractPendingLinkingCandidate<?> casted = (AbstractPendingLinkingCandidate<?>) candidate;
+				casted.setAllDescriptionsHash(allDescriptionsHash);
+				if (matches(previouslyResolved, casted)) {
+					return Collections.singletonList(candidate);
+				}
+			}
+			resultList.add(candidate);
 		}
 		if (resultList.isEmpty()) {
 			resultList.add(new NullFeatureLinkingCandidate(featureCall, this));
 		}
 		return resultList;
 	}
+
+	private List<IIdentifiableElementDescription> getDescriptions(XAbstractFeatureCall featureCall,
+			EObject proxyOrResolved, ForwardingResolvedTypes demandResolvedTypes) {
+		List<IIdentifiableElementDescription> result = new ArrayList<>(8);
+		for (IEObjectDescription description : reentrantTypeResolver.getScopeProviderAccess().getCandidateDescriptions(
+				featureCall, XbasePackage.Literals.XABSTRACT_FEATURE_CALL__FEATURE, proxyOrResolved,
+				featureScopeSession, demandResolvedTypes)) {
+			result.add(toIdentifiableDescription(description));
+		}
+		return result;
+	}
+
+	private boolean matches(AbstractPendingLinkingCandidate<?> previouslyResolved, AbstractPendingLinkingCandidate<?> candidate) {
+		if (previouslyResolved == null) {
+			return false;
+		}
+		if (!previouslyResolved.getClass().equals(candidate.getClass())) {
+			return false;
+		}
+		IIdentifiableElementDescription prevDescription = previouslyResolved.description;
+		IIdentifiableElementDescription description = candidate.description;
+		if (!prevDescription.getShadowingKey().equals(description.getShadowingKey())) {
+			return false;
+		}
+		if (!previouslyResolved.getAllDescriptionsHash().equals(candidate.getAllDescriptionsHash())) {
+			return false;
+		}
+		if (!prevDescription.getElementOrProxy().equals(description.getElementOrProxy())) {
+			return false;
+		}
+		if (!equalTypes(prevDescription.getSyntacticReceiverType(), description.getSyntacticReceiverType())) {
+			return false;
+		}
+		if (!equalTypes(prevDescription.getImplicitReceiverType(), description.getImplicitReceiverType())) {
+			return false;
+		}
+		if (!equalTypes(prevDescription.getImplicitFirstArgumentType(), description.getImplicitFirstArgumentType())) {
+			return false;
+		}
+		return true;
+	}
 	
+	private boolean equalTypes(LightweightTypeReference left, LightweightTypeReference right) {
+		if (left == right) {
+			return true;
+		}
+		if (left == null || right == null) {
+			return false;
+		}
+		return left.getUniqueIdentifier().equals(right.getUniqueIdentifier());
+	}
+
 	protected IFeatureLinkingCandidate createResolvedLink(XAbstractFeatureCall featureCall, JvmIdentifiableElement resolvedTo) {
 		ExpressionAwareStackedResolvedTypes resolvedTypes = this.resolvedTypes.pushTypes(featureCall);
 		ExpressionTypeComputationState state = createExpressionComputationState(featureCall, resolvedTypes);
@@ -532,16 +589,36 @@ public abstract class AbstractTypeComputationState implements ITypeComputationSt
 			return Collections.singletonList(result);
 		}
 		EObject proxyOrResolved = (EObject) constructorCall.eGet(XbasePackage.Literals.XCONSTRUCTOR_CALL__CONSTRUCTOR, false);
-		Iterable<IEObjectDescription> descriptions = reentrantTypeResolver.getScopeProviderAccess().getCandidateDescriptions(
-				constructorCall, XbasePackage.Literals.XCONSTRUCTOR_CALL__CONSTRUCTOR, proxyOrResolved, featureScopeSession, resolvedTypes);
+		List<IIdentifiableElementDescription> descriptions = getDescriptions(constructorCall, proxyOrResolved);
+		HashCode allDescriptionsHash = Hashing.murmur3_128().hashUnencodedChars(descriptions.toString());
 		List<IConstructorLinkingCandidate> resultList = Lists.newArrayList();
+		AbstractPendingLinkingCandidate<?> previouslyResolved = resolvedTypes.forwardLinking(constructorCall);
 		for(IEObjectDescription description: descriptions) {
-			resultList.add(createCandidate(constructorCall, toIdentifiableDescription(description)));
+			IConstructorLinkingCandidate candidate = createCandidate(constructorCall, toIdentifiableDescription(description));
+			if (candidate instanceof AbstractPendingLinkingCandidate<?>) {
+				AbstractPendingLinkingCandidate<?> casted = (AbstractPendingLinkingCandidate<?>) candidate;
+				casted.setAllDescriptionsHash(allDescriptionsHash);
+				if (matches(previouslyResolved, casted)) {
+					return Collections.singletonList(candidate);
+				}
+			}
+			resultList.add(candidate);
 		}
 		if (resultList.isEmpty()) {
 			resultList.add(new NullConstructorLinkingCandidate(constructorCall, this));
 		}
 		return resultList;
+	}
+
+	private List<IIdentifiableElementDescription> getDescriptions(XConstructorCall constructorCall,
+			EObject proxyOrResolved) {
+		List<IIdentifiableElementDescription> result = new ArrayList<>(8);
+		for (IEObjectDescription description : reentrantTypeResolver.getScopeProviderAccess().getCandidateDescriptions(
+				constructorCall, XbasePackage.Literals.XCONSTRUCTOR_CALL__CONSTRUCTOR, proxyOrResolved,
+				featureScopeSession, resolvedTypes)) {
+			result.add(toIdentifiableDescription(description));
+		}
+		return result;
 	}
 
 	protected IIdentifiableElementDescription toIdentifiableDescription(IEObjectDescription description) {
