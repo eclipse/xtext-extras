@@ -1,5 +1,11 @@
 # Eclipse Xtext Extras
 
+## Notice
+
+The content of this repository (`xtext-extras`) has been moved to the [Xtext Monorepo](https://github.com/eclipse/xtext/). Please refer to that repository to find the code, create issues or file pull requests.
+
+## About
+
 This repository contains platform-independent add-ons such as [Xbase](https://www.eclipse.org/Xtext/documentation/305_xbase.html).
 
 ## How To Build
